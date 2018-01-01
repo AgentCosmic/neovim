@@ -1,3 +1,4 @@
+" This is the folder where we'll store all the files
 let $USER = expand($VIM . '/../../user')
 set runtimepath+=$USER
 
@@ -88,19 +89,21 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 
+" keep cursor position when changin buffer
+augroup keepCursorPosition
+	autocmd!
+	autocmd BufLeave * let b:winview = winsaveview()
+	autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+augroup END
+
 
 " ----- ----- ----- -----
 " GUI
 " ----- ----- ----- -----
 
-set guifont=Consolas:h10:cANSI
+set guifont=Consolas:h9
 set background=dark
-colorscheme consis
-if !has('gui_running')
-	set t_Co=256
-	set background=dark
-	" colorscheme solarized
-endif
+colorscheme	desert
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -109,24 +112,16 @@ endif
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
-if &t_Co > 2 || has("gui_running")
-  syntax on
-  set hlsearch
-endif
-
-augroup vimrcGui
-	autocmd!
-	" Give alt key control to Windows
-	autocmd GUIEnter * simalt ~x
-augroup END
+syntax on
+set hlsearch
 
 " Status line
 set laststatus=2 " always show statusline
-set statusline=\ %{getcwd()}\ -\ %f " working directory followed by file path
+set statusline=\ %{getcwd()}\ \ \|\ \ %f " working directory followed by file path
 set statusline+=\ %r " readonly flag
 set statusline+=\ %m " modified flag
 set statusline+=%= " right align from here
-set statusline+=%c,\ %l/%L\ %P " cursor column, line/total percent
+set statusline+=%c,\ %l\ \|\ %P\ of\ %L\ " cursor column, line/total percent
 set statusline+=\ [%{strlen(&fenc)?&fenc:'none'},\ %{&ff}]\  " encoding, format
 
 " Make the cursor look nicer
@@ -276,7 +271,7 @@ noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> tr
 
 command! CdToFile cd %:p:h
 command! DeleteControlM %s/$//
-command! EVimrc :e $MYVIMRC
+command! EVimrc :e $USER/init.vim
 
 
 " ----- ----- ----- -----
@@ -285,37 +280,46 @@ command! EVimrc :e $MYVIMRC
 
 " checkout https://github.com/Shougo/dein.vim/
 call plug#begin('plugged')
-Plug 'embear/vim-localvimrc'
+" does neovim need this?
+" Plug 'embear/vim-localvimrc'
 Plug 'fholgado/minibufexpl.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
 Plug 'Raimondi/delimitMate'
 Plug 'easymotion/vim-easymotion'
 Plug 'sickill/vim-pasta'
 Plug 'majutsushi/tagbar'
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'ap/vim-css-color'
 Plug 'mattn/emmet-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesEnable', 'IndentGuidesToggle']}
-" Evaluating
-Plug 'haya14busa/incsearch.vim'
-" Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'AndrewRadev/sideways.vim'
 Plug 'itchyny/vim-cursorword'
-Plug 'python-mode/python-mode', {'for': 'python'}
-Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
+Plug 'haya14busa/incsearch.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Evaluating
+" Plug 'python-mode/python-mode', {'for': 'python'}
+Plug 'sbdchd/neoformat', {'on': ['Neoformat']}
+Plug 'wellle/targets.vim'
+
+" Plug 'haya14busa/incsearch-fuzzy.vim'
+" Plug 'heavenshell/vim-jsdoc.git
+" https://github.com/ramitos/jsctags
+" https://github.com/ternjs/tern_for_vim
 call plug#end()
 
 
 " airline
 let g:airline#extensions#branch#enabled = 0
+let g:airline_detect_paste = 0
+let g:airline_detect_crypt = 0
+let g:airline_extensions = ['quickfix', 'ctrlp', 'whitespace', 'ale']
 let g:airline_theme = 'bubblegum'
 let g:airline_powerline_fonts = 1
 set guifont=Hack:h9
@@ -323,13 +327,9 @@ set guifont=Hack:h9
 " undotree
 cabbrev UT UndotreeToggle
 
-" Syntastic
-let g:syntastic_javascript_jshint_args = $VIM . '/jshint.json'
-" let g:syntastic_javascript_checkers = ['jsxhint']
-let g:syntastic_csslint_args = '--warnings=none'
-let g:syntastic_python_checker_args = '--ignore=E501'
 " ale
 let g:ale_sign_column_always = 1
+let g:ale_linters = {'javascript': ['jshint']}
 " let g:ale_lint_on_save = 1
 " let g:ale_lint_on_text_changed = 0
 
@@ -349,7 +349,7 @@ let g:user_emmet_complete_tag = 1
 
 " Comments
 nmap <leader>c <c-_><c-_>
-imap <leader>c <c-o><c-_><c-_>
+" imap <leader>c <c-o><c-_><c-_>
 vmap <leader>c <c-_><c-_>
 
 " localvimrc
@@ -421,18 +421,19 @@ let g:miniBufExplCycleArround = 1
 
 
 " incsearch
-" map /  <plug>(incsearch-forward)
-" map ?  <plug>(incsearch-backward)
-" map g/ <plug>(incsearch-stay)
+map /  <plug>(incsearch-forward)
+map ?  <plug>(incsearch-backward)
+map g/ <plug>(incsearch-stay)
 " incsearch-fuzzy
-" map z/ <plug>(incsearch-fuzzy-/)
-" map z? <plug>(incsearch-fuzzy-?)
-" map zg/ <plug>(incsearch-fuzzy-stay)
+map z/ <plug>(incsearch-fuzzy-/)
+map z? <plug>(incsearch-fuzzy-?)
+map zg/ <plug>(incsearch-fuzzy-stay)
 
 
 " sideways
-noremap <c-left> :SidewaysLeft<cr>
-noremap <c-right> :SidewaysRight<cr>
+noremap <a-h> :SidewaysLeft<cr>
+noremap <a-l> :SidewaysRight<cr>
+
 
 
 " ----- ----- ----- -----
