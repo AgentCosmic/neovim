@@ -1,5 +1,6 @@
 " This is the folder where we'll store all the files
 let $USER = expand($VIM . '/../../user')
+let $CACHE = $USER . '/cache'
 set runtimepath+=$USER
 
 " ----- ----- ----- -----
@@ -11,10 +12,11 @@ filetype plugin indent on " Important for a lot of things
 set incsearch " Do incremental searching
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=ag\ --nogroup\ --nocolor\ --column
+set grepprg=rg\ --vimgrep\ --no-heading
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,.svn,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini " Ignore these files when searching
+set wildignore+=*.swp,.git,.svn,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
@@ -24,10 +26,10 @@ set synmaxcol=500 " Don't try to highlight lines longer than this
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$USER/swap//,.
+set directory=$CACHE/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$USER/undo//,.
+set undodir=$CACHE/undo//,.
 
 augroup vimrcBehavior
 	autocmd!
@@ -61,22 +63,22 @@ augroup vimrcBehavior
 	autocmd BufEnter * :call <SID>DelistWindow()
 augroup END
 
-function! s:DeleteBufferIfEmpty()
-	" If no name and no content
-	if bufname('%') == '' && line('$') == 1 && getline(1) == ''
-		bwipe
-		" This will trigger filetype detection, mainly to trigger syntax highlighting
-		doautocmd BufRead
-	endif
-endfunction
+" function! s:DeleteBufferIfEmpty()
+" 	" If no name and no content
+" 	if bufname('%') == '' && line('$') == 1 && getline(1) == ''
+" 		bwipe
+" 		" This will trigger filetype detection, mainly to trigger syntax highlighting
+" 		doautocmd BufRead
+" 	endif
+" endfunction
 
-function! s:DelistWindow() 
-    if &previewwindow 
-        set nobuflisted 
+function! s:DelistWindow()
+	if &previewwindow
+		set nobuflisted
 	elseif &filetype == 'qf'
 		set nobuflisted
 	endif
-endf 
+endf
 
 " vp doesn't replace paste buffer
 function! RestoreRegister()
@@ -89,7 +91,7 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 
-" keep cursor position when changin buffer
+" keep cursor position when changing buffer
 augroup keepCursorPosition
 	autocmd!
 	autocmd BufLeave * let b:winview = winsaveview()
@@ -107,7 +109,7 @@ colorscheme	desert
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
-  set mouse=a
+	set mouse=a
 endif
 
 " Switch syntax highlighting on, when the terminal has colors
@@ -124,11 +126,6 @@ set statusline+=%= " right align from here
 set statusline+=%c,\ %l\ \|\ %P\ of\ %L\ " cursor column, line/total percent
 set statusline+=\ [%{strlen(&fenc)?&fenc:'none'},\ %{&ff}]\  " encoding, format
 
-" Make the cursor look nicer
-set guicursor+=v:hor50
-set guicursor+=i:ver1
-set guicursor+=a:blinkwait750-blinkon750-blinkoff250
-
 " Line number
 set numberwidth=5
 set relativenumber
@@ -136,13 +133,19 @@ set number
 
 set colorcolumn=80,120 " set ruler to show at column 80 and 120
 set cursorline " highlight current line
-set guioptions=erR " tabs & right scollbar. No menu, toolbar and bottom scollbar
-set guitablabel=%-0.12t%M " format of tab label
 set previewheight=8 " smaller preview window
 set ruler " show the cursor position all the time
 set scrolloff=1 " keep padding around cursor
 set showcmd " display incomplete commands
 set showtabline=1 " show tabs only if there are more than one
+
+" TODO doesn't work in neovim-qt
+" Make the cursor look nicer
+set guicursor+=v:hor50
+set guicursor+=i:ver1
+set guicursor+=a:blinkwait750-blinkon750-blinkoff250
+set guioptions=erR " tabs & right scollbar. No menu, toolbar and bottom scollbar
+set guitablabel=%-0.12t%M " format of tab label
 
 
 " ----- ----- ----- -----
@@ -176,7 +179,7 @@ set nofoldenable " disable by default
 " ----- ----- ----- -----
 
 " Delete without jumping http://vim.1045645.n5.nabble.com/How-to-delete-range-of-lines-without-moving-cursor-td5713219.html
-command! -range D <line1>,<line2>d | norm <c-o> 
+command! -range D <line1>,<line2>d | norm <c-o>
 
 " Don't use Ex mode, use Q for formatting
 " map Q gq
@@ -241,11 +244,10 @@ nnoremap <leader>o :update<cr>:source %<cr>
 " Substitute
 nnoremap <F2> yiw:%s/\<<c-r>0\>/
 " Grep
-nnoremap <F3> g*Nyiw:cw<cr>:grep <c-r>0 
+nnoremap <F3> g*Nyiw:cw<cr>:grep <c-r>0
 " Delete buffer
 nnoremap <F4> :bdelete<cr>
 nnoremap <c-F4> :BufOnly<cr>
-nnoremap <Space> :CtrlP<cr>
 
 " Disable function keys in insert mode
 inoremap <F2> <esc><F2>
@@ -308,7 +310,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'sbdchd/neoformat', {'on': ['Neoformat']}
 Plug 'wellle/targets.vim'
 
-" Plug 'haya14busa/incsearch-fuzzy.vim'
 " Plug 'heavenshell/vim-jsdoc.git
 " https://github.com/ramitos/jsctags
 " https://github.com/ternjs/tern_for_vim
@@ -321,8 +322,8 @@ let g:airline_detect_paste = 0
 let g:airline_detect_crypt = 0
 let g:airline_extensions = ['quickfix', 'ctrlp', 'whitespace', 'ale']
 let g:airline_theme = 'bubblegum'
-let g:airline_powerline_fonts = 1
-set guifont=Hack:h9
+" let g:airline_powerline_fonts = 1
+" set guifont=Hack:h9
 
 " undotree
 cabbrev UT UndotreeToggle
@@ -359,17 +360,29 @@ let g:localvimrc_sandbox = 0
 let g:localvimrc_ask = 0
 
 " ctrlp
+let g:ctrlp_cache_dir = $CACHE . '/ctrlp'
+let g:ctrlp_map = '<space>'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_open_multiple_files = 'i'
 let g:ctrlp_by_filename = 1
+let g:ctrlp_match_current_file = 0
 let g:ctrlp_custom_ignore = {
 	\ 'dir': '\v[\/](\..+)$',
-	\ 'file': '\v[\/](Thumbs.db)$'
+			\ 'file': '\v[\/](.+\.min\.(css|js))$'
 \ }
+let g:user_command_async = 1
+let g:ctrlp_search_options = '-g "!*.jpg" -g "!*.png" -g "!*.gif" -g "!*.psd" -g "!*.ai"' " search options for ripgrep to reuse in other vimrc
+let g:ctrlp_user_command = {
+			\ 'types': {
+				\ 1: ['.git', 'cd %s && git ls-files | rg --files --color=never ' . g:ctrlp_search_options],
+			\ },
+			\ 'fallback': 'rg %s --files --color=never ' . g:ctrlp_search_options
+			\ }
 nnoremap gt :CtrlPBufTag<cr>
 nnoremap gT :CtrlPBufTagAll<cr>
 nnoremap gb :CtrlPBuffer<cr>
 nnoremap g/ :CtrlPLine<cr>
+" let g:ctrlp_user_command = 'rg %s --files --color=never'
 
 " Tagbar
 cabbrev TT TagbarToggle
@@ -423,11 +436,6 @@ let g:miniBufExplCycleArround = 1
 " incsearch
 map /  <plug>(incsearch-forward)
 map ?  <plug>(incsearch-backward)
-map g/ <plug>(incsearch-stay)
-" incsearch-fuzzy
-map z/ <plug>(incsearch-fuzzy-/)
-map z? <plug>(incsearch-fuzzy-?)
-map zg/ <plug>(incsearch-fuzzy-stay)
 
 
 " sideways
@@ -443,8 +451,8 @@ noremap <a-l> :SidewaysRight<cr>
 " Code taken from TagbarToggle
 " Get the number of the scratch buffer. Will create one if needed.
 function! GetScratchBuffer(name) abort
-    let buffer_number = bufwinnr(a:name)
-    if buffer_number == -1
+	let buffer_number = bufwinnr(a:name)
+	if buffer_number == -1
 		" create buffer
 		let eventignore_save = &eventignore
 		set eventignore=all
@@ -478,7 +486,7 @@ function! GetScratchBuffer(name) abort
 		setlocal foldexpr&
 
 		let buffer_number = bufwinnr(a:name)
-    endif
+	endif
 	return buffer_number
 endfunction
 
@@ -486,50 +494,50 @@ endfunction
 function! ReplaceContent(buffer_number, content) abort
 	" focus on buffer
 	let original_buffer = winnr()
-    if original_buffer == a:buffer_number
-        let in_buffer = 1
-    else
-        let in_buffer = 0
-        call s:winexec(a:buffer_number . 'wincmd w')
-    endif
+	if original_buffer == a:buffer_number
+		let in_buffer = 1
+	else
+		let in_buffer = 0
+		call s:winexec(a:buffer_number . 'wincmd w')
+	endif
 
-    let lazyredraw_save = &lazyredraw
-    set lazyredraw
-    let eventignore_save = &eventignore
-    set eventignore=all
+	let lazyredraw_save = &lazyredraw
+	set lazyredraw
+	let eventignore_save = &eventignore
+	set eventignore=all
 
-    setlocal modifiable
+	setlocal modifiable
 
-    silent %delete _
+	silent %delete _
 
-    " Delete empty lines at the end of the buffer
-    for linenr in range(line('$'), 1, -1)
-        if getline(linenr) =~ '^$'
-            execute 'silent ' . linenr . 'delete _'
-        else
-            break
-        endif
-    endfor
+	" Delete empty lines at the end of the buffer
+	for linenr in range(line('$'), 1, -1)
+		if getline(linenr) =~ '^$'
+			execute 'silent ' . linenr . 'delete _'
+		else
+			break
+		endif
+	endfor
 
 	" render
 	silent put = a:content
 
-    setlocal nomodifiable
+	setlocal nomodifiable
 
-    let &lazyredraw  = lazyredraw_save
-    let &eventignore = eventignore_save
+	let &lazyredraw  = lazyredraw_save
+	let &eventignore = eventignore_save
 
 	" return to previous buffer
-    if !in_buffer
-        call s:winexec(original_buffer . 'wincmd w')
-    endif
+	if !in_buffer
+		call s:winexec(original_buffer . 'wincmd w')
+	endif
 endfunction
 
 function! s:winexec(cmd) abort
-    let eventignore_save = &eventignore
-    set eventignore=BufEnter
-    execute a:cmd
-    let &eventignore = eventignore_save
+	let eventignore_save = &eventignore
+	set eventignore=BufEnter
+	execute a:cmd
+	let &eventignore = eventignore_save
 endfunction
 
 

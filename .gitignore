@@ -1,4 +1,3 @@
 /plugged
-/undo
-/swap
+/cache
 /autoload/plug.vim.old
