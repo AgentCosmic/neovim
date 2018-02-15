@@ -316,8 +316,6 @@ Plug 'autozimu/LanguageClient-neovim', {
 	\ 'do': 'powershell -executionpolicy bypass -File install.ps1',
 	\ }
 Plug 'adoy/vim-php-refactoring-toolbox'
-" Plug 'junegunn/fzf'
-" Plug 'junegunn/fzf.vim'
 call plug#end()
 
 
@@ -410,6 +408,8 @@ nnoremap gT :CtrlPBufTagAll<cr>
 nnoremap gb :CtrlPBuffer<cr>
 nnoremap g/ :CtrlPLine<cr>
 nnoremap gm :CtrlPMRU<cr>" 
+" use exuberant ctags because universal ctags isn't supported
+let g:ctrlp_buftag_ctags_bin = 'ectags.exe'
 " let g:ctrlp_user_command = 'rg %s --files --color=never'
 
 " Tagbar
@@ -503,3 +503,15 @@ function! MyDiff()
 	endif
 	silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+
+" fzf
+" Plug 'junegunn/fzf'
+" Plug 'junegunn/fzf.vim'
+" nnoremap <space> :Files<cr>
+" nnoremap gt :BTags<cr>
+" nnoremap gT :Tags<cr>
+" nnoremap gb :Buffers<cr>
+" nnoremap g/ :Lines<cr>
+" nnoremap gh :History<cr> 
+" nnoremap gm :Marks<cr> 
+" nnoremap <c-p> :Commands<cr> 
