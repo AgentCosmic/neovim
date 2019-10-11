@@ -101,8 +101,8 @@ hi MBENormal guifg=fg
 hi MBEChanged guifg=#f1ede4 gui=italic
 hi link MBEVisibleNormal MBENormal
 hi link MBEVisibleChanged MBEChanged
-hi MBEVisibleActiveNormal guibg=#484744 gui=bold
-hi MBEVisibleActiveChanged guibg=#484744 gui=bold,italic
+hi MBEVisibleActiveNormal guifg=#f1ede4 guibg=#484744 gui=bold
+hi MBEVisibleActiveChanged guifg=#f1ede4 guibg=#484744 gui=bold,italic
 
 
 hi phpFunctions  guifg=#d5bbff

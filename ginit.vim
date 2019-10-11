@@ -1,6 +1,8 @@
 if exists('g:GuiLoaded')
-	" Guifont! Hack:h10
-	Guifont Consolas:h10
+	" GuiFont! Hack:h10
+	GuiFont! Consolas:h10
+	GuiPopupmenu 0
+	GuiTabline 0
 	set background=dark
 	colorscheme	comfort
 
