@@ -1,3 +1,4 @@
 /plugged
 /.cache
 /autoload/plug.vim.old
+/AppData

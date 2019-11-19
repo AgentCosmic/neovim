@@ -104,6 +104,8 @@ hi link MBEVisibleChanged MBEChanged
 hi MBEVisibleActiveNormal guifg=#f1ede4 guibg=#484744 gui=bold
 hi MBEVisibleActiveChanged guifg=#f1ede4 guibg=#484744 gui=bold,italic
 
+hi CocUnderline gui=undercurl
+hi CocErrorHighlight gui=undercurl guifg=#ffa2a0
 
 hi phpFunctions  guifg=#d5bbff
 

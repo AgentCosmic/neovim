@@ -1,7 +1,8 @@
 " This is the folder where we'll store all the files
 " set environment variable $env:XDG_CONFIG_HOME="D:/Applications/Neovim"
-let $USER = expand('D:/Applications/Neovim/nvim')
-set runtimepath+=$USER
+let $ROOT = expand('D:/Applications/Neovim/nvim')
+let $HOME = $ROOT
+set runtimepath+=$HOME
 
 runtime mswin.vim
 
@@ -18,7 +19,7 @@ set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,.svn,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
+set wildignore+=*.swp,.git,.svn,node_modules,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
@@ -35,10 +36,10 @@ set showcmd " display incomplete commands
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$USER/.cache/swap//,.
+set directory=$HOME/.cache/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$USER/.cache/undo//,.
+set undodir=$HOME/.cache/undo//,.
 
 " Line number
 set numberwidth=5
@@ -258,10 +259,11 @@ noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> tr
 " Commands
 " ----- ----- ----- -----
 
-command! CdToFile cd %:p:h
-command! DeleteControlM %s/$//
-command! EVimrc :e $MYVIMRC
-command! SS :syntax sync fromstart
+command CdToFile cd %:p:h
+command DeleteControlM %s/$//
+command EVimrc :e $MYVIMRC
+command SS :syntax sync fromstart
+command -nargs=? Count :%s/<f-args>//gn
 
 " edit a macro using cq(macro name)
 fun! ChangeReg() abort
@@ -272,7 +274,29 @@ nnoremap cq :call ChangeReg()<cr>
 
 
 " ----- ----- ----- -----
+" TUI/GUI
+" ----- ----- ----- -----
+
+set background=dark
+colorscheme	comfort
+syntax on
+set hlsearch
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+	set mouse=a
+endif
+
+" Make the cursor look nicer
+set guicursor+=v:hor50
+set guicursor+=a:blinkwait750-blinkon750-blinkoff250
+
+
+" ----- ----- ----- -----
 " Others
 " ----- ----- ----- -----
 
-source $USER/plugins.vim
+set termguicolors
+" let g:loaded_matchparen = 1 " tmp disable highlighting matching parenthesis because it's ugly
+" set colorcolumn
+command! EPlugin :e $HOME/plugins.vim
+source $HOME/plugins.vim

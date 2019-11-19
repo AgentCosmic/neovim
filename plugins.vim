@@ -1,13 +1,12 @@
-" checkout https://github.com/Shougo/dein.vim/
 " https://github.com/BurntSushi/ripgrep/releases
-call plug#begin('$USER/plugged')
-" does neovim need this?
-" Plug 'embear/vim-localvimrc'
+call plug#begin('$HOME/plugged')
+" Universal Vim Functionality
 Plug 'duff/vim-bufonly'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'itchyny/vim-cursorword'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-abolish'
+Plug 'dyng/ctrlsf.vim'
 " Programming Related
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
@@ -18,30 +17,31 @@ Plug 'wellle/targets.vim'
 Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesEnable', 'IndentGuidesToggle']}
 Plug 'Shougo/echodoc.vim' " used by coc
 " External Dependency
-Plug 'neoclide/coc.nvim', { 'tag': '*', 'do': { -> coc#util#install() } } " install yarn first
+Plug 'neoclide/coc.nvim', { 'branch': 'release' } " install yarn first
 Plug 'ctrlpvim/ctrlp.vim' " https://github.com/BurntSushi/ripgrep/releases
 Plug 'majutsushi/tagbar', { 'on': ['Tagbar', 'TagbarToggle', 'TagbarOpen'] } " https://github.com/universal-ctags/ctags-win32/releases
-Plug 'w0rp/ale'
-" GUI
-" Plug 'fholgado/minibufexpl.vim'
+" Plug 'w0rp/ale'
 " Language
 Plug 'mattn/emmet-vim'
-Plug 'ap/vim-css-color'
 Plug 'pangloss/vim-javascript'
 Plug 'alvan/vim-closetag'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'pearofducks/ansible-vim'
 Plug 'posva/vim-vue', { 'for': 'vue' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'on': 'MarkdownPreview' }
-Plug 'dyng/ctrlsf.vim'
+" GUI
+Plug 'norcalli/nvim-colorizer.lua' " only works on neovim
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 " Evaluating
 Plug 'unblevable/quick-scope'
 Plug 'tommcdo/vim-exchange'
-Plug 'leafgarland/typescript-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
-Plug 'ap/vim-buftabline'
+Plug 'jeetsukumaran/vim-indentwise'
+Plug 'AndrewRadev/splitjoin.vim'
 call plug#end()
 
 
@@ -57,12 +57,6 @@ let g:UltiSnipsExpandTrigger = '<leader><tab>'
 
 " -----------------------------------------------------------------------------
 
-
-" localvimrc
-let g:localvimrc_name = '_lvimrc'
-let g:localvimrc_count = 1
-let g:localvimrc_sandbox = 0
-let g:localvimrc_ask = 0
 
 " BufOnly
 nnoremap <c-F4> :BufOnly<cr>
@@ -86,6 +80,20 @@ vmap <leader>c <c-_><c-_>
 noremap <c-h> :SidewaysLeft<cr>
 noremap <c-l> :SidewaysRight<cr>
 
+" auto-pairs
+augroup AutoPairs
+	autocmd!
+	autocmd FileType html,vue let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'})
+	autocmd FileType css,vue let b:AutoPairs = AutoPairsDefine({'/**' : '*/', '/*' : '*/'})
+	autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?php' : '?>'})
+augroup end
+inoremap {, {},<left><left>
+inoremap (, (),<left><left>
+inoremap [, [],<left><left>
+
+" CtrlSF
+let g:ctrlsf_ackprg = 'rg'
+
 " ctrlp
 let g:ctrlp_map = '<space>'
 let g:ctrlp_show_hidden = 1
@@ -104,23 +112,12 @@ let g:ctrlp_user_command = {
 			\ },
 			\ 'fallback': 'rg %s --files --color=never ' . g:ctrlp_search_options
 			\ }
-nnoremap gt :CtrlPBufTag<cr>
-nnoremap gT :CtrlPBufTagAll<cr>
 nnoremap gb :CtrlPBuffer<cr>
 nnoremap g/ :CtrlPLine<cr>
 nnoremap gm :CtrlPMRU<cr>
-" use exuberant ctags because universal ctags isn't supported
-let g:ctrlp_buftag_ctags_bin = 'ectags.exe'
-" gotags doesn't work now
-let g:ctrlp_buftag_types = {
-\ 'go'         : '--language-force=go --golang-types=ftv',
-\ }
+" nnoremap gt :CtrlPTag<cr>
+let g:ctrlp_buftag_ctags_bin = 'ctags.exe'
 " let g:ctrlp_user_command = 'rg %s --files --color=never'
-
-
-
-" CtrlSF
-let g:ctrlsf_ackprg = 'rg'
 
 
 
@@ -132,64 +129,63 @@ let g:echodoc#type = 'signature'
 
 
 " coc
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=500
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
+let g:coc_config_home = $ROOT
+let g:coc_global_extensions = ['coc-css', 'coc-emmet', 'coc-html', 'coc-json', 'coc-tsserver', 'coc-ultisnips', 'coc-yaml', 'coc-vetur']
+set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
+set shortmess+=c " don't give |ins-completion-menu| messages.
+set signcolumn=yes " always show signcolumns
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-			\ pumvisible() ? "\<C-n>" :
-			\ <SID>check_back_space() ? "\<TAB>" :
+inoremap <silent><expr> <tab>
+			\ pumvisible() ? "\<c-n>" :
+			\ <SID>check_back_space() ? "\<tab>" :
 			\ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
 function! s:check_back_space() abort
 	let col = col('.') - 1
 	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 " Use <c-space> for trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Remap keys for gotos
+" Use <cr> for confirm completion
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+" Mappings
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-" Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nmap <leader>r <Plug>(coc-rename)
+nnoremap <silent> gt :<c-u>CocList outline<cr>
+nnoremap <silent> gT :<c-u>CocList -I symbols<cr>
+nnoremap <silent> zd :<c-u>CocList diagnostics<cr>
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
+nmap g= :call CocAction('format')<cr>
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+nnoremap <silent> K :call <SID>show_documentation()<cr>
 function! s:show_documentation()
-	if &filetype == 'vim'
+	if (index(['vim','help'], &filetype) >= 0)
 		execute 'h '.expand('<cword>')
 	else
 		call CocAction('doHover')
 	endif
 endfunction
-" Highlight symbol under cursor on CursorHold
-if exists('CocActionAsync')
-	autocmd CursorHold * silent call CocActionAsync('highlight')
-endif
-" Remap for rename current word
-nmap <leader>r <Plug>(coc-rename)
-" Remap for format selected region
-nmap g= :call CocAction('format')<cr>
 augroup CocGroup
 	autocmd!
 	" Setup formatexpr specified filetype(s).
-	autocmd FileType typescript,json,vue setl formatexpr=CocAction('formatSelected')
+	autocmd FileType javascript,json,vue,html,css,go setl formatexpr=CocAction('formatSelected')
 	" Update signature help on jump placeholder
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+	" Auto format and fix import for go
+	autocmd BufWritePre *.go :call CocAction('format') | CocCommand editor.action.organizeImport
+	autocmd BufWritePre *.vue,*.js :call CocAction('format')
 augroup end
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap ga <Plug>(coc-codeaction-selected)
-nmap ga <Plug>(coc-codeaction-selected)
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+" nmap <leader>qf  <Plug>(coc-fix-current)
 " Close preview window when completion is done.
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+" autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 
 
@@ -248,10 +244,12 @@ let g:ale_fixers = {
 \}
 let g:ale_linters = {
 	\ 'javascript': [],
-	\ 'css': ['stylelint'],
+	\ 'css': [],
 	\ 'python': ['mypy'],
-	\ 'go': ['golint'],
+	\ 'go': [],
 \}
+" \ 'go': ['golint'],
+" \ 'css': ['stylelint'],
 let g:ale_python_pyls_executable = 'C:/Python36/Scripts/pyls'
 function! SetALEShortcuts()
 	" nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
@@ -264,39 +262,23 @@ endfunction()
 augroup ALE
   autocmd!
   autocmd FileType javascript,html,css,scss,python,go call SetALEShortcuts()
-augroup END
+augroup end
 " npm install -g javascript-typescript-langserver vscode-html-languageserver-bin stylelint 
 " pip install python-language-server rope mypy flake8 isort
 
 
 
-" MiniBufExpl
-nnoremap <tab> :MBEbn<cr>
-nnoremap <s-tab> :MBEbp<cr>
-vnoremap <tab> :MBEbn<cr>
-vnoremap <s-tab> :MBEbp<cr>
-inoremap <c-tab> <esc>:MBEbf<cr>
-vnoremap <c-tab> <esc>:MBEbf<cr>
-nnoremap <c-tab> :MBEbf<cr>
-inoremap <c-s-tab> <esc>:MBEbb<cr>
-vnoremap <c-s-tab> <esc>:MBEbb<cr>
-nnoremap <c-s-tab> :MBEbb<cr>
-let g:miniBufExplUseSingleClick = 1
-let g:miniBufExplCycleArround = 1
-" For third party colorschemes
-" hi MBENormal guifg=fg gui=none
-" hi MBEChanged guifg=fg gui=italic
-" hi link MBEVisibleNormal MBENormal
-" hi link MBEVisibleChanged MBEChanged
-" hi MBEVisibleActiveNormal gui=bold
-" hi MBEVisibleActiveChanged gui=bold,italic
-
-
-" Vim Go
+" vim-go
 let g:go_code_completion_enabled =  0
 let g:go_fmt_autosave = 0
 nmap gI <Plug>(go-imports):w<cr>
 nmap gV <Plug>(go-vet)
+" use for CtrlPTag
+augroup VimGo
+	autocmd!
+	autocmd FileType go nnoremap gt :GoDecls<cr>
+	autocmd FileType go nnoremap gT :GoDeclsDir<cr>
+augroup end
 
 
 
@@ -309,27 +291,44 @@ let g:vue_disable_pre_processors=1
 let g:user_emmet_leader_key = '<c-y>'
 let g:user_emmet_expandabbr_key = '<c-e>'
 " let g:user_emmet_expandword_key = '<c-e>'
-let g:user_emmet_complete_tag = 1
+" let g:user_emmet_complete_tag = 1
 
-" fzf
-" Plug 'junegunn/fzf'
-" Plug 'junegunn/fzf.vim'
-" nnoremap <space> :Files<cr>
-" nnoremap gt :BTags<cr>
-" nnoremap gT :Tags<cr>
-" nnoremap gb :Buffers<cr>
-" nnoremap g/ :Lines<cr>
-" nnoremap gh :History<cr> 
-" nnoremap gm :Marks<cr> 
-" nnoremap <c-p> :Commands<cr> 
 
+
+" MiniBufExpl
+" nnoremap <tab> :MBEbn<cr>
+" nnoremap <s-tab> :MBEbp<cr>
+" vnoremap <tab> :MBEbn<cr>
+" vnoremap <s-tab> :MBEbp<cr>
+" inoremap <c-tab> <esc>:MBEbf<cr>
+" vnoremap <c-tab> <esc>:MBEbf<cr>
+" nnoremap <c-tab> :MBEbf<cr>
+" inoremap <c-s-tab> <esc>:MBEbb<cr>
+" vnoremap <c-s-tab> <esc>:MBEbb<cr>
+" nnoremap <c-s-tab> :MBEbb<cr>
+" let g:miniBufExplUseSingleClick = 1
+" let g:miniBufExplCycleArround = 1
+
+
+
+" nvim-colorizer
+lua require'colorizer'.setup({
+	\  'css';
+	\  'javascript';
+	\  'vue';
+\ }, { no_names = true })
+
+
+
+" airline
+let g:airline_theme = 'base16' " for nvim-qt
+" let g:airline_theme = 'bubblegum' " for gonvim
+let g:airline_extensions = ['tabline']
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_nr_format = '%s:'
 nnoremap <tab> :bn<cr>
-nnoremap <s-tab> :bp<cr>
 vnoremap <tab> :bn<cr>
+nnoremap <s-tab> :bp<cr>
 vnoremap <s-tab> :bp<cr>
-inoremap <c-tab> <esc>:bf<cr>
-vnoremap <c-tab> <esc>:bf<cr>
-nnoremap <c-tab> :bf<cr>
-inoremap <c-s-tab> <esc>:bb<cr>
-vnoremap <c-s-tab> <esc>:bb<cr>
-nnoremap <c-s-tab> :bb<cr>
