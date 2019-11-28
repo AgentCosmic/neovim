@@ -276,8 +276,8 @@ nmap gV <Plug>(go-vet)
 " use for CtrlPTag
 augroup VimGo
 	autocmd!
-	autocmd FileType go nnoremap gt :GoDecls<cr>
-	autocmd FileType go nnoremap gT :GoDeclsDir<cr>
+	autocmd FileType go nnoremap <buffer> gt :GoDecls<cr>
+	autocmd FileType go nnoremap <buffer> gT :GoDeclsDir<cr>
 augroup end
 
 
