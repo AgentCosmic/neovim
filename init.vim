@@ -154,10 +154,15 @@ set autoindent
 set nocindent
 
 " Folding
-set foldmethod=indent
 set foldnestmax=8
 set foldlevel=9 " prefer to be open by default
 set nofoldenable " disable by default
+" define indent folds then allow manual folding
+augroup enhanceFold
+    autocmd!
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
 
 
 " ----- ----- ----- -----
@@ -250,6 +255,11 @@ inoremap <F10> <esc><F10>
 
 " Highlight when double click
 nnoremap <silent> <2-leftmouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>viwg<c-h>
+" remove double click mapping in help file so we can navigate the link
+augroup doubleClick
+    autocmd!
+    autocmd FileType help unmap <2-leftmouse>
+augroup END
 
 " Get syntax under cursor
 noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
