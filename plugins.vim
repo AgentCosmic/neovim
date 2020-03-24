@@ -129,8 +129,9 @@ let g:echodoc#type = 'signature'
 
 
 " coc
+" CocInstall coc-css coc-emmet coc-html coc-json coc-tsserver coc-ultisnips coc-yaml coc-vetur
 let g:coc_config_home = $ROOT
-let g:coc_global_extensions = ['coc-css', 'coc-emmet', 'coc-html', 'coc-json', 'coc-tsserver', 'coc-ultisnips', 'coc-yaml', 'coc-vetur']
+let g:coc_data_home = $HOME
 set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
 set shortmess+=c " don't give |ins-completion-menu| messages.
 set signcolumn=yes " always show signcolumns
@@ -156,7 +157,7 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>r <Plug>(coc-rename)
 nnoremap <silent> gt :<c-u>CocList outline<cr>
 nnoremap <silent> gT :<c-u>CocList -I symbols<cr>
-nnoremap <silent> zd :<c-u>CocList diagnostics<cr>
+nnoremap <silent> gD :<c-u>CocList diagnostics<cr>
 nmap <silent> [d <Plug>(coc-diagnostic-prev)
 nmap <silent> ]d <Plug>(coc-diagnostic-next)
 nmap g= :call CocAction('format')<cr>
@@ -256,7 +257,7 @@ function! SetALEShortcuts()
 	" nnoremap <buffer> <silent> gd :ALEGoToDefinition<CR>
 	nnoremap <buffer> <silent> gf :ALEFix<CR>
 	" nnoremap <buffer> <silent> <f3> :ALEFindReferences<CR>
-	nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+	" nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 	" nnoremap <buffer> <silent> <leader>= :call LanguageClient#textDocument_formatting()<CR>
 endfunction()
 augroup ALE
