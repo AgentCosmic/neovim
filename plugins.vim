@@ -132,6 +132,8 @@ let g:echodoc#type = 'signature'
 " CocInstall coc-css coc-emmet coc-html coc-json coc-tsserver coc-ultisnips coc-yaml coc-vetur
 let g:coc_config_home = $ROOT
 let g:coc_data_home = $HOME
+let g:coc_config_home = $ROOT . '/coc'
+let g:coc_data_home = $ROOT . '/coc'
 set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
 set shortmess+=c " don't give |ins-completion-menu| messages.
 set signcolumn=yes " always show signcolumns
