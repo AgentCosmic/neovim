@@ -7,6 +7,7 @@ Plug 'itchyny/vim-cursorword'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-abolish'
 Plug 'dyng/ctrlsf.vim'
+Plug 'unblevable/quick-scope'
 " Programming Related
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
@@ -28,7 +29,7 @@ Plug 'alvan/vim-closetag'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'pearofducks/ansible-vim'
 Plug 'posva/vim-vue', { 'for': 'vue' }
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'on': 'MarkdownPreview' }
 " GUI
 Plug 'norcalli/nvim-colorizer.lua' " only works on neovim
@@ -36,20 +37,14 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Evaluating
-Plug 'unblevable/quick-scope'
 Plug 'tommcdo/vim-exchange'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'jeetsukumaran/vim-indentwise'
-Plug 'AndrewRadev/splitjoin.vim'
+Plug 'tweekmonster/django-plus.vim'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
+
 call plug#end()
-
-
-" QuickScope
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-let g:qs_max_chars = 160
-highlight QuickScopePrimary guifg='#f1ede4' gui=underline
-highlight QuickScopeSecondary guifg='#94918a' gui=underline
 
 " ultisnips
 let g:UltiSnipsExpandTrigger = '<leader><tab>'
@@ -70,6 +65,12 @@ let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 " vim-closetag
 let g:closetag_filetypes = 'html,php,vue'
+
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:qs_max_chars = 160
+highlight QuickScopePrimary guifg='#f1ede4' gui=underline
+highlight QuickScopeSecondary guifg='#94918a' gui=underline
 
 " tcomment
 nmap <leader>c <c-_><c-_>
@@ -129,9 +130,8 @@ let g:echodoc#type = 'signature'
 
 
 " coc
-" CocInstall coc-css coc-emmet coc-html coc-json coc-tsserver coc-ultisnips coc-yaml coc-vetur
-let g:coc_config_home = $ROOT
-let g:coc_data_home = $HOME
+" CocInstall coc-css coc-html coc-json coc-tsserver coc-yaml coc-python coc-vetur
+" coc-go coc-emmet
 let g:coc_config_home = $ROOT . '/coc'
 let g:coc_data_home = $ROOT . '/coc'
 set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
