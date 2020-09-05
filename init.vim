@@ -163,6 +163,12 @@ augroup enhanceFold
     autocmd BufReadPre * setlocal foldmethod=indent
     autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END
+fun! Refold() abort
+    setlocal foldmethod=indent
+    " refold it to activate the new method first
+    normal zaza
+    setlocal foldmethod=manual
+endfun
 
 
 " ----- ----- ----- -----
