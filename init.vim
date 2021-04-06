@@ -18,7 +18,7 @@ set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,.svn,node_modules,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
+set wildignore+=*.swp,.git,.svn,**/node_modules/**,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
@@ -303,7 +303,7 @@ endif
 
 " Make the cursor look nicer
 set guicursor+=v:hor50
-set guicursor+=a:blinkwait750-blinkon750-blinkoff250
+set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 
 
 " ----- ----- ----- -----
