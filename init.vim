@@ -96,11 +96,8 @@ augroup vimrcBehavior
 	autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
 	autocmd FileType python setlocal omnifunc=python3complete#Complete
 
-	" less files
-	" autocmd BufNewFile,BufRead *.less setlocal filetype=css
-
 	" Remove trailing space before saving
-	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.php,*.py,*.vue :%s/\s\+$//e
+	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.php,*.py,*.ts,*.tsx,*.jsx,*.vue :%s/\(\s\+\|\)$//e
 
 	" Don't list preview and quickfix window
 	autocmd BufEnter * :call <SID>DelistWindow()
