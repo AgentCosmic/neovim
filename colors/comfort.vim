@@ -96,7 +96,6 @@ hi CursorLineNr    guifg=#94918a
 hi NonText         guifg=#94918a guibg=#262624
 hi ColorColumn                   guibg=#12110e
 
-
 hi MBENormal guifg=fg
 hi MBEChanged guifg=#f1ede4 gui=italic
 hi link MBEVisibleNormal MBENormal
@@ -106,6 +105,12 @@ hi MBEVisibleActiveChanged guifg=#f1ede4 guibg=#484744 gui=bold,italic
 
 hi CocUnderline gui=undercurl
 hi CocErrorHighlight gui=undercurl guifg=#ffa2a0
+hi CocErrorSign gui=undercurl guifg=#ffa2a0
+
+hi Conceal		guibg=bg		guifg=#3d3c37
+
+hi QuickScopePrimary	guifg=#f1ede4	gui=underline
+hi QuickScopeSecondary	guifg=#94918a	gui=underline
 
 hi phpFunctions  guifg=#d5bbff
 
