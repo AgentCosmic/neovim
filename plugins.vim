@@ -1,5 +1,5 @@
 " https://github.com/BurntSushi/ripgrep/releases
-call plug#begin('$HOME/plugged')
+call plug#begin('$ROOT/plugged')
 " Universal Vim Functionality
 Plug 'duff/vim-bufonly'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
