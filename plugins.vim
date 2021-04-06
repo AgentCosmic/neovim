@@ -15,22 +15,19 @@ Plug 'tomtom/tcomment_vim'
 Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/sideways.vim'
 Plug 'wellle/targets.vim'
+Plug 'sheerun/vim-polyglot'
 Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesEnable', 'IndentGuidesToggle']}
 Plug 'Shougo/echodoc.vim' " used by coc
 " External Dependency
-Plug 'neoclide/coc.nvim', { 'branch': 'release' } " install yarn first
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'ctrlpvim/ctrlp.vim' " https://github.com/BurntSushi/ripgrep/releases
 Plug 'majutsushi/tagbar', { 'on': ['Tagbar', 'TagbarToggle', 'TagbarOpen'] } " https://github.com/universal-ctags/ctags-win32/releases
 " Plug 'w0rp/ale'
 " Language
 Plug 'mattn/emmet-vim'
-Plug 'pangloss/vim-javascript'
 Plug 'alvan/vim-closetag'
-Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'pearofducks/ansible-vim'
-Plug 'posva/vim-vue', { 'for': 'vue' }
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install', 'on': 'MarkdownPreview' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'MarkdownPreview' }
 " GUI
 Plug 'norcalli/nvim-colorizer.lua' " only works on neovim
 Plug 'vim-airline/vim-airline'
@@ -69,8 +66,6 @@ let g:closetag_filetypes = 'html,php,vue'
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_max_chars = 160
-highlight QuickScopePrimary guifg='#f1ede4' gui=underline
-highlight QuickScopeSecondary guifg='#94918a' gui=underline
 
 " tcomment
 nmap <leader>c <c-_><c-_>
