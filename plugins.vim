@@ -81,6 +81,7 @@ augroup AutoPairs
 	autocmd!
 	autocmd FileType html,vue let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'})
 	autocmd FileType css,vue let b:AutoPairs = AutoPairsDefine({'/**' : '*/', '/*' : '*/'})
+	autocmd FileType html,htmldjango let b:AutoPairs = AutoPairsDefine({'{%' : '%}'})
 	autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?php' : '?>'})
 augroup end
 inoremap {, {},<left><left>
