@@ -289,6 +289,7 @@ nnoremap cq :call ChangeReg()<cr>
 " TUI/GUI
 " ----- ----- ----- -----
 
+set guifont=Consolas:h9
 set background=dark
 colorscheme	comfort
 syntax on
