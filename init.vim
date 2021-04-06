@@ -1,8 +1,7 @@
 " This is the folder where we'll store all the files
 " set environment variable $env:XDG_CONFIG_HOME="D:/Applications/Neovim"
 let $ROOT = expand('D:/Applications/Neovim/nvim')
-let $HOME = $ROOT
-set runtimepath+=$HOME
+set runtimepath+=$ROOT
 
 runtime mswin.vim
 
@@ -36,10 +35,10 @@ set showcmd " display incomplete commands
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$HOME/.cache/swap//,.
+set directory=$ROOT/.cache/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$HOME/.cache/undo//,.
+set undodir=$ROOT/.cache/undo//,.
 
 " Line number
 set numberwidth=5
@@ -314,5 +313,5 @@ set guicursor+=a:blinkwait750-blinkon750-blinkoff250
 set termguicolors
 " let g:loaded_matchparen = 1 " tmp disable highlighting matching parenthesis because it's ugly
 " set colorcolumn
-command! EPlugin :e $HOME/plugins.vim
-source $HOME/plugins.vim
+command! EPlugin :e $ROOT/plugins.vim
+source $ROOT/plugins.vim
