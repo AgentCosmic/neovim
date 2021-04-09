@@ -1,4 +1,3 @@
-/plugged
-/.cache
 /autoload/plug.vim.old
-/coc
+/plugged
+/home
