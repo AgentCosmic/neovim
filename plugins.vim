@@ -1,5 +1,5 @@
 " https://github.com/BurntSushi/ripgrep/releases
-call plug#begin('$ROOT/plugged')
+call plug#begin('$HOME/plugged')
 " Universal Vim Functionality
 Plug 'duff/vim-bufonly'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
@@ -130,6 +130,8 @@ let g:echodoc#type = 'signature'
 " coc-go coc-emmet
 let g:coc_config_home = $ROOT . '/coc'
 let g:coc_data_home = $ROOT . '/coc'
+let g:coc_config_home = $HOME . '/coc'
+let g:coc_data_home = $HOME . '/coc'
 set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
 set shortmess+=c " don't give |ins-completion-menu| messages.
 set signcolumn=yes " always show signcolumns

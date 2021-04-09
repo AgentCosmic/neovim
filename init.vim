@@ -2,6 +2,8 @@
 " set environment variable $env:XDG_CONFIG_HOME="D:/Applications/Neovim"
 let $ROOT = expand('D:/Applications/Neovim/nvim')
 set runtimepath+=$ROOT
+" we reset $HOME directory here so plugins won't dirty our real home directory
+let $HOME = $ROOT . '/home'
 
 runtime mswin.vim
 
@@ -35,10 +37,10 @@ set showcmd " display incomplete commands
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$ROOT/.cache/swap//,.
+set directory=$HOME/.cache/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$ROOT/.cache/undo//,.
+set undodir=$HOME/.cache/undo//,.
 
 " Line number
 set numberwidth=5
