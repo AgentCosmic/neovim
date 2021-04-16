@@ -16,7 +16,6 @@ Plug 'sickill/vim-pasta'
 Plug 'AndrewRadev/sideways.vim'
 Plug 'wellle/targets.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesEnable', 'IndentGuidesToggle']}
 Plug 'Shougo/echodoc.vim' " used by coc
 " External Dependency
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }

@@ -150,6 +150,7 @@ set softtabstop=4
 set smartindent
 set autoindent
 set nocindent
+set list lcs=tab:\|\ " show tab guides
 
 " Folding
 set foldnestmax=8
