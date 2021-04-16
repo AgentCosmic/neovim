@@ -1,6 +1,5 @@
 if exists('g:GuiLoaded')
-	" GuiFont! Hack:h10
-	GuiFont! Consolas:h10
+	GuiFont! Hack\ NF:h9
 	GuiPopupmenu 0
 	GuiTabline 0
 	set background=dark

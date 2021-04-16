@@ -8,6 +8,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-abolish'
 Plug 'dyng/ctrlsf.vim'
 Plug 'unblevable/quick-scope'
+Plug 'ryanoasis/vim-devicons'
 " Programming Related
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
