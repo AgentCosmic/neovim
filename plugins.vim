@@ -61,7 +61,7 @@ let g:EasyMotion_leader_key = '<Leader>'
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 " vim-closetag
-let g:closetag_filetypes = 'html,php,vue'
+let g:closetag_filetypes = 'html,php,typescript,typescriptreact,javascriptreact,vue'
 
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -291,6 +291,14 @@ let g:vue_disable_pre_processors=1
 " Emmet
 let g:user_emmet_leader_key = '<c-y>'
 let g:user_emmet_expandabbr_key = '<c-e>'
+let g:user_emmet_settings = {
+\    'typescriptreact' : {
+\        'extends' : 'jsx',
+\    },
+\    'javascriptreact' : {
+\        'extends' : 'jsx',
+\    },
+\ }
 " let g:user_emmet_expandword_key = '<c-e>'
 " let g:user_emmet_complete_tag = 1
 
