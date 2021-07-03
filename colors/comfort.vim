@@ -94,7 +94,7 @@ hi CursorColumn                  guibg=#30302e
 hi LineNr          guifg=#94918a
 hi CursorLineNr    guifg=#94918a
 hi NonText         guifg=#94918a guibg=#262624
-hi ColorColumn                   guibg=#12110e
+hi ColorColumn                   guibg=#1c1b1a
 hi Whitespace      guifg=#3d3c37
 
 hi Conceal		guibg=bg		guifg=#3d3c37
@@ -123,4 +123,5 @@ hi phpFunctions  guifg=#d5bbff
 " #3d3c37 25 Visual
 " #30302e 20 CursorLine
 " #262624 15 bg
+" #1c1b1a 10 column
 " #12110e 5  black
