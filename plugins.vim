@@ -70,7 +70,7 @@ let g:qs_max_chars = 160
 " tcomment
 nmap <leader>c <c-_><c-_>
 vmap <leader>c <c-_><c-_>
-" imap <leader>c <c-o><c-_><c-_>
+let g:tcomment#filetype#guess_typescriptreact = 1
 
 " sideways
 noremap <c-h> :SidewaysLeft<cr>
