@@ -126,10 +126,8 @@ let g:echodoc#type = 'signature'
 
 
 " coc
-" CocInstall coc-css coc-html coc-json coc-tsserver coc-yaml coc-python coc-vetur
+" CocInstall coc-css coc-html coc-json coc-tsserver coc-yaml coc-pyright coc-prettier coc-eslint coc-vetur
 " coc-go coc-emmet
-let g:coc_config_home = $ROOT . '/coc'
-let g:coc_data_home = $ROOT . '/coc'
 let g:coc_config_home = $HOME . '/coc'
 let g:coc_data_home = $HOME . '/coc'
 set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
@@ -154,18 +152,23 @@ inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
-nmap <leader>r <Plug>(coc-rename)
-nnoremap <silent> gt :<c-u>CocList outline<cr>
-nnoremap <silent> gT :<c-u>CocList -I symbols<cr>
-nnoremap <silent> gD :<c-u>CocList diagnostics<cr>
-nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> gt :<c-u>CocList outline<cr>
+nmap <silent> gT :<c-u>CocList -I symbols<cr>
+nmap <silent> gD :<c-u>CocList diagnostics<cr>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]r :CocCommand document.jumpToNextSymbol<cr>
+nmap <silent> [r :CocCommand document.jumpToPrevSymbol<cr>
+nmap <silent> K :call <SID>show_documentation()<cr>
 nmap g= :call CocAction('format')<cr>
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>qf <Plug>(coc-fix-current)
+nmap <leader>oi :CocCommand editor.action.organizeImport<cr>
+nmap <leader>ac :CocAction<cr>
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
-nnoremap <silent> K :call <SID>show_documentation()<cr>
 function! s:show_documentation()
 	if (index(['vim','help'], &filetype) >= 0)
 		execute 'h '.expand('<cword>')
@@ -176,15 +179,14 @@ endfunction
 augroup CocGroup
 	autocmd!
 	" Setup formatexpr specified filetype(s).
-	autocmd FileType javascript,json,vue,html,css,go setl formatexpr=CocAction('formatSelected')
+	autocmd FileType javascript,typescript,typescriptreact,javascriptreact,json,vue,html,css,go setl formatexpr=CocAction('formatSelected')
 	" Update signature help on jump placeholder
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 	" Auto format and fix import for go
-	autocmd BufWritePre *.go :call CocAction('format') | CocCommand editor.action.organizeImport
-	autocmd BufWritePre *.vue,*.js :call CocAction('format')
+	" autocmd BufWritePre *.tsx CocCommand editor.action.organizeImport
+	" autocmd BufWritePre *.go :call CocAction('format') | CocCommand editor.action.organizeImport
+	" autocmd BufWritePre *.jsx,*.vue,*.js :call CocAction('format')
 augroup end
-" Fix autofix problem of current line
-" nmap <leader>qf  <Plug>(coc-fix-current)
 " Close preview window when completion is done.
 " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -255,7 +257,7 @@ let g:ale_python_pyls_executable = 'C:/Python36/Scripts/pyls'
 function! SetALEShortcuts()
 	" nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<CR>
 	" nnoremap <buffer> <silent> gd :ALEGoToDefinition<CR>
-	nnoremap <buffer> <silent> gf :ALEFix<CR>
+	" nnoremap <buffer> <silent> gf :ALEFix<CR>
 	" nnoremap <buffer> <silent> <f3> :ALEFindReferences<CR>
 	" nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 	" nnoremap <buffer> <silent> <leader>= :call LanguageClient#textDocument_formatting()<CR>
