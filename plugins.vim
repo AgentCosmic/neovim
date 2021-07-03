@@ -102,12 +102,12 @@ let g:ctrlp_custom_ignore = {
 			\ 'file': '\v[\/](.+\.min\.(css|js))$'
 			\ }
 let g:user_command_async = 1
-let g:ctrlp_search_options = '-g "!*.jpg" -g "!*.png" -g "!*.gif" -g "!*.psd" -g "!*.ai" -g "!node_modules" -g "!__pycache__" -g "!venv"' " search options for ripgrep to reuse in other vimrc
+let g:ctrlp_search_options = '-g "!*.jpg" -g "!*.png" -g "!*.gif" -g "!*.svg" -g "!*.psd" -g "!*.ai" -g "!.git" -g "!node_modules" -g "!__pycache__" -g "!.venv" -g "!venv"' " search options for ripgrep to reuse in other vimrc
 let g:ctrlp_user_command = {
 			\ 'types': {
-				\ 1: ['.git', 'cd %s && git ls-files -- . ":!:*.jpg" . ":!:*.png" . ":!:*.psd" . ":!:*.ai"'],
+				\ 1: ['.git', 'cd %s && git ls-files -- . ":!:*.jpg" . ":!:*.png" . ":!:*.svg" . ":!:*.psd" . ":!:*.ai"'],
 			\ },
-			\ 'fallback': 'rg %s --files --color=never ' . g:ctrlp_search_options
+			\ 'fallback': 'rg %s --files --color=never --hidden ' . g:ctrlp_search_options
 			\ }
 nnoremap gb :CtrlPBuffer<cr>
 nnoremap g/ :CtrlPLine<cr>
