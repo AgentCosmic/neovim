@@ -235,11 +235,11 @@ nnoremap <c-s-down> 10<C-x>
 
 " Shortcuts
 nnoremap <leader>s :update<cr>
-nnoremap <leader>a :wa<cr>
-nnoremap <leader>h :nohlsearch<cr>
-nnoremap <leader>q :q<cr>
+nnoremap <leader>as :wa<cr>
+nnoremap <leader>nh :nohlsearch<cr>
+nnoremap <leader>qq :q<cr>
 vnoremap <leader>p "_dP
-nnoremap <leader>o :update<cr>:source %<cr>
+nnoremap <leader>ou :update<cr>:source %<cr>
 " Substitute
 nnoremap <F2> yiw:%s/\<<c-r>0\>/
 " Grep
