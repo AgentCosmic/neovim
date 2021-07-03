@@ -15,12 +15,12 @@ filetype plugin indent on " Important for a lot of things
 set incsearch " Do incremental searching
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !*.svg\ -g\ !package-lock.json\ -g\ !Pipfile.lock
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,.svn,**/node_modules/**,*.pyc,*.png,*.jpg,*.gif,*.psd,desktop.ini,Thumbs.db " Ignore these files when searching
+set wildignore+=*.swp,.git,*/node_modules/*,*/venv/*,*/.venv/*,*.pyc,*.png,*.jpg,*.gif,*.svg,*.psd,*.ai,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
