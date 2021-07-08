@@ -92,23 +92,23 @@ augroup vimrcBehavior
 		\ endif
 
 	" OmniComplete
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-	autocmd FileType python setlocal omnifunc=python3complete#Complete
+	" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+	" autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+	" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+	" autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
+	" autocmd FileType python setlocal omnifunc=python3complete#Complete
 
 	" Remove trailing whitespace before saving
 	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.php,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.vue :%s/\(\s\+\|\)$//e
 
-	" Don't list preview and quickfix window
+	" Don't list preview window
 	autocmd BufEnter * :call <SID>DelistWindow()
+	" Don't list quickfix window
+	autocmd FileType qf set nobuflisted
 augroup END
 
 function! s:DelistWindow()
 	if &previewwindow
-		set nobuflisted
-	elseif &filetype == 'qf'
 		set nobuflisted
 	endif
 endf

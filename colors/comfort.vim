@@ -9,7 +9,6 @@ endif
 
 let g:colors_name="comfort"
 
-
 hi Boolean         guifg=#ffa640
 hi Character       guifg=#e5d477
 hi Number          guifg=#ffa640
@@ -99,29 +98,70 @@ hi Whitespace      guifg=#3d3c37
 
 hi Conceal		guibg=bg		guifg=#3d3c37
 
-hi MBENormal guifg=fg
-hi MBEChanged guifg=#f1ede4 gui=italic
-hi link MBEVisibleNormal MBENormal
-hi link MBEVisibleChanged MBEChanged
-hi MBEVisibleActiveNormal guifg=#f1ede4 guibg=#484744 gui=bold
-hi MBEVisibleActiveChanged guifg=#f1ede4 guibg=#484744 gui=bold,italic
+" ------------------------------------------------------------------------------
 
-hi CocUnderline gui=undercurl
-hi CocErrorHighlight gui=undercurl guifg=#ffa2a0
-hi CocErrorSign gui=undercurl guifg=#ffa2a0
+" quick-scope
 
 hi QuickScopePrimary	guifg=#f1ede4	gui=underline
 hi QuickScopeSecondary	guifg=#94918a	gui=underline
 
-hi phpFunctions  guifg=#d5bbff
+" CtrlP
 
-" #f1ede4 95 white
-" #d6d4cb 85 fg
-" #94918a 60 grey
-" #706a5a 45 Search
-" #484744 30 UI
-" #3d3c37 25 Visual
-" #30302e 20 CursorLine
-" #262624 15 bg
-" #1c1b1a 10 column
-" #12110e 5  black
+hi CtrlPMatch guifg=#99cbff
+
+" LSP
+
+hi LspDiagnosticsDefaultError gui=undercurl guifg=#ffa2a0
+hi LspDiagnosticsSignError guifg=#ffa2a0
+hi LspDiagnosticsDefaultWarning guifg=#ffa640
+hi LspReferenceText gui=underline
+hi link LspReferenceWrite LspReferenceText
+hi link LspReferenceRead LspReferenceText
+
+" nvim-compe
+
+" hi link CompeDocumentation NormalFloat
+
+" barbar.nvim
+
+hi BufferTabpages guifg=#12110e guibg=#12110e
+hi BufferTabpageFill guifg=#12110e guibg=#12110e
+hi BufferOffset guibg=#262624
+
+hi BufferCurrent guifg=#d6d4cb guibg=#262624
+hi link BufferCurrentIcon BufferCurrent
+hi link BufferCurrentIndex BufferCurrent
+hi BufferCurrentMod guifg=#99cbff guibg=#262624
+hi BufferCurrentSign guifg=#262624 guibg=#262624
+hi BufferCurrentTarget guifg=#ffa2a0 guibg=#262624
+
+hi BufferVisible guifg=#94918a guibg=#262624
+hi link BufferVisibleIcon BufferVisible
+hi link BufferVisibleIndex BufferVisible
+hi BufferVisibleMod guifg=#99cbff guibg=#262624
+hi BufferVisibleSign guifg=#262624 guibg=#262624
+hi BufferVisibleTarget guifg=#ffa2a0 guibg=#262624
+
+hi BufferInactive guifg=#94918a guibg=#12110e
+hi link BufferInactiveIcon BufferInactive
+hi link BufferInactiveIndex BufferInactive
+hi BufferInactiveMod guifg=#99cbff guibg=#12110e
+hi BufferInactiveSign guifg=#12110e guibg=#12110e
+hi BufferInactiveTarget guifg=#ffa2a0 guibg=#12110e
+
+" red = '#ffa2a0'
+" orange = '#ffa640'
+" yellow = '#e5d477'
+" green = '#7bdb7b'
+" blue = '#99cbff'
+" purple = '#d5bbff'
+" grey95 = '#f1ede4' " white
+" grey85 = '#d6d4cb' " fg
+" grey60 = '#94918a' " grey
+" grey45 = '#706a5a' " Search
+" grey30 = '#484744' " UI
+" grey25 = '#3d3c37' " Visual
+" grey20 = '#30302e' " CursorLine
+" grey15 = '#262624' " bg
+" grey10 = '#1c1b1a' " column
+" grey5 = '#12110e'  " black
