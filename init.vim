@@ -121,6 +121,9 @@ augroup END
 " Text and formatting
 " ----- ----- ----- -----
 
+" Default to unix line ending
+set fileformats=unix,dos
+
 " Wordwrap
 set linebreak
 
