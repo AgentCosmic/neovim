@@ -401,8 +401,8 @@ nnoremap <silent> K :Lspsaga hover_doc<CR>
 nnoremap <silent> <leader>k :Lspsaga signature_help<CR>
 nnoremap <silent> <leader>rn :Lspsaga rename<CR>
 nnoremap <silent> <leader>d :Lspsaga show_line_diagnostics<CR>
-nnoremap <silent> [d :Lspsaga diagnostic_jump_next<CR>
-nnoremap <silent> ]d :Lspsaga diagnostic_jump_prev<CR>
+nnoremap <silent> ]d :Lspsaga diagnostic_jump_next<CR>
+nnoremap <silent> [d :Lspsaga diagnostic_jump_prev<CR>
 
 
 
