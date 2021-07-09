@@ -43,40 +43,25 @@ set undofile
 set undodir=$HOME/.cache/undo//,.
 
 " Line number
-set numberwidth=5
+set numberwidth=4
 set relativenumber
 set number
 
 " Status line
 set laststatus=2 " always show statusline
-set statusline=\ %{StatuslineMode()}\ | " working directory
+set statusline=
+set statusline+=%{%&modified?'%#MyStatusLineModified#':'%#MyStatusLineUnmodified#'%} " highlight modified
+set statusline+=\ ➤\ |
+set statusline+=%#MyStatusLinePath#
 set statusline+=\ %f " working directory followed by file path
-set statusline+=\ %r " readonly flag
-set statusline+=\ %m " modified flag
+set statusline+=\ %r%h%w%q%m " flags: readonly, help, preview, list, modified
 set statusline+=%= " right align from here
-set statusline+=\ %{&ff},\ %{strlen(&fenc)?&fenc:'none'}\ %y\  " filetype, format, encoding
-set statusline+=\ | " separator
-set statusline+=\ %l:\ %c\ -\ %L\ lines\ " current line, cursor column, line/total percent
-function! StatuslineMode()
-  let l:mode=mode()
-  if l:mode==#"n"
-	return "NORMAL"
-  elseif l:mode==?"v"
-	return "VISUAL"
-  elseif l:mode==#"i"
-	return "INSERT"
-  elseif l:mode==#"R"
-	return "REPLACE"
-  elseif l:mode==?"s"
-	return "SELECT"
-  elseif l:mode==#"t"
-	return "TERMINAL"
-  elseif l:mode==#"c"
-	return "COMMAND"
-  elseif l:mode==#"!"
-	return "SHELL"
-  endif
-endfunction
+set statusline+=%#MyStatusLinePosition#
+set statusline+=\ %l,%c\ ≡\ %L\ | " current line, cursor column, line/total percent
+set statusline+=%#MyStatusLineMisc#
+set statusline+=\ %{&ff}\ ∷\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
+set statusline+=%#MyStatusLineFiletype#
+set statusline+=\ %{&ft}\ |
 
 augroup vimrcBehavior
 	autocmd!
@@ -293,7 +278,7 @@ nnoremap cq :call ChangeReg()<cr>
 " ----- ----- ----- -----
 
 set background=dark
-colorscheme	comfort
+colorscheme	soft
 syntax on
 set hlsearch
 " In many terminal emulators the mouse works just fine, thus enable it.

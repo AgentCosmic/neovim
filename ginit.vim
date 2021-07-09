@@ -3,7 +3,7 @@ if exists('g:GuiLoaded')
 	GuiPopupmenu 0
 	GuiTabline 0
 	set background=dark
-	colorscheme	comfort
+	colorscheme	soft
 
 	" Start with maximized window
 	call GuiWindowMaximized(1)
