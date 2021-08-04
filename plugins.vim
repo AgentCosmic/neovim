@@ -287,6 +287,16 @@ local on_attach = function(client, bufnr)
 	-- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', opts)
 	-- buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
 
+	-- lspsaga
+	buf_set_keymap('n', '<leader>ac', ':Lspsaga code_action<cr>', opts)
+	buf_set_keymap('n', 'K', ':Lspsaga hover_doc<cr>', opts)
+	buf_set_keymap('n', '<leader>K', ':Lspsaga signature_help<cr>', opts)
+	buf_set_keymap('n', '<leader>rn', ':Lspsaga rename<cr>', opts)
+	buf_set_keymap('n', '<leader>ld', ':Lspsaga show_line_diagnostics<cr>', opts)
+	buf_set_keymap('n', ']d', ':Lspsaga diagnostic_jump_next<cr>', opts)
+	buf_set_keymap('n', '[d', ':Lspsaga diagnostic_jump_prev<cr>', opts)
+	buf_set_keymap('n', '<leader>rf', ':Lspsaga lsp_finder<cr>', opts)
+
 	-- auto format
 	if client.resolved_capabilities.document_formatting then
 		vim.cmd [[augroup AutoFormat]]
@@ -389,17 +399,6 @@ nvim_lsp.yamlls.setup{
 	cmd = { "yaml-language-server.cmd", "--stdio" },
 }
 EOF
-
-
-
-" lspsaga
-nnoremap <silent> <leader>ac :Lspsaga code_action<CR>
-nnoremap <silent> K :Lspsaga hover_doc<CR>
-nnoremap <silent> <leader>k :Lspsaga signature_help<CR>
-nnoremap <silent> <leader>rn :Lspsaga rename<CR>
-nnoremap <silent> <leader>d :Lspsaga show_line_diagnostics<CR>
-nnoremap <silent> ]d :Lspsaga diagnostic_jump_next<CR>
-nnoremap <silent> [d :Lspsaga diagnostic_jump_prev<CR>
 
 
 
