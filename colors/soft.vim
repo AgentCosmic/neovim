@@ -18,13 +18,14 @@ function! s:h(group, style, ...)
 endfunction
 
 let s:red = '#ffb2b5'
+let s:purple = '#ddbaff'
+let s:blue = '#99cbff'
+let s:green = '#8bd6bd'
 let s:yellow = '#becc7a'
 let s:orange = '#e5bf8a'
-let s:green = '#8bd6bd'
-let s:blue = '#99cbff'
-let s:purple = '#ddbaff'
 let s:grey95 = '#f1ede4' " white
 let s:grey85 = '#d6d4cb' " fg
+let s:grey75 = '#bdb8b1' " inactive tab
 let s:grey65 = '#a29d97' " comment
 let s:grey25 = '#3d3c37' " Visual
 let s:grey20 = '#30302e' " CursorLine
@@ -99,7 +100,7 @@ call s:h('Substitute', {'fg': s:orange, 'bg': s:grey15})
 call s:h('LineNr', {'fg': s:grey65})
 call s:h('CursorLineNr', {'fg': s:grey65})
 call s:h('MatchParen', {'fg': s:grey15, 'bg': s:green})
-call s:h('ModeMsg', {'fg': s:grey65})
+call s:h('ModeMsg', {'fg': s:orange})
 call s:h('MsgArea', {'fg': s:grey85})
 call s:h('MsgSeparator', {'fg': s:yellow})
 call s:h('MoreMsg', {'fg': s:yellow})
@@ -107,7 +108,7 @@ call s:h('NonText', {'fg': s:grey65})
 call s:h('Normal', {'fg': s:grey85, 'bg': s:grey15})
 call s:h('NormalFloat', {'fg': s:grey85, 'bg': s:grey20})
 call s:h('Pmenu', {'fg': s:grey85, 'bg': s:grey25})
-call s:h('PmenuSel', {'fg': s:grey15, 'bg': s:blue})
+call s:h('PmenuSel', {'fg': s:grey15, 'bg': s:green})
 call s:h('PmenuSbar', {'bg': s:grey95})
 call s:h('PmenuThumb', {'fg': s:green})
 call s:h('Question', {'fg': s:orange})
@@ -135,10 +136,10 @@ call s:h('WildMenu', {'fg': s:grey15, 'bg': s:blue})
 " custom status line highlight groups
 
 call s:h('MyStatusLineUnmodified', {'fg': s:grey65, 'bg': s:grey10})
-call s:h('MyStatusLineModified', {'fg': s:grey15, 'bg': s:blue})
+call s:h('MyStatusLineModified', {'fg': s:grey15, 'bg': s:orange})
 call s:h('MyStatusLinePath', {'fg': s:grey85, 'bg': s:grey25})
 call s:h('MyStatusLinePosition', {'fg': s:grey65, 'bg': s:grey10})
-call s:h('MyStatusLineMisc', {'fg': s:grey65, 'bg': s:grey25})
+call s:h('MyStatusLineMisc', {'fg': s:grey75, 'bg': s:grey25})
 call s:h('MyStatusLineFiletype', {'fg': s:grey65, 'bg': s:grey10})
 
 " languages
@@ -180,18 +181,18 @@ call s:h('BufferTabpages', {'fg': s:grey05, 'bg': s:grey05})
 call s:h('BufferTabpageFill', {'fg': s:grey05, 'bg': s:grey05})
 call s:h('BufferOffset', {'bg': s:grey15})
 
-call s:h('BufferCurrent', {'fg': s:grey95, 'bg': s:grey25, 'gui': 'bold'})
+call s:h('BufferCurrent', {'fg': s:grey95, 'bg': s:grey25})
 hi link BufferCurrentIcon BufferCurrent
 hi link BufferCurrentIndex BufferCurrent
-call s:h('BufferCurrentMod', {'fg': s:blue, 'bg': s:grey25, 'gui': 'bold'})
+call s:h('BufferCurrentMod', {'fg': s:orange, 'bg': s:grey25})
 call s:h('BufferCurrentSign', {'fg': s:green, 'bg': s:grey25})
 call s:h('BufferCurrentTarget', {'fg': s:orange, 'bg': s:grey25})
 
-call s:h('BufferInactive', {'fg': s:grey85, 'bg': s:grey05})
+call s:h('BufferInactive', {'fg': s:grey75, 'bg': s:grey05})
 hi link BufferInactiveIcon BufferInactive
 hi link BufferInactiveIndex BufferInactive
 hi link BufferInactiveMod BufferInactive
-call s:h('BufferInactiveMod', {'fg': s:blue, 'bg': s:grey05})
+call s:h('BufferInactiveMod', {'fg': s:orange, 'bg': s:grey05})
 call s:h('BufferInactiveSign', {'fg': s:grey25, 'bg': s:grey05})
 call s:h('BufferInactiveTarget', {'fg': s:orange, 'bg': s:grey05})
 
@@ -212,7 +213,7 @@ call s:h('HopUnmatched', {'fg': s:grey65})
 " nvim-tree.lua
 
 call s:h('NvimTreeRootFolder', {'fg': s:blue})
-call s:h('NvimTreeFolderName', {'fg': s:orange})
+" call s:h('NvimTreeFolderName', {'fg': s:orange})
 call s:h('NvimTreeOpenedFolderName', {'fg': s:orange})
 call s:h('NvimTreeExecFile', {'fg': s:grey85})
 call s:h('NvimTreeGitDirty', {'fg': s:blue})
