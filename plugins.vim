@@ -1,7 +1,6 @@
 " https://github.com/BurntSushi/ripgrep/releases
 call plug#begin('$HOME/plugged')
 " Universal Vim Functionality
-Plug 'duff/vim-bufonly'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'tpope/vim-abolish'
 Plug 'dyng/ctrlsf.vim'
@@ -66,11 +65,6 @@ let g:firenvim_config = {
 
 
 " -----------------------------------------------------------------------------
-
-
-
-" BufOnly
-nnoremap <c-F4> :BufOnly<cr>
 
 
 
@@ -190,9 +184,12 @@ imap <F6> <c-e>
 let bufferline = get(g:, 'bufferline', {})
 let bufferline.animation = v:false
 let bufferline.maximum_padding = 2
+let bufferline.icon_separator_active = '▌'
+let bufferline.icon_separator_inactive = '▌'
 nnoremap <silent> <tab> :BufferNext<cr>
 nnoremap <silent> <s-tab> :BufferPrevious<cr>
 nnoremap <silent> <f4> :BufferClose<cr>
+nnoremap <silent> <c-f4> :BufferCloseAllButCurrent<cr>
 nnoremap <silent> <leader><tab> :BufferPick<cr>
 nnoremap <silent> <c-s-tab> :BufferMovePrevious<cr>
 nnoremap <silent> <c-tab> :BufferMoveNext<cr>
