@@ -13,12 +13,12 @@ runtime mswin.vim
 
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !*.svg\ -g\ !package-lock.json\ -g\ !Pipfile.lock
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !*.svg\ -g\ !package-lock.json\ -g\ !Pipfile.lock\ -g\ !node_modules\ -g\ !venv\ -g\ !.venv
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,*/node_modules/*,*/venv/*,*/.venv/*,*.pyc,*.png,*.jpg,*.gif,*.svg,*.psd,*.ai,desktop.ini,Thumbs.db " Ignore these files when searching
+set wildignore+=*.swp,.git,*/node_modules/*,*/venv/*,*/.venv/*,*.pyc,*.png,*.jpg,*.gif,*.psd,*.ai,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set synmaxcol=500 " Don't try to highlight lines longer than this
@@ -56,7 +56,7 @@ set statusline+=%= " right align from here
 set statusline+=%#MyStatusLinePosition#
 set statusline+=\ %l,%c\ ≡\ %L\ | " current line, cursor column, line/total percent
 set statusline+=%#MyStatusLineMisc#
-set statusline+=\ %{&ff}\ ∷\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
+set statusline+=\ %{&ff}\ ∴\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
 set statusline+=%#MyStatusLineFiletype#
 set statusline+=\ %{&ft}\ |
 
@@ -137,7 +137,7 @@ set nocindent
 set list lcs=tab:\|\ " show tab guides
 
 " Folding
-set foldnestmax=8
+set foldnestmax=12
 set foldlevel=9 " prefer to be open by default
 set nofoldenable " disable by default
 " define indent folds then allow manual folding
