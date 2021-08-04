@@ -11,8 +11,6 @@ runtime mswin.vim
 " Behavior
 " ----- ----- ----- -----
 
-filetype plugin indent on " Important for a lot of things
-set incsearch " Do incremental searching
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !*.svg\ -g\ !package-lock.json\ -g\ !Pipfile.lock
@@ -23,7 +21,6 @@ set wildmenu " Auto complete on command line
 set wildignore+=*.swp,.git,*/node_modules/*,*/venv/*,*/.venv/*,*.pyc,*.png,*.jpg,*.gif,*.svg,*.psd,*.ai,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
-set encoding=utf8 " Set utf8 as standard encoding and en_US as the standard language
 set synmaxcol=500 " Don't try to highlight lines longer than this
 set signcolumn=yes " always show signcolumns
 set colorcolumn=120 " set ruler to show at 120
@@ -136,7 +133,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set smartindent
-set autoindent
 set nocindent
 set list lcs=tab:\|\ " show tab guides
 
@@ -280,10 +276,7 @@ nnoremap cq :call ChangeReg()<cr>
 " TUI/GUI
 " ----- ----- ----- -----
 
-set background=dark
 colorscheme	soft
-syntax on
-set hlsearch
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
 	set mouse=a
