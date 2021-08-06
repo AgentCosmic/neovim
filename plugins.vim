@@ -151,7 +151,7 @@ let g:user_command_async = 1
 let g:ctrlp_search_options = '-g "!*.jpg" -g "!*.png" -g "!*.gif" -g "!*.svg" -g "!*.psd" -g "!*.ai" -g "!.git" -g "!node_modules" -g "!__pycache__" -g "!.venv" -g "!venv"' " search options for ripgrep to reuse in other vimrc
 let g:ctrlp_user_command = {
 	\ 'types': {
-		\ 1: ['.git', 'cd %s && git ls-files -- . ":!:*.jpg" . ":!:*.png" . ":!:*.svg" . ":!:*.psd" . ":!:*.ai"'],
+		\ 1: ['.git', 'cd %s && git ls-files -- . ":!:*.jpg" . ":!:*.png" . ":!:*.svg" . ":!:*.psd" . ":!:*.ai" . ":!:*/node_modules/*"'],
 	\ },
 	\ 'fallback': 'rg %s --files --color=never --hidden ' . g:ctrlp_search_options
 \ }
@@ -170,7 +170,7 @@ let g:user_emmet_settings = {
 \    'typescriptreact' : {
 \        'extends' : 'jsx',
 \    },
-\    'javascriptreact' : {
+\    'javascript' : {
 \        'extends' : 'jsx',
 \    },
 \ }
@@ -557,11 +557,6 @@ augroup end
 " }
 " EOF
 
-
-
-" " EasyMotion
-" let g:EasyMotion_leader_key = '<Leader>'
-" let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 
 " " echodoc
