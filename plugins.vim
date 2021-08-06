@@ -207,33 +207,6 @@ let g:nvim_tree_indent_markers = 1
 lua << EOF
 local nvim_lsp = require('lspconfig')
 
--- lets us use efm formatting instead of other servers like tsserver
-local prioritize_efm_formatting
-function custom_formatting()
-	if not prioritize_efm_formatting then
-		local clients = vim.lsp.buf_get_clients(0)
-		if #clients > 1 then
-			-- check if multiple clients, and if efm is setup
-			for _,c1 in pairs(clients) do
-				if c1.name == "efm" then
-					-- if efm then disable others
-					for _,c2 in pairs(clients) do
-						if c2.name ~= "efm" then c2.resolved_capabilities.document_formatting = false end
-					end
-					-- no need to contunue first loop
-					break
-				end
-			end
-		end
-	end
-	-- no need to do above check again
-	prioritize_efm_formatting = true
-	-- seems like async mode will mess up the content if multiple buffers are saved at once
-	-- vim.lsp.buf.formatting()
-	-- use sync formatting so we can format before saving
-	vim.lsp.buf.formatting_sync({}, 2000)
-end
-
 function organize_imports()
 	local params = vim.lsp.util.make_range_params()
 	params.context = {diagnostics = {}, only = {'source.organizeImports'}}
@@ -277,7 +250,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
 	-- buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', opts)
 	-- buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', opts)
-	buf_set_keymap('n', 'g=', '<cmd>lua custom_formatting()<cr>', opts)
+	buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
 	buf_set_keymap('n', '<leader>oi', '<cmd>lua organize_imports()<cr>', opts)
 	-- buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 	-- buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
@@ -301,20 +274,27 @@ local on_attach = function(client, bufnr)
 	if client.resolved_capabilities.document_formatting then
 		vim.cmd [[augroup AutoFormat]]
 		vim.cmd [[autocmd! * <buffer>]]
-		vim.cmd [[autocmd BufWritePre <buffer> lua custom_formatting()]]
+		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync({}, 2000)]]
 		vim.cmd [[augroup END]]
 	end
 end
 
--- npm install -g typescript typescript-language-server
+-- this is where we install all the language servers
+local lsp_bins = vim.api.nvim_eval("$ROOT . '\\lsp'")
+
+-- npm i  typescript-language-server
 nvim_lsp.tsserver.setup{
-	on_attach = on_attach,
+	on_attach = function(client, bufnr)
+		client.resolved_capabilities.document_formatting = false	
+		on_attach(client, bufnr)
+	end,
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\typescript-language-server.cmd', '--stdio' }
 }
 
--- npm i -g vscode-langservers-extracted
+-- npm i vscode-langservers-extracted
 nvim_lsp.cssls.setup{
 	on_attach = on_attach,
-	cmd = { 'vscode-css-language-server.cmd', '--stdio' },
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-css-language-server.cmd', '--stdio' },
 	settings = {
 		css = {
 			validate = false,
@@ -323,24 +303,34 @@ nvim_lsp.cssls.setup{
 }
 nvim_lsp.html.setup{
 	on_attach = on_attach,
-	cmd = { 'vscode-html-language-server.cmd', '--stdio' },
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-html-language-server.cmd', '--stdio' },
 }
 nvim_lsp.jsonls.setup{
-	on_attach = on_attach,
-	cmd = { 'vscode-json-language-server.cmd', '--stdio' },
+	on_attach = function(client, bufnr)
+		client.resolved_capabilities.document_formatting = false	
+		on_attach(client, bufnr)
+	end,
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-json-language-server.cmd', '--stdio' },
 }
 
 -- go get github.com/mattn/efm-langserver
--- npm install -g eslint_d
+-- npm install eslint_d prettier
 -- pip install black
 local eslint = {
-	lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+	lintCommand = lsp_bins .. '\\node_modules\\.bin\\eslint_d -f unix --stdin --stdin-filename ${INPUT}',
 	lintStdin = true,
-	lintFormats = {"%f:%l:%c: %m"},
+	lintFormats = {'%f:%l:%c: %m'},
 	lintIgnoreExitCode = true,
-	formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+	formatCommand = 'eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}',
 	formatStdin = true
 }
+local prettier_path = '.\\node_modules\\.bin\\prettier.cmd' -- default to local
+local prettier_config = ' --config-precedence file-override --no-semi --use-tabs --single-quote'
+-- use our own if project doesn't have
+if vim.fn.executable(prettier_path) ~= 1 then
+	prettier_path = lsp_bins .. '\\node_modules\\.bin\\prettier.cmd'
+end
+prettier_cmd = prettier_path .. prettier_config
 nvim_lsp.efm.setup {
 	on_attach = on_attach,
 	init_options = {
@@ -354,49 +344,50 @@ nvim_lsp.efm.setup {
 		rootMarkers = {'.git/', 'node_modules/'},
 		languages = {
 			typescript = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser typescript', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
 				eslint,
 			},
 			typescriptreact = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser typescript', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
 				eslint,
 			},
 			javascript = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser javascript', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
 				eslint,
 			},
 			javascriptreact = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser javascript', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
 				eslint,
 			},
 			css = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser css', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser css', formatStdin = true},
 			},
 			html = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser html', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser html', formatStdin = true},
 			},
 			json = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser json', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser json', formatStdin = true},
 			},
 			python = {
-				{formatCommand = 'black --quiet -', formatStdin = true},
+				{formatCommand = lsp_bins .. '\\.venv\\Scripts\\black.exe --quiet -', formatStdin = true},
 			},
 			yaml = {
-				{formatCommand = '.\\node_modules\\.bin\\prettier.cmd --parser yaml', formatStdin = true},
+				{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
 			},
 		}
 	}
 }
 
--- npm install -g pyright
+-- npm i pyright
 nvim_lsp.pyright.setup{
 	on_attach = on_attach,
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\pyright-langserver.cmd', '--stdio' }
 }
 
--- npm install -g yaml-language-server
+-- npm i yaml-language-server
 nvim_lsp.yamlls.setup{
 	on_attach = on_attach,
-	cmd = { "yaml-language-server.cmd", "--stdio" },
+	cmd = { lsp_bins .. '\\node_modules\\.bin\\yaml-language-server.cmd', '--stdio' },
 }
 EOF
 
