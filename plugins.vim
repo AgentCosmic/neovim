@@ -38,7 +38,6 @@ Plug 'romgrk/barbar.nvim'
 " Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python -m chadtree deps', 'on': 'CHADopen'}
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'ggandor/lightspeed.nvim'
 " Plug 'nvim-lua/popup.nvim' " for telescope
@@ -55,13 +54,6 @@ let g:firenvim_config = {
 		\ }
 	\ }
 \ }
-
-" CHADTree
-" cabbrev CO CHADopen
-" let g:chadtree_settings = {
-"     \ 'theme.text_colour_set': 'nerdtree_syntax_dark',
-" 	\ 'ignore.name_exact': ['thumbs.db', '.git', 'node_modules'],
-" \ }
 
 
 " -----------------------------------------------------------------------------
@@ -556,77 +548,3 @@ augroup end
 " 	}
 " }
 " EOF
-
-
-
-" " echodoc
-" set cmdheight=2
-" let g:echodoc#enable_at_startup = 1
-" let g:echodoc#type = 'signature'
-
-
-
-" " coc
-" " CocInstall coc-css coc-html coc-json coc-tsserver coc-yaml coc-pyright coc-prettier coc-eslint coc-vetur
-" " coc-go coc-emmet
-" let g:coc_config_home = $HOME . '/coc'
-" let g:coc_data_home = $HOME . '/coc'
-" set updatetime=500 " You will have bad experience for diagnostic messages when it's default 4000.
-" set shortmess+=c " don't give |ins-completion-menu| messages.
-" set signcolumn=yes " always show signcolumns
-" " Use tab for trigger completion with characters ahead and navigate.
-" " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" inoremap <silent><expr> <tab>
-" 			\ pumvisible() ? "\<c-n>" :
-" 			\ <SID>check_back_space() ? "\<tab>" :
-" 			\ coc#refresh()
-" inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
-" function! s:check_back_space() abort
-" 	let col = col('.') - 1
-" 	return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-" " Use <c-space> for trigger completion.
-" inoremap <silent><expr> <c-space> coc#refresh()
-" " Use <cr> for confirm completion
-" inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-" " Mappings
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gr <Plug>(coc-references)
-" nmap <silent> gt :<c-u>CocList outline<cr>
-" nmap <silent> gT :<c-u>CocList -I symbols<cr>
-" nmap <silent> gD :<c-u>CocList diagnostics<cr>
-" nmap <silent> ]d <Plug>(coc-diagnostic-next)
-" nmap <silent> [d <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]r :CocCommand document.jumpToNextSymbol<cr>
-" nmap <silent> [r :CocCommand document.jumpToPrevSymbol<cr>
-" nmap <silent> K :call <SID>show_documentation()<cr>
-" nmap g= :call CocAction('format')<cr>
-" nmap <leader>rn <Plug>(coc-rename)
-" nmap <leader>qf <Plug>(coc-fix-current)
-" nmap <leader>oi :CocCommand editor.action.organizeImport<cr>
-" nmap <leader>ac :CocAction<cr>
-" xmap if <Plug>(coc-funcobj-i)
-" xmap af <Plug>(coc-funcobj-a)
-" omap if <Plug>(coc-funcobj-i)
-" omap af <Plug>(coc-funcobj-a)
-" function! s:show_documentation()
-" 	if (index(['vim','help'], &filetype) >= 0)
-" 		execute 'h '.expand('<cword>')
-" 	else
-" 		call CocAction('doHover')
-" 	endif
-" endfunction
-" augroup CocGroup
-" 	autocmd!
-" 	" Setup formatexpr specified filetype(s).
-" 	autocmd FileType javascript,typescript,typescriptreact,javascriptreact,json,vue,html,css,go setl formatexpr=CocAction('formatSelected')
-" 	" Update signature help on jump placeholder
-" 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" 	" Auto format and fix import for go
-" 	" autocmd BufWritePre *.tsx CocCommand editor.action.organizeImport
-" 	" autocmd BufWritePre *.go :call CocAction('format') | CocCommand editor.action.organizeImport
-" 	" autocmd BufWritePre *.jsx,*.vue,*.js :call CocAction('format')
-" augroup end
-" " Close preview window when completion is done.
-" " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
