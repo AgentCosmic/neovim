@@ -307,7 +307,7 @@ nvim_lsp.jsonls.setup{
 
 -- go get github.com/mattn/efm-langserver
 -- npm install eslint_d prettier
--- pip install black
+-- pip install black isort
 local eslint = {
 	lintCommand = lsp_bins .. '\\node_modules\\.bin\\eslint_d -f unix --stdin --stdin-filename ${INPUT}',
 	lintStdin = true,
@@ -362,6 +362,7 @@ nvim_lsp.efm.setup {
 			},
 			python = {
 				{formatCommand = lsp_bins .. '\\.venv\\Scripts\\black.exe --quiet -', formatStdin = true},
+				{formatCommand = lsp_bins .. '\\.venv\\Scripts\\isort.exe --quiet -', formatStdin = true},
 			},
 			yaml = {
 				{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
