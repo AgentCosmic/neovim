@@ -192,6 +192,7 @@ nnoremap <silent> <c-tab> :BufferMoveNext<cr>
 cabbrev NO NvimTreeOpen
 let g:nvim_tree_ignore = ['.git', 'node_modules']
 let g:nvim_tree_indent_markers = 1
+lua require'nvim-tree'.setup {}
 
 
 
