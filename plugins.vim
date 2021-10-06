@@ -228,6 +228,8 @@ local on_attach = function(client, bufnr)
 	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 	-- reference highlighting
 	require 'illuminate'.on_attach(client)
+	-- show signature
+	require "lsp_signature".on_attach()
 
 	-- Mappings.
 	local opts = { noremap=true, silent=true }
@@ -453,11 +455,6 @@ vim.api.nvim_set_keymap('i', '<s-tab>', 'v:lua.s_tab_complete()', {expr = true})
 vim.api.nvim_set_keymap('s', '<s-tab>', 'v:lua.s_tab_complete()', {expr = true})
 vim.api.nvim_set_keymap('i', '<c-space>', '<cmd>call compe#confirm()<cr>', {noremap = true})
 EOF
-
-
-
-" lsp_signature
-lua require'lsp_signature'.on_attach()
 
 
 
