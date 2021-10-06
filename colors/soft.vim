@@ -23,6 +23,7 @@ let s:blue = '#99cbff'
 let s:green = '#8bd6bd'
 let s:yellow = '#becc7a'
 let s:orange = '#e5bf8a'
+let s:highlight = '#1e497a'
 let s:grey95 = '#f1ede4' " white
 let s:grey85 = '#d6d4cb' " fg
 let s:grey75 = '#bdb8b1' " inactive tab
@@ -113,7 +114,7 @@ call s:h('PmenuSbar', {'bg': s:grey95})
 call s:h('PmenuThumb', {'fg': s:green})
 call s:h('Question', {'fg': s:orange})
 call s:h('QuickFixLine', {'bg': s:grey25, 'gui': 'bold'})
-call s:h('Search', {'fg': s:grey15, 'bg': s:orange})
+call s:h('Search', {'fg': s:grey95, 'bg': s:highlight, 'gui': 'underline'})
 call s:h('SpecialKey', {'fg': s:grey65, 'gui': 'italic'})
 call s:h('SpellBad', {'fg': s:red, 'gui': 'undercurl', 'sp': s:red})
 call s:h('SpellCap', {'fg': s:orange, 'gui': 'undercurl', 'sp': s:orange})
