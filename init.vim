@@ -87,6 +87,9 @@ augroup vimrcBehavior
 	autocmd BufEnter * :call <SID>DelistWindow()
 	" Don't list quickfix window
 	autocmd FileType qf set nobuflisted
+
+	" Highlight yanked region
+	au TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=100, on_visual=true}
 augroup END
 
 function! s:DelistWindow()
