@@ -27,7 +27,8 @@ Plug 'majutsushi/tagbar', { 'on': ['Tagbar', 'TagbarToggle', 'TagbarOpen'] } " h
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'ray-x/lsp_signature.nvim'
-Plug 'glepnir/lspsaga.nvim'
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-lsputils'
 " GUI
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'MarkdownPreview' }
 Plug 'kyazdani42/nvim-web-devicons' " required by barbar.nvim and nvim-tree.lue
@@ -237,39 +238,46 @@ local on_attach = function(client, bufnr)
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
 	buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
 	buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-	-- buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-	-- buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-	-- buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-	-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-	-- buf_set_keymap('n', '<leader>d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>', opts)
+	buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+	buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+	buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+	buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+	buf_set_keymap('n', '<leader>d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
-	-- buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', opts)
-	-- buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', opts)
+	buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
+	buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
 	buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
 	buf_set_keymap('n', '<leader>oi', '<cmd>lua organize_imports()<cr>', opts)
-	-- buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+	buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 	-- buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
 	-- buf_set_keymap('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
 	-- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', opts)
 	-- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', opts)
 	-- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', opts)
-	-- buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
 
-	-- lspsaga
-	buf_set_keymap('n', '<leader>ac', ':Lspsaga code_action<cr>', opts)
-	buf_set_keymap('n', 'K', ':Lspsaga hover_doc<cr>', opts)
-	buf_set_keymap('n', '<leader>K', ':Lspsaga signature_help<cr>', opts)
-	buf_set_keymap('n', '<leader>rn', ':Lspsaga rename<cr>', opts)
-	buf_set_keymap('n', '<leader>ld', ':Lspsaga show_line_diagnostics<cr>', opts)
-	buf_set_keymap('n', ']d', ':Lspsaga diagnostic_jump_next<cr>', opts)
-	buf_set_keymap('n', '[d', ':Lspsaga diagnostic_jump_prev<cr>', opts)
-	buf_set_keymap('n', '<leader>rf', ':Lspsaga lsp_finder<cr>', opts)
+	-- floating windows
+	vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = 'rounded'})
+	vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'rounded'})
+	-- diagnostics options
+	vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+		virtual_text = { prefix = '❱' },
+	})
+
+	-- lsputils
+	vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+    vim.lsp.handlers['textDocument/references'] = require'lsputil.locations'.references_handler
+    vim.lsp.handlers['textDocument/definition'] = require'lsputil.locations'.definition_handler
+    vim.lsp.handlers['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
+    vim.lsp.handlers['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
+    vim.lsp.handlers['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
+    vim.lsp.handlers['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
+    vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
 
 	-- auto format
 	if client.resolved_capabilities.document_formatting then
 		vim.cmd [[augroup AutoFormat]]
 		vim.cmd [[autocmd! * <buffer>]]
-		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync({}, 2000)]]
+		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()]]
 		vim.cmd [[augroup END]]
 	end
 end
