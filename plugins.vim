@@ -166,6 +166,9 @@ let g:user_emmet_settings = {
 \    'javascript' : {
 \        'extends' : 'jsx',
 \    },
+\    'htmldjango' : {
+\        'extends' : 'html',
+\    },
 \ }
 imap <F6> <c-e>
 " let g:user_emmet_expandword_key = '<c-e>'
