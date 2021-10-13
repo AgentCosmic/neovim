@@ -73,13 +73,6 @@ augroup vimrcBehavior
 		\   exe "normal! g`\"" |
 		\ endif
 
-	" OmniComplete
-	" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	" autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-	" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	" autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-	" autocmd FileType python setlocal omnifunc=python3complete#Complete
-
 	" Remove trailing whitespace before saving
 	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.php,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.vue :%s/\(\s\+\|\)$//e
 
@@ -205,8 +198,6 @@ vnoremap <c-k> :m '<-2<cr>gv=gv
 
 " Select last modified/pasted http://vim.wikia.com/wiki/Selecting_your_pasted_text
 nnoremap <expr> <leader>v '`[' . strpart(getregtype(), 0, 1) . '`]'
-" Paste then select
-" nmap <leader>p p<leader>v
 
 " Navigate between windows
 noremap <a-j> <c-w>j
@@ -251,6 +242,7 @@ nnoremap <silent> <2-leftmouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\
 augroup doubleClick
     autocmd!
     autocmd FileType help unmap <2-leftmouse>
+	autocmd FileType qf unmap <2-leftmouse>
 augroup END
 
 " Get syntax under cursor
@@ -295,7 +287,5 @@ set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 " ----- ----- ----- -----
 
 set termguicolors
-" let g:loaded_matchparen = 1 " tmp disable highlighting matching parenthesis because it's ugly
-" set colorcolumn
 command! EPlugin :e $ROOT/plugins.vim
 source $ROOT/plugins.vim
