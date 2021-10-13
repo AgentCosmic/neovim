@@ -241,8 +241,8 @@ nnoremap <silent> <2-leftmouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\
 " remove double click mapping in help file so we can navigate the link
 augroup doubleClick
     autocmd!
-    autocmd FileType help unmap <2-leftmouse>
-	autocmd FileType qf unmap <2-leftmouse>
+    autocmd FileType help :silent! unmap <2-leftmouse>
+	autocmd FileType qf :silent! unmap <2-leftmouse>
 augroup END
 
 " Get syntax under cursor

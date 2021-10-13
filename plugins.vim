@@ -98,9 +98,6 @@ augroup AutoPairs
 	autocmd FileType html,htmldjango let b:AutoPairs = AutoPairsDefine({'{%' : '%}'})
 	autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?php' : '?>'})
 augroup end
-inoremap {, {},<left><left>
-inoremap (, (),<left><left>
-inoremap [, [],<left><left>
 
 
 
@@ -245,7 +242,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
 	buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 	buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-	buf_set_keymap('n', '<leader>d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
+	buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
 	buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
 	buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
