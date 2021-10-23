@@ -1,9 +1,8 @@
 if exists('g:GuiLoaded')
+	" https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 	GuiFont! Hack\ NF:h9
 	GuiPopupmenu 0
 	GuiTabline 0
-	set background=dark
-	colorscheme	soft
 
 	" Start with maximized window
 	call GuiWindowMaximized(1)

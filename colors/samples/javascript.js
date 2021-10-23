@@ -1,28 +1,31 @@
-var ralpha = /alpha\([^)]*\)/i,
-	ropacity = /opacity=([^)]*)/,
-	// fixed for IE9, see #8346
-	rupper = /([A-Z]|^ms)/g,
-	rnumpx = /^-?\d+(?:px)?$/i,
-	rnum = /^-?\d/,
-	rrelNum = /^([\-+])=([\-+.\de]+)/,
+import { name as alternativeName } from 'module_name'
 
-	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
-	cssWidth = [ "Left", "Right" ],
-	cssHeight = [ "Top", "Bottom" ],
-	curCSS,
+let string = 'base16'
+const symbol = Symbol('base16')
+let number = 0
+number = 0.0
+let array = new Array()
+array = ['chris', 85]
+let hash = { test: 'test' }
+let regexp = /[abc]/
 
-	getComputedStyle,
-	currentStyle;
+function func() {
+	return 'I am a function!'
+}
 
-jQuery.fn.css = function( name, value ) {
-	// Setting 'undefined' is a no-op
-	if ( arguments.length === 2 && value === undefined ) {
-		return this;
+// This is a comment
+class Person {
+	constructor(attributes = {}) {
+		this.name = attributes['name']
 	}
 
-	return jQuery.access( this, name, value, true, function( elem, name, value ) {
-		return value !== undefined ?
-			jQuery.style( elem, name, value ) :
-			jQuery.css( elem, name );
-	});
-};
+	static greet() {
+		return 'hello'
+	}
+}
+
+let person1 = new Person({ name: 'Chris' })
+
+console.log(Person.greet(), person1.name)
+
+console.log(`another ${Person.greet()} ${person1.name}`)

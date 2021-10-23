@@ -271,7 +271,7 @@ nnoremap cq :call ChangeReg()<cr>
 " TUI/GUI
 " ----- ----- ----- -----
 
-colorscheme	soft
+colorscheme	distinct
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
 	set mouse=a
