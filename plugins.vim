@@ -25,7 +25,12 @@ Plug 'mattn/emmet-vim'
 " IDE
 Plug 'majutsushi/tagbar', { 'on': ['Tagbar', 'TagbarToggle', 'TagbarOpen'] } " https://github.com/universal-ctags/ctags-win32/releases
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip' " snippets are required for nvim-cmp
+Plug 'hrsh7th/vim-vsnip' " snippets
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
@@ -277,7 +282,7 @@ local on_attach = function(client, bufnr)
 	if client.resolved_capabilities.document_formatting then
 		vim.cmd [[augroup AutoFormat]]
 		vim.cmd [[autocmd! * <buffer>]]
-		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()]]
+		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 		vim.cmd [[augroup END]]
 	end
 end
@@ -285,18 +290,24 @@ end
 -- this is where we install all the language servers
 local lsp_bins = vim.api.nvim_eval("$ROOT . '\\lsp'")
 
+-- nvim-cmp
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
 -- npm i  typescript-language-server
 nvim_lsp.tsserver.setup{
 	on_attach = function(client, bufnr)
 		client.resolved_capabilities.document_formatting = false	
 		on_attach(client, bufnr)
 	end,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\typescript-language-server.cmd', '--stdio' }
 }
 
 -- npm i vscode-langservers-extracted
 nvim_lsp.cssls.setup{
 	on_attach = on_attach,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-css-language-server.cmd', '--stdio' },
 	settings = {
 		css = {
@@ -306,6 +317,7 @@ nvim_lsp.cssls.setup{
 }
 nvim_lsp.html.setup{
 	on_attach = on_attach,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-html-language-server.cmd', '--stdio' },
 }
 nvim_lsp.jsonls.setup{
@@ -313,6 +325,7 @@ nvim_lsp.jsonls.setup{
 		client.resolved_capabilities.document_formatting = false	
 		on_attach(client, bufnr)
 	end,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-json-language-server.cmd', '--stdio' },
 }
 
@@ -336,6 +349,7 @@ end
 prettier_cmd = prettier_path .. prettier_config
 nvim_lsp.efm.setup {
 	on_attach = on_attach,
+	capabilities = capabilities,
 	init_options = {
 		documentFormatting = true,
 		hover = true,
@@ -385,84 +399,61 @@ nvim_lsp.efm.setup {
 -- npm i pyright
 nvim_lsp.pyright.setup{
 	on_attach = on_attach,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\pyright-langserver.cmd', '--stdio' }
 }
 
 -- npm i yaml-language-server
 nvim_lsp.yamlls.setup{
 	on_attach = on_attach,
+	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\yaml-language-server.cmd', '--stdio' },
 }
 EOF
 
 
 
-" nvim-compe
-set completeopt=menuone,noselect
+" nvim-cmp
+set completeopt=menu,menuone,noselect
 lua << EOF
--- Compe setup
-require'compe'.setup {
-	enabled = true;
-	autocomplete = true;
-	debug = false;
-	min_length = 1;
-	preselect = 'enable';
-	throttle_time = 80;
-	source_timeout = 200;
-	incomplete_delay = 400;
-	max_abbr_width = 100;
-	max_kind_width = 100;
-	max_menu_width = 100;
+local cmp = require'cmp'
+cmp.setup({
+	mapping = {
+		['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+		['<s-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+		['<c-space>'] = cmp.mapping.complete(),
+		['<cr>'] = cmp.mapping.confirm({ select = true }),
+		['<c-d>'] = cmp.mapping.scroll_docs(-4),
+		['<c-f>'] = cmp.mapping.scroll_docs(4),
+	},
+	sources = {
+		{ name = 'nvim_lsp' },
+		{ name = 'vsnip' },
+		{
+			name = 'buffer',
+			opts = {
+				get_bufnrs = function()
+					return vim.api.nvim_list_bufs() -- use all buffers
+				end,
+			},
+		},
+		{ name = 'path' },
+	},
 	documentation = {
 		border = 'single'
-	};
-
-	source = {
-		path = true;
-		nvim_lsp = true;
-		buffer = true;
-	};
-}
-
-local t = function(str)
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-	local col = vim.fn.col('.') - 1
-	if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-		return true
-	else
-		return false
-	end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t '<C-n>'
-	elseif check_back_space() then
-		return t '<Tab>'
-	else
-		return vim.fn['compe#complete']()
-	end
-end
-_G.s_tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t '<C-p>'
-	else
-		return t '<S-Tab>'
-	end
-end
-
-vim.api.nvim_set_keymap('i', '<tab>', 'v:lua.tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('s', '<tab>', 'v:lua.tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('i', '<s-tab>', 'v:lua.s_tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('s', '<s-tab>', 'v:lua.s_tab_complete()', {expr = true})
-vim.api.nvim_set_keymap('i', '<c-space>', '<cmd>call compe#confirm()<cr>', {noremap = true})
+	},
+	snippet = {
+		expand = function(args)
+			-- required even if not used
+			vim.fn["vsnip#anonymous"](args.body)
+		end,
+    },
+})
 EOF
+
+" vsnip
+imap <expr> <c-s-n>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<c-s-n>'
+smap <expr> <c-s-n>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<c-s-n>'
 
 
 
