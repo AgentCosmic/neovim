@@ -40,12 +40,9 @@ Plug 'kyazdani42/nvim-web-devicons' " required by barbar.nvim and nvim-tree.lue
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'romgrk/barbar.nvim'
 
-" Plug 'Shougo/echodoc.vim' " used by coc
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-" Plug 'ggandor/lightspeed.nvim'
 " Plug 'nvim-lua/popup.nvim' " for telescope
 " Plug 'nvim-lua/plenary.nvim' " for telescope
 " Plug 'nvim-telescope/telescope.nvim'
@@ -133,7 +130,7 @@ nnoremap <leader>w :HopWord<cr>
 
 " ctrlp
 " get ripgref https://github.com/BurntSushi/ripgrep/releases
-let g:ctrlp_map = '<space>'
+let g:ctrlp_map = '\'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_open_multiple_files = 'i'
 let g:ctrlp_by_filename = 1
@@ -195,7 +192,8 @@ nnoremap <silent> <c-tab> :BufferMoveNext<cr>
 
 
 " nvim-tree.lue
-cabbrev NO NvimTreeOpen
+cabbrev NTF NvimTreeFindFile
+nmap <leader>nt :NvimTreeOpen<cr>
 let g:nvim_tree_ignore = ['.git', 'node_modules']
 let g:nvim_tree_indent_markers = 1
 lua require'nvim-tree'.setup {}

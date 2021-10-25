@@ -154,6 +154,9 @@ nnoremap za :call FoldIndent()<cr>
 " Remapping
 " ----- ----- ----- -----
 
+" Change leader key
+let mapleader = ' '
+
 " Re-select after copying
 vnoremap <c-c> "+ygv
 
@@ -215,7 +218,7 @@ nnoremap <c-s-down> 10<C-x>
 nnoremap <leader>s :update<cr>
 nnoremap <leader>as :wa<cr>
 nnoremap <leader>nh :nohlsearch<cr>
-nnoremap <leader>qq :q<cr>
+nnoremap <leader>q :q<cr>
 vnoremap <leader>p "_dP
 nnoremap <leader>ou :update<cr>:source %<cr>
 " Substitute
@@ -264,7 +267,7 @@ fun! ChangeReg() abort
 	let x = nr2char(getchar())
 	call feedkeys("q:ilet @" . x . " = \<c-r>\<c-r>=string(@" . x . ")\<cr>\<esc>0f'", 'n')
 endfun
-nnoremap cq :call ChangeReg()<cr>
+nnoremap cr :call ChangeReg()<cr>
 
 
 " ----- ----- ----- -----
