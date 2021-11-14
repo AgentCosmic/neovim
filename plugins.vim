@@ -35,6 +35,7 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
 " GUI
+Plug 'lukas-reineke/indent-blankline.nvim' " indent guides for spaces
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'MarkdownPreview' }
 Plug 'kyazdani42/nvim-web-devicons' " required by barbar.nvim and nvim-tree.lue
 Plug 'kyazdani42/nvim-tree.lua'
