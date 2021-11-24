@@ -236,9 +236,14 @@ nnoremap <silent> <c-tab> :BufferMoveNext<cr>
 " nvim-tree.lue
 cabbrev NTF NvimTreeFindFile
 nmap <leader>nt :NvimTreeOpen<cr>
-let g:nvim_tree_ignore = ['.git', 'node_modules']
 let g:nvim_tree_indent_markers = 1
-lua require'nvim-tree'.setup {}
+lua << EOF
+require'nvim-tree'.setup {
+	filters = {
+		custom = {'.git', 'node_modules'}
+	}
+}
+EOF
 
 
 
@@ -286,7 +291,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
 	buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
 	buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-	buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+	-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
 	buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
 	buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
@@ -319,12 +324,12 @@ local on_attach = function(client, bufnr)
     vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
 
 	-- auto format
-	if client.resolved_capabilities.document_formatting then
-		vim.cmd [[augroup AutoFormat]]
-		vim.cmd [[autocmd! * <buffer>]]
-		vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
-		vim.cmd [[augroup END]]
-	end
+	-- if client.resolved_capabilities.document_formatting then
+	-- 	vim.cmd [[augroup AutoFormat]]
+	-- 	vim.cmd [[autocmd! * <buffer>]]
+	-- 	vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+	-- 	vim.cmd [[augroup END]]
+	-- end
 end
 
 -- this is where we install all the language servers
@@ -457,10 +462,11 @@ EOF
 set completeopt=menu,menuone,noselect
 lua << EOF
 local cmp = require'cmp'
+local cmp_buffer = require('cmp_buffer')
 cmp.setup({
 	mapping = {
-		['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-		['<s-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+		['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+		['<s-tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 		['<c-space>'] = cmp.mapping.complete(),
 		['<cr>'] = cmp.mapping.confirm({ select = true }),
 		['<c-d>'] = cmp.mapping.scroll_docs(-4),
@@ -488,6 +494,19 @@ cmp.setup({
 			vim.fn["vsnip#anonymous"](args.body)
 		end,
     },
+	sorting = {
+		comparators = {
+			cmp.config.compare.score,
+			cmp.config.compare.offset,
+			function(...) return cmp_buffer:compare_locality(...) end,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.exact,
+			cmp.config.compare.kind,
+			cmp.config.compare.sort_text,
+			cmp.config.compare.length,
+			cmp.config.compare.order,
+		}
+	}
 })
 EOF
 
