@@ -274,6 +274,9 @@ nnoremap cr :call ChangeReg()<cr>
 " TUI/GUI
 " ----- ----- ----- -----
 
+if (has("termguicolors"))
+	set termguicolors
+endif
 colorscheme	distinct
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -289,6 +292,5 @@ set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 " Others
 " ----- ----- ----- -----
 
-set termguicolors
 command! EPlugin :e $ROOT/plugins.vim
 source $ROOT/plugins.vim
