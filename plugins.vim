@@ -425,22 +425,22 @@ EOF
 set completeopt=menu,menuone,noselect
 lua << EOF
 local cmp = require'cmp'
-local cmp_buffer = require('cmp_buffer')
+local cmp_buffer = require'cmp_buffer'
 cmp.setup({
 	mapping = {
 		['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-		['<s-tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-		['<c-space>'] = cmp.mapping.complete(),
-		['<cr>'] = cmp.mapping.confirm({ select = true }),
-		['<c-d>'] = cmp.mapping.scroll_docs(-4),
-		['<c-f>'] = cmp.mapping.scroll_docs(4),
+		['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+		['<C-Space>'] = cmp.mapping.complete(),
+		['<CR>'] = cmp.mapping.confirm({ select = true }),
+		['<C-D>'] = cmp.mapping.scroll_docs(-4),
+		['<C-F>'] = cmp.mapping.scroll_docs(4),
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
 		{ name = 'vsnip' },
 		{
 			name = 'buffer',
-			opts = {
+			options = {
 				get_bufnrs = function()
 					return vim.api.nvim_list_bufs() -- use all buffers
 				end,
