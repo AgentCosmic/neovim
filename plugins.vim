@@ -8,7 +8,6 @@ Plug 'unblevable/quick-scope'
 Plug 'wellle/targets.vim'
 Plug 'rrethy/vim-illuminate'
 Plug 'phaazon/hop.nvim'
-" Plug 'ctrlpvim/ctrlp.vim'
 " Programming Related
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat' " so vim-surround can repeat with dot command
@@ -22,6 +21,9 @@ Plug 'jeetsukumaran/vim-indentwise'
 Plug 'alvan/vim-closetag'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'mattn/emmet-vim'
+Plug 'nvim-lua/popup.nvim' " telescope
+Plug 'nvim-lua/plenary.nvim' " telescope
+Plug 'nvim-telescope/telescope.nvim'
 " IDE
 Plug 'majutsushi/tagbar', { 'on': ['Tagbar', 'TagbarToggle', 'TagbarOpen'] } " https://github.com/universal-ctags/ctags-win32/releases
 Plug 'neovim/nvim-lspconfig'
@@ -59,46 +61,6 @@ let g:firenvim_config = {
 	\ }
 \ }
 
-
-
-" telescope
-nnoremap \ :lua telescope_project_files()<cr>
-" nnoremap \ :Telescope find_files<cr>
-nnoremap gh :Telescope oldfiles<cr>
-nnoremap gt :Telescope lsp_document_symbols<cr>
-nnoremap <leader>rf :Telescope lsp_references<cr>
-lua << EOF
--- use git_files, fallback to to find_files
-function telescope_project_files ()
-	local opts = {} -- add additional options here
-	local ok = pcall(require'telescope.builtin'.git_files, opts)
-	if not ok then require'telescope.builtin'.find_files(opts) end
-end
-require'telescope'.setup{
-	defaults = {
-		file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
-	},
-	sorters = 'get_fzy_sorter',
-	pickers = {
-		find_files = {
-			theme = 'dropdown',
-			hidden = true
-		},
-		git_files = {
-			theme = 'dropdown'
-		},
-		oldfiles = {
-			theme = 'dropdown'
-		},
-		lsp_document_symbols = {
-			theme = 'dropdown'
-		},
-		lsp_references = {
-			theme = 'dropdown'
-		},
-	}
-}
-EOF
 
 
 " -----------------------------------------------------------------------------
@@ -145,6 +107,34 @@ augroup end
 
 
 
+" Telescope
+nnoremap \ :lua telescope_project_files()<cr>
+" nnoremap \ :Telescope find_files<cr>
+nnoremap gh :Telescope oldfiles<cr>
+nnoremap gt :Telescope lsp_document_symbols<cr>
+nnoremap <leader>rf :Telescope lsp_references<cr>
+lua << EOF
+-- use git_files, fallback to to find_files
+function telescope_project_files ()
+	local opts = {} -- add additional options here
+	local ok = pcall(require'telescope.builtin'.git_files, opts)
+	if not ok then require'telescope.builtin'.find_files(opts) end
+end
+require'telescope'.setup{
+	defaults = {
+		file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
+	},
+	sorters = 'get_fzy_sorter',
+	pickers = {
+		find_files = {
+			hidden = true
+		},
+	}
+}
+EOF
+
+
+
 " CtrlSF
 let g:ctrlsf_ackprg = 'rg'
 
@@ -167,33 +157,6 @@ lua require'colorizer'.setup({
 " hop
 lua require'hop'.setup()
 nnoremap <leader>w :HopWord<cr>
-
-
-
-" " ctrlp
-" " get ripgref https://github.com/BurntSushi/ripgrep/releases
-" let g:ctrlp_map = '\'
-" let g:ctrlp_show_hidden = 1
-" let g:ctrlp_open_multiple_files = 'i'
-" let g:ctrlp_by_filename = 1
-" let g:ctrlp_match_current_file = 0
-" let g:ctrlp_custom_ignore = {
-" 			\ 'dir': '\v[\/](\..+|node_modules|__pycache__)$',
-" 			\ 'file': '\v[\/](.+\.min\.(css|js))$'
-" 			\ }
-" let g:user_command_async = 1
-" let g:ctrlp_search_options = '-g "!*.jpg" -g "!*.png" -g "!*.gif" -g "!*.svg" -g "!*.psd" -g "!*.ai" -g "!.git" -g "!node_modules" -g "!__pycache__" -g "!.venv" -g "!venv"' " search options for ripgrep to reuse in other vimrc
-" let g:ctrlp_user_command = {
-" 	\ 'types': {
-" 		\ 1: ['.git', 'cd %s && git ls-files -- . ":!:*.jpg" . ":!:*.png" . ":!:*.svg" . ":!:*.psd" . ":!:*.ai" . ":!:*/node_modules/*"'],
-" 	\ },
-" 	\ 'fallback': 'rg %s --files --color=never --hidden ' . g:ctrlp_search_options
-" \ }
-" nnoremap gb :CtrlPBuffer<cr>
-" nnoremap gh :CtrlPMRU<cr>
-" " nnoremap gt :CtrlPTag<cr>
-" let g:ctrlp_buftag_ctags_bin = 'ctags.exe'
-" " let g:ctrlp_user_command = 'rg %s --files --color=never'
 
 
 
