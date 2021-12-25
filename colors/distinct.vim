@@ -153,16 +153,16 @@ hi link jsxAttrib Statement
 
 " LSP
 
-call s:h('LspDiagnosticsDefaultError', {'fg': s:red, 'sp': s:red})
-call s:h('LspDiagnosticsDefaultWarning', {'fg': s:orange, 'sp': s:orange})
-call s:h('LspDiagnosticsDefaultInformation', {'fg': s:grey85})
-call s:h('LspDiagnosticsDefaultHint', {'fg': s:grey65})
-call s:h('LspDiagnosticsUnderlineError', {'gui': 'underline', 'sp': s:red})
-call s:h('LspDiagnosticsUnderlineWarning', {'gui': 'underline', 'sp': s:orange})
-call s:h('LspDiagnosticsUnderlineInformation', {'gui': 'underline', 'sp': s:blue})
-call s:h('LspDiagnosticsUnderlineHint', {'gui': 'underline', 'sp': s:grey65})
-call s:h('LspDiagnosticsSignError', {'fg': s:red})
-call s:h('LspDiagnosticsDefaultWarning', {'fg': s:orange})
+call s:h('DiagnosticError', {'fg': s:red, 'sp': s:red})
+call s:h('DiagnosticWarn', {'fg': s:orange, 'sp': s:orange})
+call s:h('DiagnosticInfo', {'fg': s:grey85})
+call s:h('DiagnosticHint', {'fg': s:grey65})
+call s:h('DiagnosticUnderlineError', {'gui': 'underline', 'sp': s:red})
+call s:h('DiagnosticUnderlineWarn', {'gui': 'underline', 'sp': s:orange})
+call s:h('DiagnosticUnderlineInfo', {'gui': 'underline', 'sp': s:blue})
+call s:h('DiagnosticUnderlineHint', {'gui': 'underline', 'sp': s:grey65})
+call s:h('DiagnosticignError', {'fg': s:red})
+" call s:h('DiagnosticDefaultWarning', {'fg': s:orange})
 call s:h('LspReferenceText', {'gui': 'underline'})
 hi link LspReferenceWrite LspReferenceText
 hi link LspReferenceRead LspReferenceText
