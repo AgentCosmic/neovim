@@ -43,6 +43,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'Mark
 Plug 'kyazdani42/nvim-web-devicons' " required by nvim-tree.lue
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'noib3/nvim-cokeline'
+Plug 'numtostr/BufOnly.nvim', { 'on': 'BufOnly' }
 
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
@@ -514,8 +515,10 @@ cmp.setup({
 		{ name = 'path' },
 		{ name = 'luasnip' },
 	},
-	documentation = {
-		border = 'single'
+	window = {
+		documentation = {
+			border = 'single'
+		},
 	},
 	snippet = {
 		expand = function(args)
