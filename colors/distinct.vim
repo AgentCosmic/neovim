@@ -176,34 +176,6 @@ call s:h('QuickScopeSecondary', {'fg': s:grey65, 'gui': 'underline'})
 
 call s:h('illuminatedWord', {'gui': 'underline'})
 
-" barbar.nvim
-
-call s:h('BufferTabpages', {'fg': s:grey05, 'bg': s:grey05})
-call s:h('BufferTabpageFill', {'fg': s:grey05, 'bg': s:grey05})
-call s:h('BufferOffset', {'bg': s:grey15})
-
-call s:h('BufferCurrent', {'fg': s:grey95, 'bg': s:grey25})
-hi link BufferCurrentIcon BufferCurrent
-hi link BufferCurrentIndex BufferCurrent
-call s:h('BufferCurrentMod', {'fg': s:orange, 'bg': s:grey25})
-call s:h('BufferCurrentSign', {'fg': s:green, 'bg': s:grey25})
-call s:h('BufferCurrentTarget', {'fg': s:orange, 'bg': s:grey25})
-
-call s:h('BufferInactive', {'fg': s:grey75, 'bg': s:grey05})
-hi link BufferInactiveIcon BufferInactive
-hi link BufferInactiveIndex BufferInactive
-hi link BufferInactiveMod BufferInactive
-call s:h('BufferInactiveMod', {'fg': s:orange, 'bg': s:grey05})
-call s:h('BufferInactiveSign', {'fg': s:grey25, 'bg': s:grey05})
-call s:h('BufferInactiveTarget', {'fg': s:orange, 'bg': s:grey05})
-
-hi link BufferVisible BufferInactive
-hi link BufferVisibleIcon BufferVisible
-hi link BufferVisibleIndex BufferVisible
-hi link BufferVisibleMod BufferVisible
-hi link BufferVisibleSign BufferInactiveSign
-hi link BufferVisibleTarget BufferInactiveTarget
-
 " hop.nvim
 
 call s:h('HopNextKey', {'fg': s:blue})

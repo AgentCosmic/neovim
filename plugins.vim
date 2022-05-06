@@ -40,9 +40,9 @@ Plug 'RishabhRD/nvim-lsputils'
 " GUI
 Plug 'lukas-reineke/indent-blankline.nvim' " indent guides for spaces
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'MarkdownPreview' }
-Plug 'kyazdani42/nvim-web-devicons' " required by barbar.nvim and nvim-tree.lue
+Plug 'kyazdani42/nvim-web-devicons' " required by nvim-tree.lue
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'romgrk/barbar.nvim'
+Plug 'noib3/nvim-cokeline'
 
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
@@ -177,20 +177,70 @@ imap <F6> <c-e>
 " let g:user_emmet_complete_tag = 1
 
 
+" cokeline
+lua << EOF
+local is_picking_focus = require('cokeline/mappings').is_picking_focus
+local is_picking_close = require('cokeline/mappings').is_picking_close
+local get_hex = require('cokeline/utils').get_hex
+require('cokeline').setup({
+	default_hl = {
+		fg = function(buffer)
+			return buffer.is_focused and get_hex('Todo', 'fg') or get_hex('Comment', 'fg')
+		end,
+		bg = function(buffer)
+			return buffer.is_focused and get_hex('Normal', 'bg') or get_hex('ColorColumn', 'bg')
+		end
+	},
+	components = {
+		{
+			text = ' ',
+			bg = function(buffer)
+				-- return buffer.is_focused and get_hex('PmenuSel', 'bg') or get_hex('ColorColumn', 'bg')
+				return buffer.is_focused and get_hex('Normal', 'fg') or get_hex('ColorColumn', 'bg')
+			end,
+		},
+		{
+			text = function(buffer)
+				return (is_picking_focus() or is_picking_close()) and ' ' .. buffer.pick_letter .. ' ' or ' ' .. buffer.devicon.icon
+			end,
+			fg = function(buffer)
+				return (is_picking_focus() and get_hex('DiffAdd', 'fg')) or (is_picking_close() and get_hex('Error', 'fg')) or buffer.devicon.color
+			end,
+		},
+		{
+			text = function(buffer) return buffer.unique_prefix end,
+			style = 'italic',
+		},
+		{
+			text = function(buffer) return buffer.filename .. ' ' end,
+			fg = function(buffer)
+				if buffer.is_modified then
+					return get_hex('ModeMsg', 'fg')
+				end
+				if buffer.is_focused then
+					return get_hex('Todo', 'fg')
+				end
+				return get_hex('Comment', 'fg')
+			end,
+		},
+		{
+			text = '',
+			delete_buffer_on_left_click = true,
+		},
+		{
+			text = ' ',
+		}
+	},
+})
 
-" barbar.nvim
-let bufferline = get(g:, 'bufferline', {})
-let bufferline.animation = v:false
-let bufferline.maximum_padding = 2
-let bufferline.icon_separator_active = '▌'
-let bufferline.icon_separator_inactive = '▌'
-nnoremap <silent> <tab> :BufferNext<cr>
-nnoremap <silent> <s-tab> :BufferPrevious<cr>
-nnoremap <silent> <f4> :BufferClose<cr>
-nnoremap <silent> <c-f4> :BufferCloseAllButCurrent<cr>
-nnoremap <silent> <leader><tab> :BufferPick<cr>
-nnoremap <silent> <c-s-tab> :BufferMovePrevious<cr>
-nnoremap <silent> <c-tab> :BufferMoveNext<cr>
+local map = vim.api.nvim_set_keymap
+map('n', '<tab>', '<Plug>(cokeline-focus-next)', { silent = true })
+map('n', '<s-tab>', '<Plug>(cokeline-focus-prev)', { silent = true })
+map('n', '<c-tab>', '<Plug>(cokeline-switch-next)', { silent = true })
+map('n', '<c-s-tab>', '<Plug>(cokeline-switch-prev)', { silent = true })
+map('n', '<c-f4>', ':BufOnly<cr>', { silent = true, noremap = true })
+map('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
+EOF
 
 
 
