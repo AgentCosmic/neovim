@@ -305,8 +305,8 @@ local on_attach = function(client, bufnr)
 	-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
 	buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
-	buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
-	buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
+	buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
+	buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
 	buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
 	buf_set_keymap('n', '<leader>oi', '<cmd>lua organize_imports()<cr>', opts)
 	buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
@@ -350,7 +350,7 @@ local lsp_bins = vim.api.nvim_eval("$ROOT . '\\lsp'")
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
--- npm i  typescript-language-server
+-- npm i typescript-language-server
 nvim_lsp.tsserver.setup{
 	on_attach = function(client, bufnr)
 		client.resolved_capabilities.document_formatting = false	
@@ -412,7 +412,7 @@ nvim_lsp.efm.setup {
 		documentSymbol = true,
 		codeAction = true,
 	},
-	filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml'},
+	filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'solidity'},
 	settings = {
 		rootMarkers = {'.git/', 'node_modules/'},
 		languages = {
@@ -448,6 +448,9 @@ nvim_lsp.efm.setup {
 			yaml = {
 				{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
 			},
+			solidity = {
+				{formatCommand = prettier_path .. ' --parser solidity-parse', formatStdin = true},
+			},
 		}
 	}
 }
@@ -464,6 +467,21 @@ nvim_lsp.yamlls.setup{
 	on_attach = on_attach,
 	capabilities = capabilities,
 	cmd = { lsp_bins .. '\\node_modules\\.bin\\yaml-language-server.cmd', '--stdio' },
+}
+
+-- https://docs.soliditylang.org/en/latest/installing-solidity.html
+nvim_lsp.solc.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+	cmd = { lsp_bins .. '\\solc.exe', '--lsp' },
+}
+
+-- https://github.com/eclipse/eclipse.jdt.ls
+-- using v0.57 because we're using java 8
+nvim_lsp.jdtls.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+	cmd = { 'java.exe', '-jar', lsp_bins .. '\\jdtls\\plugins\\org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar', '-Declipse.application=org.eclipse.jdt.ls.core.id1', '-Dosgi.bundles.defaultStartLevel=4', '-Declipse.product=org.eclipse.jdt.ls.core.product', '-Dlog.protocol=true', '-Dlog.level=ALL', '-Xms1g', '-Xmx2G', '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '\\jdtls\\config_win', '-data', lsp_bins .. '\\jdtls\\workspace' }
 }
 EOF
 
