@@ -31,10 +31,11 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-vsnip' " snippets are required for nvim-cmp
-Plug 'hrsh7th/vim-vsnip' " snippets
+Plug 'L3MON4D3/LuaSnip' " snippets
+Plug 'saadparwaiz1/cmp_luasnip' " snippets
+" Plug 'rafamadriz/friendly-snippets' " snippets
 Plug 'ray-x/lsp_signature.nvim'
-Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/popfix' " lsputils
 Plug 'RishabhRD/nvim-lsputils'
 " GUI
 Plug 'lukas-reineke/indent-blankline.nvim' " indent guides for spaces
@@ -46,9 +47,6 @@ Plug 'romgrk/barbar.nvim'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'nvim-lua/popup.nvim' " for telescope
-Plug 'nvim-lua/plenary.nvim' " for telescope
-Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 
@@ -437,7 +435,6 @@ cmp.setup({
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
-		{ name = 'vsnip' },
 		{
 			name = 'buffer',
 			options = {
@@ -447,6 +444,7 @@ cmp.setup({
 			},
 		},
 		{ name = 'path' },
+		{ name = 'luasnip' },
 	},
 	documentation = {
 		border = 'single'
@@ -454,7 +452,7 @@ cmp.setup({
 	snippet = {
 		expand = function(args)
 			-- required even if not used
-			vim.fn["vsnip#anonymous"](args.body)
+			require'luasnip'.lsp_expand(args.body)
 		end,
     },
 	sorting = {
@@ -473,9 +471,10 @@ cmp.setup({
 })
 EOF
 
-" vsnip
-imap <expr> <c-s-n>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<c-s-n>'
-smap <expr> <c-s-n>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<c-s-n>'
+" luasnip
+lua require("luasnip.loaders.from_vscode").load({ paths = { vim.env.HOME .. '/snippets' } })
+imap <silent><expr> <c-s-n> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
+smap <silent><expr> <c-s-n> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
 
 
 
@@ -528,7 +527,7 @@ let g:go_code_completion_enabled =  0
 let g:go_fmt_autosave = 0
 nmap gI <Plug>(go-imports):w<cr>
 nmap gV <Plug>(go-vet)
-" use for CtrlPTag
+" override Telescope
 augroup VimGo
 	autocmd!
 	autocmd FileType go nnoremap <buffer> gt :GoDecls<cr>
