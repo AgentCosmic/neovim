@@ -36,10 +36,10 @@ set selection=inclusive " include the last character, required by some plugins
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$HOME/.cache/swap//,.
+set directory=$HOME/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$HOME/.cache/undo//,.
+set undodir=$HOME/undo//,.
 
 " Line number
 set numberwidth=4
