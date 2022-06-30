@@ -1,6 +1,7 @@
 " This is the folder where we'll store all the files
-" set environment variable $env:XDG_CONFIG_HOME="D:/Applications/Neovim"
-let $ROOT = expand('D:/Applications/Neovim/nvim')
+" For custom config location, we can tell neovim to look at $XDG_CONFIG_HOME/nvim/init.vim
+" So we need to set the environment variable to the application directory e.g. $env:XDG_CONFIG_HOME="..."
+let $ROOT = expand('%:p:h')
 set runtimepath+=$ROOT
 " we reset $HOME directory here so plugins won't dirty our real home directory
 let $HOME = $ROOT . '/home'
