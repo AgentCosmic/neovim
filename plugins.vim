@@ -122,6 +122,9 @@ end
 require'telescope'.setup{
 	defaults = {
 		file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
+		preview = {
+			filesize_limit = 1,
+		},
 	},
 	sorters = 'get_fzy_sorter',
 	pickers = {
@@ -398,7 +401,7 @@ local eslint = {
 	formatStdin = true
 }
 local prettier_path = '.\\node_modules\\.bin\\prettier.cmd' -- default to local
-local prettier_config = ' --config-precedence file-override --no-semi --use-tabs --single-quote'
+local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
 -- use our own if project doesn't have
 if vim.fn.executable(prettier_path) ~= 1 then
 	prettier_path = lsp_bins .. '\\node_modules\\.bin\\prettier.cmd'
@@ -528,11 +531,11 @@ cmp.setup({
     },
 	sorting = {
 		comparators = {
+			cmp.config.compare.exact,
 			cmp.config.compare.score,
-			cmp.config.compare.offset,
 			function(...) return cmp_buffer:compare_locality(...) end,
 			cmp.config.compare.recently_used,
-			cmp.config.compare.exact,
+			cmp.config.compare.offset,
 			cmp.config.compare.kind,
 			cmp.config.compare.sort_text,
 			cmp.config.compare.length,
