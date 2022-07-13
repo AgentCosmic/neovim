@@ -76,7 +76,7 @@ augroup vimrcBehavior
 		\ endif
 
 	" Remove trailing whitespace before saving
-	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.php,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.vue :%s/\(\s\+\|\)$//e
+	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.xml,*.java,*.php,*.vue :%s/\(\s\+\|\)$//e
 
 	" Don't list preview window
 	autocmd BufEnter * :call <SID>DelistWindow()
