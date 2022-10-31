@@ -1,7 +1,6 @@
+" For neovim to use this config we need to set $VIMINIT environment variable. See README.
 " This is the folder where we'll store all the files
-" For custom config location, we can tell neovim to look at $XDG_CONFIG_HOME/nvim/init.vim
-" So we need to set the environment variable to the application directory e.g. $env:XDG_CONFIG_HOME="..."
-let $ROOT = $XDG_CONFIG_HOME . '/nvim'
+let $ROOT = fnamemodify($MYVIMRC, ':h')
 set runtimepath+=$ROOT
 " we reset $HOME directory here so plugins won't dirty our real home directory
 let $HOME = $ROOT . '/home'

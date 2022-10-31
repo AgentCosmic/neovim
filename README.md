@@ -13,7 +13,8 @@ Personal Neovim setup.
 ## Getting Started
 
 - Install neovim first and clone this project to `/nvim` into the application directory.
-- Set the environment variable `XDG_CONFIG_HOME` to where neovim is installed.
+- Set the environment variable `VIMINIT` to `let $MYVIMRC = {root}\init.vim' | source {root}\init.vim`, replacing
+	`{root}` with the project directory.
 - Create folders at `/home/swap` and  `/home/undo`.
 - Install the fonts in `/fonts`.
 - Install LSP servers in `/lsp`. Install the dependencies into `/lsp/.venv` and `/lsp/node_modules`. Refer to LSP
