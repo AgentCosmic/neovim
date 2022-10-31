@@ -47,7 +47,7 @@ set relativenumber
 set number
 
 " Status line
-set laststatus=2 " always show statusline
+set laststatus=3 " always show only 1 statusline
 set statusline=
 set statusline+=%{%&modified?'%#MyStatusLineModified#':'%#MyStatusLineUnmodified#'%} " highlight modified
 set statusline+=\ ➤\ |

@@ -174,7 +174,9 @@ call s:h('QuickScopeSecondary', {'fg': s:grey65, 'gui': 'underline'})
 
 " illuminate
 
-call s:h('illuminatedWord', {'gui': 'underline'})
+call s:h('IlluminatedWordText', {'gui': 'underline'})
+call s:h('IlluminatedWordRead', {'gui': 'underline'})
+call s:h('IlluminatedWordWrite', {'gui': 'underline'})
 
 " hop.nvim
 

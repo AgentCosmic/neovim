@@ -33,7 +33,7 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip' " snippets
 Plug 'saadparwaiz1/cmp_luasnip' " snippets
-" Plug 'rafamadriz/friendly-snippets' " snippets
+" Plug 'rafamadriz/friendly-snippets' " snippets copied into project for customization
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'RishabhRD/popfix' " lsputils
 Plug 'RishabhRD/nvim-lsputils'
@@ -124,6 +124,7 @@ require'telescope'.setup{
 		file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
 		preview = {
 			filesize_limit = 1,
+			timeout = 250,
 		},
 	},
 	sorters = 'get_fzy_sorter',
@@ -250,13 +251,23 @@ EOF
 
 " nvim-tree.lue
 cabbrev NTF NvimTreeFindFile
-nmap <leader>nt :NvimTreeOpen<cr>
-let g:nvim_tree_indent_markers = 1
+nmap <leader>nt :NvimTreeFocus<cr>
 lua << EOF
 require'nvim-tree'.setup {
 	filters = {
-		custom = {'.git', 'node_modules'}
-	}
+		custom = {'.git', 'node_modules'},
+	},
+	view = {
+		adaptive_size = true,
+	},
+	renderer = {
+		add_trailing = true,
+		indent_markers = {
+			enable = true,
+		},
+	},
+	sync_root_with_cwd = true,
+	auto_reload_on_write = true,
 }
 EOF
 
@@ -292,10 +303,8 @@ local on_attach = function(client, bufnr)
 
 	--Enable completion triggered by <c-x><c-o>
 	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-	-- reference highlighting
-	require 'illuminate'.on_attach(client)
 	-- show signature
-	require "lsp_signature".on_attach()
+	require "lsp_signature".on_attach({}, bufnr)
 
 	-- Mappings.
 	local opts = { noremap=true, silent=true }
@@ -311,7 +320,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
 	buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
 	buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
-	buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
+	buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
 	buf_set_keymap('n', '<leader>oi', '<cmd>lua organize_imports()<cr>', opts)
 	buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 	-- buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
@@ -339,7 +348,7 @@ local on_attach = function(client, bufnr)
     vim.lsp.handlers['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
 
 	-- auto format
-	-- if client.resolved_capabilities.document_formatting then
+	-- if client.server_capabilities.document_formatting then
 	-- 	vim.cmd [[augroup AutoFormat]]
 	-- 	vim.cmd [[autocmd! * <buffer>]]
 	-- 	vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
@@ -352,12 +361,12 @@ local lsp_bins = vim.api.nvim_eval("$ROOT . '\\lsp'")
 
 -- nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- npm i typescript-language-server
 nvim_lsp.tsserver.setup{
 	on_attach = function(client, bufnr)
-		client.resolved_capabilities.document_formatting = false	
+		client.server_capabilities.document_formatting = false	
 		on_attach(client, bufnr)
 	end,
 	capabilities = capabilities,
@@ -382,7 +391,7 @@ nvim_lsp.html.setup{
 }
 nvim_lsp.jsonls.setup{
 	on_attach = function(client, bufnr)
-		client.resolved_capabilities.document_formatting = false	
+		client.server_capabilities.document_formatting = false	
 		on_attach(client, bufnr)
 	end,
 	capabilities = capabilities,
@@ -416,7 +425,7 @@ nvim_lsp.efm.setup {
 		documentSymbol = true,
 		codeAction = true,
 	},
-	filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'solidity'},
+	filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'markdown', 'solidity'},
 	settings = {
 		rootMarkers = {'.git/', 'node_modules/'},
 		languages = {
@@ -451,6 +460,9 @@ nvim_lsp.efm.setup {
 			},
 			yaml = {
 				{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
+			},
+			markdown = {
+				{formatCommand = prettier_cmd .. ' --parser markdown', formatStdin = true},
 			},
 			solidity = {
 				{formatCommand = prettier_path .. ' --parser solidity-parse', formatStdin = true},
@@ -549,6 +561,15 @@ EOF
 lua require("luasnip.loaders.from_vscode").load({ paths = { vim.env.HOME .. '/snippets' } })
 imap <silent><expr> <c-s-n> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
 smap <silent><expr> <c-s-n> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
+
+
+
+" vim-illuminate
+lua << EOF
+require('illuminate').configure({
+	under_cursor = false,
+})
+EOF
 
 
 
