@@ -49,7 +49,7 @@ set number
 set laststatus=3 " always show only 1 statusline
 set statusline=
 set statusline+=%{%&modified?'%#MyStatusLineModified#':'%#MyStatusLineUnmodified#'%} " highlight modified
-set statusline+=\ ➤\ |
+set statusline+=\ \ |
 set statusline+=%#MyStatusLinePath#
 set statusline+=\ %f " working directory followed by file path
 set statusline+=\ %r%h%w%q%m " flags: readonly, help, preview, list, modified
@@ -288,6 +288,13 @@ endif
 set guicursor+=v:hor50
 set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 
+" neovide
+if exists("g:neovide")
+    set guifont=Hack\ NF:h9
+	let g:neovide_scroll_animation_length = 0.2 " not working yet
+	let g:neovide_cursor_animation_length=0.1
+	let g:neovide_cursor_trail_size = 0.2
+endif
 
 " ----- ----- ----- -----
 " Others

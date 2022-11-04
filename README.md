@@ -25,4 +25,5 @@ Personal Neovim setup.
 
 ## GUI
 
-This project is configure for [neovim-qt](https://github.com/equalsraf/neovim-qt). See `/ginit.vim` for configs.
+- [neovim-qt](https://github.com/equalsraf/neovim-qt) - see `/ginit.vim` for configs.
+- [neovide](https://neovide.dev/) - see GUI section in `/init.vim` for configs.
