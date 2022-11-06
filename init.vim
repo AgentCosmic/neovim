@@ -150,6 +150,14 @@ fun! FoldIndent() abort
 endfun
 nnoremap za :call FoldIndent()<cr>
 
+" Disable some native plugins to improve performance
+let g:loaded_gzip = 1 " for editing compressed files
+let g:loaded_netrwPlugin = 1 " for editing remote files
+let g:loaded_tarPlugin = 1 " for browsing tar files
+let g:loaded_2html_plugin = 1 " for generating HTML files with syntax highlight
+let g:loaded_tutor_mode_plugin = 1 " vim tutor
+let g:loaded_zipPlugin = 1 " for browsing zip files
+
 
 " ----- ----- ----- -----
 " Remapping
