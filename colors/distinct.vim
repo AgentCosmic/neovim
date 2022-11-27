@@ -136,8 +136,8 @@ call s:h('WildMenu', {'fg': s:grey15, 'bg': s:green})
 
 " custom status line highlight groups
 
-call s:h('MyStatusLineUnmodified', {'fg': s:grey65, 'bg': s:grey10})
-call s:h('MyStatusLineModified', {'fg': s:grey15, 'bg': s:orange})
+call s:h('MyStatusLineUnmodified', {'fg': s:green, 'bg': s:grey10})
+call s:h('MyStatusLineModified', {'fg': s:grey15, 'bg': s:green})
 call s:h('MyStatusLinePath', {'fg': s:grey85, 'bg': s:grey25})
 call s:h('MyStatusLinePosition', {'fg': s:grey65, 'bg': s:grey10})
 call s:h('MyStatusLineMisc', {'fg': s:grey75, 'bg': s:grey25})

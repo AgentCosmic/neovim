@@ -308,5 +308,5 @@ endif
 " Others
 " ----- ----- ----- -----
 
-command! EPlugin :e $ROOT/plugins.vim
-source $ROOT/plugins.vim
+command! EPlugin :e $ROOT/plugins.lua
+luafile $ROOT/plugins.lua

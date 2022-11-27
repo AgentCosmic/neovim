@@ -29,7 +29,7 @@ packer.startup({function(use)
 
 	use {
 		'hrsh7th/nvim-cmp',
-		requires = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path'},
+		requires = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip'},
 		events = 'InsertEnter',
 		config = function()
 			vim.opt.completeopt = 'menu,menuone,noselect'
@@ -73,7 +73,13 @@ packer.startup({function(use)
 						cmp.config.compare.length,
 						cmp.config.compare.order,
 					}
-				}
+				},
+				snippet = {
+					expand = function(args)
+						-- required even if not used
+						require'luasnip'.lsp_expand(args.body)
+					end,
+				},
 			})
 		end
 	}
@@ -141,9 +147,10 @@ packer.startup({function(use)
 
 
 	use {
-		'tpope/vim-surround',
-		requires = {'tpope/vim-repeat'}, -- so vim-surround can repeat with dot command
-		event = 'BufRead',
+		'kylechui/nvim-surround',
+		config = function()
+			require('nvim-surround').setup({})
+		end
 	}
 
 	use {
@@ -219,7 +226,7 @@ packer.startup({function(use)
 
 	use {
 		'alvan/vim-closetag',
-		ft = {'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'php', 'vue'},
+		ft = {'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'htmldjango', 'php', 'vue'},
 		setup = function()
 			vim.g.closetag_filetypes = 'html,typescript,typescriptreact,javascriptreact,php,vue'
 		end
@@ -236,7 +243,6 @@ packer.startup({function(use)
 				javascript = { extends = 'jsx' },
 				htmldjango = { extends = 'html' },
 			}
-			vim.api.nvim_set_keymap('i', '<F6>', '<c-r>', {silent = true})
 		end
 	}
 
@@ -491,55 +497,6 @@ packer.startup({function(use)
 		end
 	}
 
-	use {
-		'majutsushi/tagbar',
-		cmd = {'Tagbar', 'TagbarToggle', 'TagbarOpen'},
-		setup = function()
-			vim.cmd 'cabbrev TT TagbarToggle'
-		end,
-		config = function()
-			vim.g.tagbar_sort = 0
-			vim.g.tagbar_type_php  = {
-				ctagstype = 'php',
-				kinds = {
-					'i:interfaces',
-					'c:classes',
-					'd:constant definitions',
-					'f:functions',
-					'j:javascript functions:1'
-				}
-			}
-			-- go get -u github.com/jstemmer/gotags
-			vim.g.tagbar_type_go = {
-				ctagstype = 'go',
-				kinds = {
-					'p:package',
-					'i:imports:1',
-					'c:constants',
-					'v:variables',
-					't:types',
-					'n:interfaces',
-					'w:fields',
-					'e:embedded',
-					'm:methods',
-					'r:constructor',
-					'f:functions'
-				},
-				sro = '.',
-				kind2scope = {
-					t = 'ctype',
-					n = 'ntype'
-				},
-				scope2kind = {
-					ctype = 't',
-					ntype = 'n'
-				},
-				ctagsbin = 'gotags',
-				ctagsargs = '-sort -silent'
-			}
-		end
-	}
-
 
 	------------------------------------------------------------------------------
 	-- GUI
@@ -635,7 +592,7 @@ packer.startup({function(use)
 			vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', {noremap = true, silent = true})
 		end,
 		config = function()
-			require('telescope').setup{
+			require('telescope').setup({
 				defaults = {
 					file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
 					preview = {
@@ -649,7 +606,7 @@ packer.startup({function(use)
 						hidden = true
 					},
 				}
-			}
+			})
 		end
 	}
 
