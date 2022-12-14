@@ -1,6 +1,12 @@
 " Vim color file
 " Author: Dalton Tan <daltonyi@hotmail.com>
 
+" auto reload colorscheme when saving this file
+augroup DistinctColorscheme
+	autocmd!
+	autocmd BufWritePost distinct.vim colorscheme distinct
+augroup end
+
 set background=dark
 hi clear
 if exists('syntax_on')
