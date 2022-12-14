@@ -29,15 +29,15 @@ let s:blue = '#98cfeb'
 let s:purple = '#cabfff'
 let s:red = '#ffb0b0'
 let s:highlight = '#213a6e'
-let s:grey95 = '#f1ede4' " white
-let s:grey85 = '#d9d3ca' " fg
-let s:grey75 = '#bdb8b1' " inactive tab
-let s:grey65 = '#a29d97' " comment
-let s:grey25 = '#3c3b38' " Visual
-let s:grey20 = '#31302d' " CursorLine
-let s:grey15 = '#262522' " bg
-let s:grey10 = '#1c1b19' " column
-let s:grey05 = '#12110d' " black
+let s:grey95 = '#f1f1f1' " white
+let s:grey85 = '#d4d4d4' " fg
+let s:grey75 = '#b9b9b9' " inactive tab
+let s:grey65 = '#9e9e9e' " comment
+let s:grey25 = '#3b3b3b' " Visual
+let s:grey20 = '#303030' " CursorLine
+let s:grey15 = '#262626' " bg
+let s:grey10 = '#1b1b1b' " column
+let s:grey05 = '#121212' " black
 
 " Syntax Groups (descriptions and ordering from `:h w18`)
 
