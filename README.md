@@ -12,16 +12,19 @@ Personal Neovim setup.
 
 ## Getting Started
 
-- Install neovim first and clone this project to `/nvim` into the application directory.
-- Set the environment variable `VIMINIT` to `let $MYVIMRC = {root}\init.vim' | source {root}\init.vim`, replacing
-	`{root}` with the project directory.
-- Create folders at `/home/swap` and  `/home/undo`.
+- Install neovim.
+- Set the environment variable `VIMINIT` to `let $MYVIMRC = {root}/init.vim' | source $MYVIMRC`, replacing `{root}`
+	with the project directory.
+- Create folders at `/swap` and  `/undo` in the project directory.
 - Install the fonts in `/fonts`.
+- Install packer.nvim:
+	- Linux: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.config/nvim/pack/packer/start/packer.nvim`.
+	- Windows: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/AppData/Local/nvim/pack/packer/start/packer.nvim`.
+- Install plugins by runnig this command in neovim `:PackerInstall`.
 - Install LSP servers in `/lsp`. Install the dependencies into `/lsp/.venv` and `/lsp/node_modules`. Refer to LSP
 	section for other languages that requires manual installation.
 - *Optional*: Copy snippets from [friendly-snippets](https://github.com/rafamadriz/friendly-snippets/tree/main/snippets)
 	into `/home/snippets` and customize them.
-- Install plugins by runnig this command in neovim `:PlugInstall`.
 
 ## GUI
 

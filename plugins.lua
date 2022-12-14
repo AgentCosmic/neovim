@@ -1,7 +1,3 @@
-local root_dir = vim.env.HOME .. '/pack/'
-vim.opt.packpath:append(vim.env.HOME)
-vim.opt.runtimepath:append(',' .. root_dir)
-
 -- auto compile when saving this file
 vim.cmd([[
 	augroup PackerUserConfig
@@ -662,8 +658,7 @@ packer.startup({function(use)
 	}
 end,
 config = {
-	package_root = root_dir,
-	compile_path = root_dir  .. '/plugin/packer_compiled.vim',
+	compile_path = vim.fn.stdpath('config')  .. '/plugin/packer_compiled.vim', -- put in /plugin so it autoloads
 	-- :PackerCompile profile=true
 	-- restart then :PackerProfile
 	-- profile = {

@@ -2,8 +2,6 @@
 " This is the folder where we'll store all the files
 let $ROOT = fnamemodify($MYVIMRC, ':h')
 set runtimepath+=$ROOT
-" we reset $HOME directory here so plugins won't dirty our real home directory
-let $HOME = $ROOT . '/home'
 
 runtime mswin.vim
 
@@ -35,10 +33,10 @@ set selection=inclusive " include the last character, required by some plugins
 set nobackup
 set writebackup
 " Use custom swap file location
-set directory=$HOME/swap//,.
+set directory=$ROOT/swap//,.
 " Use persistent undo
 set undofile
-set undodir=$HOME/undo//,.
+set undodir=$ROOT/undo//,.
 
 " Line number
 set numberwidth=4
@@ -60,6 +58,9 @@ set statusline+=%#MyStatusLineMisc#
 set statusline+=\ %{&ff}\ ∴\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
 set statusline+=%#MyStatusLineFiletype#
 set statusline+=\ %{&ft}\ |
+
+" Hide command line
+" set cmdheight=0
 
 augroup vimrcBehavior
 	autocmd!
@@ -302,6 +303,9 @@ if exists("g:neovide")
 	let g:neovide_scroll_animation_length = 0.2 " not working yet
 	let g:neovide_cursor_animation_length=0.1
 	let g:neovide_cursor_trail_size = 0.2
+	" it always use the wrong size and position
+	let g:neovide_remember_window_size = v:false	
+	let g:neovide_remember_window_position = v:false	
 endif
 
 " ----- ----- ----- -----
