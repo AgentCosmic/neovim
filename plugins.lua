@@ -608,31 +608,27 @@ packer.startup({function(use)
 	}
 
 	use {
-		'kyazdani42/nvim-tree.lua',
-		requires = {'kyazdani42/nvim-web-devicons'},
-		cmd = {'NvimTreeFindFile', 'NvimTreeFocus'},
+		'nvim-neo-tree/neo-tree.nvim',
+		branch = 'v2.x',
+		requires = { 
+			'nvim-lua/plenary.nvim',
+			'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+			'MunifTanjim/nui.nvim',
+		},
+		cmd = {'Neotree', 'NeoTreeReveal'},
 		setup = function()
-			vim.cmd('cabbrev NTF NvimTreeFindFile')
-			vim.api.nvim_set_keymap('n', '<leader>nt', ':NvimTreeFocus<cr>', {silent = true})
+			vim.cmd('cabbrev NTR NeoTreeReveal')
+			vim.api.nvim_set_keymap('n', '<leader>nt', ':Neotree<cr>', {silent = true})
 		end,
 		config = function()
-			require('nvim-tree').setup({
-					filters = {
-						custom = {'.git', 'node_modules'},
-					},
-					view = {
-						adaptive_size = true,
-					},
-					renderer = {
-						add_trailing = true,
-						indent_markers = {
-							enable = true,
-						},
-					},
-					sync_root_with_cwd = true,
-					auto_reload_on_write = true,
-				})
-		end
+			require('neo-tree').setup({
+				filesystem =  {
+					filtered_items = {
+						hide_dotfiles = false,
+					}
+				}
+			})
+		end,
 	}
 
 
@@ -657,6 +653,16 @@ packer.startup({function(use)
 			vim.g.floaterm_height = 0.9
 		end
 	}
+
+	use {
+		'lewis6991/gitsigns.nvim',
+		-- events = 'BufRead',
+		cmd = 'Gitsigns',
+		config = function()
+			require('gitsigns').setup()
+		end
+	}
+
 end,
 config = {
 	compile_path = vim.fn.stdpath('config')  .. '/plugin/packer_compiled.vim', -- put in /plugin so it autoloads

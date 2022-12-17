@@ -191,13 +191,6 @@ call s:h('HopNextKey1', {'fg': s:orange})
 call s:h('HopNextKey2', {'fg': s:orange})
 call s:h('HopUnmatched', {'fg': s:grey65})
 
-" nvim-tree.lua
-
-call s:h('NvimTreeRootFolder', {'fg': s:blue})
-call s:h('NvimTreeOpenedFolderName', {'fg': s:orange})
-call s:h('NvimTreeExecFile', {'fg': s:grey85})
-call s:h('NvimTreeGitDirty', {'fg': s:blue})
-
 " nvim-cmp
 
 call s:h('CmpItemAbbrMatch', {'fg': s:grey85, 'gui': 'none'})
