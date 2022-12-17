@@ -21,8 +21,7 @@ Personal Neovim setup.
 	- Linux: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.config/nvim/pack/packer/start/packer.nvim`.
 	- Windows: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/AppData/Local/nvim/pack/packer/start/packer.nvim`.
 - Install plugins by runnig this command in neovim `:PackerInstall`.
-- Install LSP servers in `/lsp`. Install the dependencies into `/lsp/.venv` and `/lsp/node_modules`. Refer to LSP
-	section for other languages that requires manual installation.
+- Refer to [LSP](lsp/README.md) to set up LSP.
 - *Optional*: Copy snippets from [friendly-snippets](https://github.com/rafamadriz/friendly-snippets/tree/main/snippets)
 	into `/home/snippets` and customize them.
 

@@ -343,7 +343,7 @@ packer.startup({function(use)
 			end
 
 			-- this is where we install all the language servers
-			local lsp_bins = vim.api.nvim_eval("$ROOT . '\\lsp'")
+			local lsp_bins = vim.fn.stdpath('config')
 
 			-- nvim-cmp
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -356,14 +356,14 @@ packer.startup({function(use)
 					on_attach(client, bufnr)
 				end,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\typescript-language-server.cmd', '--stdio' }
+				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' }
 			}
 
 			-- npm i vscode-langservers-extracted
 			nvim_lsp.cssls.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-css-language-server.cmd', '--stdio' },
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-css-language-server', '--stdio' },
 				settings = {
 					css = {
 						validate = false,
@@ -373,7 +373,7 @@ packer.startup({function(use)
 			nvim_lsp.html.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-html-language-server.cmd', '--stdio' },
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-html-language-server', '--stdio' },
 			}
 			nvim_lsp.jsonls.setup{
 				on_attach = function(client, bufnr)
@@ -381,30 +381,31 @@ packer.startup({function(use)
 					on_attach(client, bufnr)
 				end,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\vscode-json-language-server.cmd', '--stdio' },
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
 			}
 
 			-- go get github.com/mattn/efm-langserver
 			-- npm install eslint_d prettier
 			-- pip install black isort
 			local eslint = {
-				lintCommand = lsp_bins .. '\\node_modules\\.bin\\eslint_d -f unix --stdin --stdin-filename ${INPUT}',
+				lintCommand = lsp_bins .. '/node_modules/.bin/eslint_d -f unix --stdin --stdin-filename ${INPUT}',
 				lintStdin = true,
 				lintFormats = {'%f:%l:%c: %m'},
 				lintIgnoreExitCode = true,
 				formatCommand = 'eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}',
 				formatStdin = true
 			}
-			local prettier_path = '.\\node_modules\\.bin\\prettier.cmd' -- default to local
+			local prettier_path = './node_modules/.bin/prettier' -- default to local
 			local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
 			-- use our own if project doesn't have
 			if vim.fn.executable(prettier_path) ~= 1 then
-				prettier_path = lsp_bins .. '\\node_modules\\.bin\\prettier.cmd'
+				prettier_path = lsp_bins .. '/node_modules/.bin/prettier'
 			end
 			prettier_cmd = prettier_path .. prettier_config
 			nvim_lsp.efm.setup {
 				on_attach = on_attach,
 				capabilities = capabilities,
+				cmd = { lsp_bins .. '/efm-langserver' },
 				init_options = {
 					documentFormatting = true,
 					hover = true,
@@ -441,8 +442,8 @@ packer.startup({function(use)
 							{formatCommand = prettier_cmd .. ' --parser json', formatStdin = true},
 						},
 						python = {
-							{formatCommand = lsp_bins .. '\\.venv\\Scripts\\black.exe --quiet -', formatStdin = true},
-							{formatCommand = lsp_bins .. '\\.venv\\Scripts\\isort.exe --quiet -', formatStdin = true},
+							{formatCommand = lsp_bins .. '/.venv/bin/black --quiet -', formatStdin = true},
+							{formatCommand = lsp_bins .. '/.venv/bin/isort --quiet -', formatStdin = true},
 						},
 						yaml = {
 							{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
@@ -461,21 +462,21 @@ packer.startup({function(use)
 			nvim_lsp.pyright.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\pyright-langserver.cmd', '--stdio' }
+				cmd = { lsp_bins .. '/node_modules/.bin/pyright-langserver', '--stdio' }
 			}
 
 			-- npm i yaml-language-server
 			nvim_lsp.yamlls.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\node_modules\\.bin\\yaml-language-server.cmd', '--stdio' },
+				cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
 			}
 
 			-- https://docs.soliditylang.org/en/latest/installing-solidity.html
 			nvim_lsp.solc.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '\\solc.exe', '--lsp' },
+				cmd = { lsp_bins .. '/solc.exe', '--lsp' },
 			}
 
 			-- https://github.com/eclipse/eclipse.jdt.ls
@@ -483,12 +484,12 @@ packer.startup({function(use)
 			nvim_lsp.jdtls.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { 'java.exe', '-jar', lsp_bins .. '\\jdtls\\plugins\\org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
+				cmd = { 'java.exe', '-jar', lsp_bins .. '/jdtls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
 					'-Declipse.application=org.eclipse.jdt.ls.core.id1', '-Dosgi.bundles.defaultStartLevel=4',
 					'-Declipse.product=org.eclipse.jdt.ls.core.product', '-Dlog.protocol=true', '-Dlog.level=ALL', '-Xms1g',
 					'-Xmx2G', '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens',
-					'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '\\jdtls\\config_win', '-data',
-				lsp_bins .. '\\jdtls\\workspace' }
+					'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '/jdtls/config_win', '-data',
+				lsp_bins .. '/jdtls/workspace' }
 			}
 		end
 	}
