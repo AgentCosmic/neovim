@@ -1,9 +1,9 @@
 " https://github.com/BurntSushi/ripgrep/releases
 call plug#begin('$HOME/plugged')
 " Universal Vim Functionality
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'  }
 Plug 'tpope/vim-abolish'
-Plug 'dyng/ctrlsf.vim'
+Plug 'dyng/ctrlsf.vim', { 'on': 'CtrlSF'  }
 Plug 'unblevable/quick-scope'
 Plug 'wellle/targets.vim'
 Plug 'rrethy/vim-illuminate'
@@ -20,7 +20,7 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'jeetsukumaran/vim-indentwise'
 Plug 'alvan/vim-closetag'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': ['html', 'css', 'javascriptreact', 'typescriptreact', 'htmldjango'] }
 Plug 'nvim-lua/popup.nvim' " telescope
 Plug 'nvim-lua/plenary.nvim' " telescope
 Plug 'nvim-telescope/telescope.nvim'
@@ -39,15 +39,17 @@ Plug 'RishabhRD/popfix' " lsputils
 Plug 'RishabhRD/nvim-lsputils'
 " GUI
 Plug 'lukas-reineke/indent-blankline.nvim' " indent guides for spaces
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install', 'on': 'MarkdownPreview' }
 Plug 'kyazdani42/nvim-web-devicons' " required by nvim-tree.lue
-Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kyazdani42/nvim-tree.lua', { 'on': ['NvimTreeFindFile', 'NvimTreeFocus'] }
 Plug 'noib3/nvim-cokeline'
 Plug 'numtostr/BufOnly.nvim', { 'on': 'BufOnly' }
 
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go', 'tag': 'v1.22' }
 " Evaluating
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+" Plug 'kkoomen/vim-doge'
+Plug 'perost/modelica-vim'
+Plug 'voldikss/vim-floaterm'
 call plug#end()
 
 
@@ -59,6 +61,13 @@ let g:firenvim_config = {
 		\ }
 	\ }
 \ }
+
+" modelica-vim
+au BufRead,BufNewFile *.mo set filetype=modelica
+
+" floaterm
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.9
 
 
 
@@ -108,7 +117,6 @@ augroup end
 
 " Telescope
 nnoremap \ :lua telescope_project_files()<cr>
-" nnoremap \ :Telescope find_files<cr>
 nnoremap gh :Telescope oldfiles<cr>
 nnoremap gt :Telescope lsp_document_symbols<cr>
 nnoremap <leader>rf :Telescope lsp_references<cr>
