@@ -235,9 +235,9 @@ packer.startup({function(use)
 
 	use {
 		'alvan/vim-closetag',
-		ft = {'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'htmldjango', 'php', 'vue'},
+		ft = {'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'htmldjango', 'svg', 'php', 'vue'},
 		setup = function()
-			vim.g.closetag_filetypes = 'html,typescript,typescriptreact,javascriptreact,php,vue'
+			vim.g.closetag_filetypes = 'html,typescript,typescriptreact,javascriptreact,svg,php,vue'
 		end
 	}
 
@@ -317,8 +317,8 @@ packer.startup({function(use)
 				buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
 				buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
 				buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-				buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({focusable = false, border = "rounded"})<cr>', opts)
-				buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>', opts)
+				buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
+				buf_set_keymap('n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
 				buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
 				buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
 				buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
@@ -345,14 +345,6 @@ packer.startup({function(use)
 				vim.lsp.handlers['textDocument/implementation'] = require('lsputil.locations').implementation_handler
 				vim.lsp.handlers['textDocument/documentSymbol'] = require('lsputil.symbols').document_handler
 				vim.lsp.handlers['workspace/symbol'] = require('lsputil.symbols').workspace_handler
-
-				-- auto format
-				-- if client.server_capabilities.document_formatting then
-				-- 	vim.cmd [[augroup AutoFormat]]
-				-- 	vim.cmd [[autocmd! * <buffer>]]
-				-- 	vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
-				-- 	vim.cmd [[augroup END]]
-				-- end
 			end
 
 			-- this is where we install all the language servers
@@ -604,7 +596,7 @@ packer.startup({function(use)
 		config = function()
 			require('telescope').setup({
 				defaults = {
-					file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.svg$', '%.psd$', '%.ai$'},
+					file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.psd$', '%.ai$'},
 					preview = {
 						filesize_limit = 1,
 						timeout = 250,
@@ -684,7 +676,6 @@ packer.startup({function(use)
 
 	use {
 		'lewis6991/gitsigns.nvim',
-		-- events = 'BufRead',
 		cmd = 'Gitsigns',
 		config = function()
 			require('gitsigns').setup()
