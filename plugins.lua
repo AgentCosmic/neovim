@@ -651,19 +651,34 @@ packer.startup({function(use)
 
 
 	use {
-		'perost/modelica-vim',
-		ft = {'modelica'},
+		'lukas-reineke/virt-column.nvim',
 		config = function()
-			vim.cmd('au BufRead,BufNewFile *.mo set filetype=modelica')
+			require('virt-column').setup()
 		end
 	}
 
+
 	use {
-		'voldikss/vim-floaterm',
-		cmd = 'FloatermNew',
+		'akinsho/toggleterm.nvim',
+		cmd = {'ToggleTerm', 'TermExec'},
+		setup = function ()
+			vim.cmd('command! LazyGit :TermExec cmd=lazygit direction=float')
+		end,
 		config = function()
-			vim.g.floaterm_width = 0.9
-			vim.g.floaterm_height = 0.9
+			require('toggleterm').setup({
+					shade_terminals = false,
+				})
+			-- mapping to easliy navigate terminals
+			function _G.set_terminal_keymaps()
+				local opts = {buffer = 0}
+				vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+				vim.keymap.set('t', '<a-h>', [[<Cmd>wincmd h<CR>]], opts)
+				vim.keymap.set('t', '<a-j>', [[<Cmd>wincmd j<CR>]], opts)
+				vim.keymap.set('t', '<a-k>', [[<Cmd>wincmd k<CR>]], opts)
+				vim.keymap.set('t', '<a-l>', [[<Cmd>wincmd l<CR>]], opts)
+			end
+			-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 		end
 	}
 
@@ -675,6 +690,22 @@ packer.startup({function(use)
 			require('gitsigns').setup()
 		end
 	}
+
+
+	use {
+		'liuchengxu/vista.vim',
+		cmd = 'Vista',
+	}
+
+
+	-- use {
+	-- 	'perost/modelica-vim',
+	-- 	ft = {'modelica'},
+	-- 	config = function()
+	-- 		vim.cmd('au BufRead,BufNewFile *.mo set filetype=modelica')
+	-- 	end
+	-- }
+
 
 end,
 config = {
