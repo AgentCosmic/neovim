@@ -25,12 +25,17 @@ packer.startup({function(use)
 
 	use {
 		'hrsh7th/nvim-cmp',
-		requires = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip'},
+		requires = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip'},
 		events = 'InsertEnter',
+		setup = function()
+			-- luasnip needs to load snippets before cmp
+			require("luasnip.loaders.from_vscode").lazy_load({paths = {vim.env.ROOT .. '/snippets'}})
+		end,
 		config = function()
 			vim.opt.completeopt = 'menu,menuone,noselect'
 			local cmp = require('cmp')
 			local cmp_buffer = require('cmp_buffer')
+			local luasnip = require('luasnip')
 			cmp.setup({
 				mapping = {
 					['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -39,6 +44,13 @@ packer.startup({function(use)
 					['<CR>'] = cmp.mapping.confirm({ select = true }),
 					['<C-D>'] = cmp.mapping.scroll_docs(-4),
 					['<C-F>'] = cmp.mapping.scroll_docs(4),
+					['<C-N>'] = cmp.mapping(function(fallback)
+						if luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
 				},
 				sources = {
 					{ name = 'nvim_lsp' },
@@ -51,6 +63,7 @@ packer.startup({function(use)
 						},
 					},
 					{ name = 'path' },
+					{ name = 'luasnip' },
 				},
 				window = {
 					documentation = {
@@ -73,7 +86,7 @@ packer.startup({function(use)
 				snippet = {
 					expand = function(args)
 						-- required even if not used
-						require'luasnip'.lsp_expand(args.body)
+						require('luasnip').lsp_expand(args.body)
 					end,
 				},
 			})
