@@ -97,7 +97,7 @@ call s:h('DiffDelete', {'fg': s:red, 'bg': 'NONE'})
 call s:h('DiffText', {'bg': s:grey25, 'gui': 'italic,bold'})
 call s:h('EndOfBuffer', {'fg': s:grey65, 'bg': 'NONE'})
 call s:h('ErrorMsg', {'fg': s:red, 'bg': 'NONE', 'sp': s:red})
-call s:h('VertSplit', {'fg': s:grey65, 'bg': s:grey15})
+call s:h('VertSplit', {'fg': s:grey25, 'bg': s:grey15})
 call s:h('Folded', {'fg': s:grey65, 'bg': s:grey05})
 call s:h('FoldColumn', {'fg': s:grey65, 'bg': s:grey05})
 call s:h('SignColumn', {'fg': s:purple, 'bg': 'bg'})
@@ -195,3 +195,11 @@ call s:h('HopUnmatched', {'fg': s:grey65})
 
 call s:h('CmpItemAbbrMatch', {'fg': s:grey85, 'gui': 'none'})
 call s:h('CmpItemKind', {'fg': s:orange})
+
+" indent-blankline
+
+call s:h('IndentBlanklineChar', {'fg': s:grey20})
+
+" virt-column
+
+call s:h('VirtColumn', {'fg': s:grey20})
