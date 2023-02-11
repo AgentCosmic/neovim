@@ -1,36 +1,31 @@
--- auto compile when saving this file
-vim.cmd([[
-	augroup PackerUserConfig
-		autocmd!
-		autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-	augroup end
-]])
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-local packer = require('packer')
-
-packer.startup({function(use)
-	-- Packer can manage itself
-	use 'wbthomason/packer.nvim'
-
-
+require('lazy').setup({
 	------------------------------------------------------------------------------
 	-- Universal Vim Functionality
 	------------------------------------------------------------------------------
 
 
-	use {
+	{
 		'wellle/targets.vim',
 		event = 'BufRead',
-	}
+	},
 
-	use {
+	{
 		'hrsh7th/nvim-cmp',
-		requires = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip'},
-		events = 'InsertEnter',
-		setup = function()
-			-- luasnip needs to load snippets before cmp
-			require("luasnip.loaders.from_vscode").lazy_load({paths = {vim.env.ROOT .. '/snippets'}})
-		end,
+		dependencies = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip'},
+		event = 'InsertEnter',
 		config = function()
 			vim.opt.completeopt = 'menu,menuone,noselect'
 			local cmp = require('cmp')
@@ -91,9 +86,20 @@ packer.startup({function(use)
 				},
 			})
 		end
-	}
+	},
 
-	use {
+	{
+		-- snippet plugin in requried for nvim-cmp to work
+		'L3MON4D3/LuaSnip',
+		dependencies = {'saadparwaiz1/cmp_luasnip'},
+		event = 'InsertEnter',
+		config = function()
+			-- luasnip needs to load snippets before nvim-cmp is loaded
+			require("luasnip.loaders.from_vscode").lazy_load({paths = {vim.env.ROOT .. '/snippets'}})
+		end
+	},
+
+	{
 		'rrethy/vim-illuminate',
 		event = 'BufRead',
 		config = function()
@@ -101,53 +107,53 @@ packer.startup({function(use)
 				under_cursor = false,
 			})
 		end
-	}
+	},
 
-	use {
+	{
 		'phaazon/hop.nvim',
 		cmd = 'HopWord',
-		setup = function()
+		init = function()
 			vim.api.nvim_set_keymap('n', '<leader>w', ':HopWord<cr>', {noremap = true, silent = true})
 		end,
 		config = function()
 			require('hop').setup()
 		end
-	}
+	},
 
-	use {
+	{
 		'unblevable/quick-scope',
 		event = 'BufRead',
-		setup = function()
+		init = function()
 			vim.g.qs_highlight_on_keys = {'f', 'F', 't', 'T'}
 			vim.g.qs_max_chars = 160
 		end
-	}
+	},
 
-	use {
+	{
 		'numtostr/BufOnly.nvim',
 		cmd = {'BufOnly'},
-	}
+	},
 
-	use {
+	{
 		'tpope/vim-abolish',
-		events = 'CmdwinEnter',
-	}
+		event = 'CmdwinEnter',
+	},
 
-	use {
+	{
 		'dyng/ctrlsf.vim',
 		cmd = 'CtrlSF',
 		config = function()
 			vim.g.ctrlsf_ackprg = 'rg'
 		end
-	}
+	},
 
-	use {
+	{
 		'mbbill/undotree',
 		cmd = 'UndotreeToggle',
-		setup = function()
+		init = function()
 			vim.cmd 'cabbrev UT UndotreeToggle'
 		end
-	}
+	},
 
 
 	------------------------------------------------------------------------------
@@ -155,36 +161,32 @@ packer.startup({function(use)
 	------------------------------------------------------------------------------
 
 
-	use {
+	{
 		'kylechui/nvim-surround',
+		event = 'BufRead',
 		config = function()
 			require('nvim-surround').setup({})
 		end
-	}
+	},
 
-	use {
-		'sickill/vim-pasta',
-		event = 'VimEnter',
-	}
-
-	use {
+	{
 		'sheerun/vim-polyglot',
-		event = 'BufRead',
-	}
+		-- can't lazy load, otherwise filetype won't be set for first file
+	},
 
-	use {
+	{
 		'michaeljsmith/vim-indent-object',
 		event = 'BufRead',
-	}
+	},
 
-	use {
+	{
 		'jeetsukumaran/vim-indentwise',
 		event = 'BufRead',
-	}
+	},
 
-	use {
+	{
 		'jiangmiao/auto-pairs',
-		-- TODO can't lazy load
+		event = 'BufRead',
 		config = function()
 			vim.cmd([[
 				augroup AutoPairs
@@ -196,9 +198,9 @@ packer.startup({function(use)
 				augroup end
 			]])
 		end
-	}
+	},
 
-	use {
+	{
 		'numToStr/Comment.nvim',
 		event = 'BufRead',
 		config = function()
@@ -206,18 +208,18 @@ packer.startup({function(use)
 			vim.api.nvim_set_keymap('n', '<leader>c', ':normal gcc<cr>', {silent = true})
 			vim.api.nvim_set_keymap('v', '<leader>c', ':normal gbc<cr>', {silent = true})
 		end
-	}
+	},
 
-	use {
+	{
 		'AndrewRadev/sideways.vim',
 		cmd = {'SidewaysLeft', 'SidewaysRight'},
-		setup = function()
+		init = function()
 			vim.api.nvim_set_keymap('n', '<c-h>', ':SidewaysLeft<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<c-l>', ':SidewaysRight<cr>', {noremap = true, silent = true})
 		end
-	}
+	},
 
-	use {
+	{
 		'norcalli/nvim-colorizer.lua',
 		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
 		config = function()
@@ -231,20 +233,20 @@ packer.startup({function(use)
 					'vim',
 				}, { no_names = true })
 		end
-	}
+	},
 
-	use {
+	{
 		'alvan/vim-closetag',
 		ft = {'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'htmldjango', 'svg', 'php', 'vue'},
-		setup = function()
+		init = function()
 			vim.g.closetag_filetypes = 'html,typescript,typescriptreact,javascriptreact,svg,php,vue'
 		end
-	}
+	},
 
-	use {
+	{
 		'mattn/emmet-vim',
 		ft = {'html', 'css', 'javascriptreact', 'typescriptreact', 'htmldjango'},
-		setup = function()
+		init = function()
 			vim.g.user_emmet_leader_key = '<c-y>'
 			vim.g.user_emmet_expandabbr_key = '<c-e>'
 			vim.g.user_emmet_settings = {
@@ -253,7 +255,7 @@ packer.startup({function(use)
 				htmldjango = { extends = 'html' },
 			}
 		end
-	}
+	},
 
 
 	------------------------------------------------------------------------------
@@ -261,21 +263,24 @@ packer.startup({function(use)
 	------------------------------------------------------------------------------
 
 
-	use {
+	{
 		'ray-x/lsp_signature.nvim',
-		event = 'BufRead',
-	}
+		lazy = true,
+		-- event = 'BufRead',
+	},
 
-	use {
+	{
 		'RishabhRD/nvim-lsputils',
-		requires = {'RishabhRD/popfix'},
-		event = 'BufRead',
-	}
+		dependencies = {'RishabhRD/popfix'},
+		lazy = true,
+		-- event = 'BufRead',
+	},
 
-	use {
+	{
 		'neovim/nvim-lspconfig',
-		after = {'cmp-nvim-lsp', 'nvim-lsputils', 'lsp_signature.nvim'},
-		event = 'BufRead',
+		dependencies = {'cmp-nvim-lsp', 'nvim-lsputils', 'lsp_signature.nvim'},
+		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'java', 'solidity'},
+		-- event = 'BufRead',
 		config = function()
 			local nvim_lsp = require('lspconfig')
 
@@ -497,7 +502,7 @@ packer.startup({function(use)
 				lsp_bins .. '/jdtls/workspace' }
 			}
 		end
-	}
+	},
 
 
 	------------------------------------------------------------------------------
@@ -505,12 +510,12 @@ packer.startup({function(use)
 	------------------------------------------------------------------------------
 
 
-	use {
+	{
 		'lukas-reineke/indent-blankline.nvim', -- indent guides for spaces
 		event = 'BufRead',
-	}
+	},
 
-	use {
+	{
 		'noib3/nvim-cokeline',
 		event = 'BufRead',
 		config = function()
@@ -576,15 +581,16 @@ packer.startup({function(use)
 			map('n', '<c-f4>', ':BufOnly<cr>', { silent = true, noremap = true })
 			map('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
 		end
-	}
+	},
 
-	use {
+	{
 		'nvim-telescope/telescope.nvim',
-		requires = {'nvim-lua/plenary.nvim'},
+		dependencies = {'nvim-lua/plenary.nvim'},
 		cmd = {'Telescope'},
-		setup = function()
+		init = function()
+			-- use git_files if available, else find_files
 			vim.keymap.set('n', '\\', function()
-				vim.cmd(':PackerLoad telescope.nvim') -- we need to manually load it cos we're not calling :Telescope
+				-- vim.cmd(':PackerLoad telescope.nvim') -- we need to manually load it cos we're not calling :Telescope
 				local opts = {} -- add additional options here
 				local ok = pcall(require('telescope.builtin').git_files, opts)
 				if not ok then require('telescope.builtin').find_files(opts) end
@@ -592,6 +598,7 @@ packer.startup({function(use)
 			vim.api.nvim_set_keymap('n', 'gh', ':Telescope oldfiles<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', 'gt', ':Telescope lsp_document_symbols<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', 'g/', ':Telescope current_buffer_fuzzy_find<cr>', {noremap = true, silent = true})
 		end,
 		config = function()
 			require('telescope').setup({
@@ -610,18 +617,18 @@ packer.startup({function(use)
 				}
 			})
 		end
-	}
+	},
 
-	use {
+	{
 		'nvim-neo-tree/neo-tree.nvim',
 		branch = 'v2.x',
-		requires = { 
+		dependencies = { 
 			'nvim-lua/plenary.nvim',
 			'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
 			'MunifTanjim/nui.nvim',
 		},
 		cmd = {'Neotree', 'NeoTreeReveal'},
-		setup = function()
+		init = function()
 			vim.cmd('cabbrev NTR NeoTreeReveal')
 			vim.api.nvim_set_keymap('n', '<leader>nt', ':Neotree<cr>', {silent = true})
 		end,
@@ -634,7 +641,7 @@ packer.startup({function(use)
 				}
 			})
 		end,
-	}
+	},
 
 
 	------------------------------------------------------------------------------
@@ -642,18 +649,19 @@ packer.startup({function(use)
 	------------------------------------------------------------------------------
 
 
-	use {
+	{
 		'lukas-reineke/virt-column.nvim',
+		event = 'BufRead',
 		config = function()
 			require('virt-column').setup()
 		end
-	}
+	},
 
 
-	use {
+	{
 		'akinsho/toggleterm.nvim',
 		cmd = {'ToggleTerm', 'TermExec'},
-		setup = function ()
+		init = function ()
 			vim.cmd('command! LazyGit :TermExec cmd=lazygit direction=float')
 		end,
 		config = function()
@@ -672,40 +680,31 @@ packer.startup({function(use)
 			-- if you only want these mappings for toggle term use term://*toggleterm#* instead
 			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 		end
-	}
+	},
 
-	use {
+	{
 		'lewis6991/gitsigns.nvim',
 		cmd = 'Gitsigns',
 		config = function()
 			require('gitsigns').setup()
 		end
-	}
+	},
 
 
-	use {
+	{
 		'liuchengxu/vista.vim',
 		cmd = 'Vista',
-	}
+	},
 
 
-	-- use {
+	-- {
 	-- 	'perost/modelica-vim',
 	-- 	ft = {'modelica'},
 	-- 	config = function()
 	-- 		vim.cmd('au BufRead,BufNewFile *.mo set filetype=modelica')
 	-- 	end
-	-- }
+	-- },
 
 
-end,
-config = {
-	compile_path = vim.fn.stdpath('config')  .. '/plugin/packer_compiled.vim', -- put in /plugin so it autoloads
-	-- :PackerCompile profile=true
-	-- restart then :PackerProfile
-	-- profile = {
-	-- 	enable = true,
-	-- 	threshold = 1 -- the amount in ms that a plugin's load time must be over for it to be included in the profile
-	-- }
-}
+}, {
 })
