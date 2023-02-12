@@ -11,7 +11,7 @@ runtime mswin.vim
 
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !*.svg\ -g\ !package-lock.json\ -g\ !Pipfile.lock\ -g\ !node_modules\ -g\ !venv\ -g\ !.venv
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !package-lock.json\ -g\ !Pipfile.lock\ -g\ !node_modules\ -g\ !venv\ -g\ !.venv
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
@@ -260,6 +260,9 @@ augroup END
 
 " Get syntax under cursor
 noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+
+" unmap ctrl-z so we can suspend the app
+unmap <c-z>
 
 
 " ----- ----- ----- -----
