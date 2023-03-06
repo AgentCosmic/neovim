@@ -12,6 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+
 	------------------------------------------------------------------------------
 	-- Universal Vim Functionality
 	------------------------------------------------------------------------------
@@ -136,7 +137,7 @@ require('lazy').setup({
 
 	{
 		'tpope/vim-abolish',
-		event = 'CmdwinEnter',
+		event = 'BufRead',
 	},
 
 	{
@@ -162,16 +163,16 @@ require('lazy').setup({
 
 
 	{
+		'sheerun/vim-polyglot',
+		-- can't lazy load, otherwise filetype won't be set for first file
+	},
+
+	{
 		'kylechui/nvim-surround',
 		event = 'BufRead',
 		config = function()
 			require('nvim-surround').setup({})
 		end
-	},
-
-	{
-		'sheerun/vim-polyglot',
-		-- can't lazy load, otherwise filetype won't be set for first file
 	},
 
 	{
@@ -643,12 +644,6 @@ require('lazy').setup({
 		end,
 	},
 
-
-	------------------------------------------------------------------------------
-	-- Evaluating
-	------------------------------------------------------------------------------
-
-
 	{
 		'lukas-reineke/virt-column.nvim',
 		event = 'BufRead',
@@ -658,11 +653,26 @@ require('lazy').setup({
 	},
 
 
+
+	------------------------------------------------------------------------------
+	-- Evaluating
+	------------------------------------------------------------------------------
+
+
 	{
 		'akinsho/toggleterm.nvim',
 		cmd = {'ToggleTerm', 'TermExec'},
 		init = function ()
-			vim.cmd('command! LazyGit :TermExec cmd=lazygit direction=float')
+			local Terminal  = require('toggleterm.terminal').Terminal
+			local lazygit = Terminal:new({
+				cmd = 'lazygit',
+				direction = 'float',
+				hidden = true
+			})
+				function _lazygit_toggle()
+					lazygit:toggle()
+			end
+			vim.cmd('command! LazyGit :lua _lazygit_toggle()')
 		end,
 		config = function()
 			require('toggleterm').setup({
@@ -708,3 +718,6 @@ require('lazy').setup({
 
 }, {
 })
+
+-- add back our runtime path
+vim.opt.rtp:prepend(vim.env.ROOT)
