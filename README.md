@@ -17,10 +17,6 @@ Personal Neovim setup.
 	with the project directory.
 - Create folders at `/swap` and  `/undo` in the project directory.
 - Install the fonts in `/fonts`.
-- Install packer.nvim:
-	- Linux: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.config/nvim/pack/packer/start/packer.nvim`.
-	- Windows: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/AppData/Local/nvim/pack/packer/start/packer.nvim`.
-- Install plugins by runnig this command in neovim `:PackerInstall`.
 - Refer to [LSP](lsp/README.md) to set up LSP.
 - *Optional*: Copy snippets from [friendly-snippets](https://github.com/rafamadriz/friendly-snippets/tree/main/snippets)
 	into `/home/snippets` and customize them.
