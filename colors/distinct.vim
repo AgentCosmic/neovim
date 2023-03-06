@@ -203,3 +203,8 @@ call s:h('IndentBlanklineChar', {'fg': s:grey20})
 " virt-column
 
 call s:h('VirtColumn', {'fg': s:grey20})
+
+" vim-matchup
+
+call s:h('MatchParen', {'bg': s:green})
+call s:h('MatchWord', {'gui': 'underline,bold'})

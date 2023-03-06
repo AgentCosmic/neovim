@@ -707,6 +707,14 @@ require('lazy').setup({
 	},
 
 
+	{
+		'andymass/vim-matchup',
+		config = function()
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+		end
+	},
+
+
 	-- {
 	-- 	'perost/modelica-vim',
 	-- 	ft = {'modelica'},
@@ -717,6 +725,11 @@ require('lazy').setup({
 
 
 }, {
+	-- performance = {
+	-- 	rtp = {
+	-- 		reset = false,
+	-- 	}	
+	-- }
 })
 
 -- add back our runtime path
