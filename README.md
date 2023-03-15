@@ -15,11 +15,8 @@ Personal Neovim setup.
 - Install neovim.
 - Set the environment variable `VIMINIT` to `let $MYVIMRC = {root}/init.vim' | source $MYVIMRC`, replacing `{root}`
 	with the project directory.
-- Create folders at `/swap` and  `/undo` in the project directory.
 - Install the fonts in `/fonts`.
 - Refer to [LSP](lsp/README.md) to set up LSP.
-- *Optional*: Copy snippets from [friendly-snippets](https://github.com/rafamadriz/friendly-snippets/tree/main/snippets)
-	into `/home/snippets` and customize them.
 
 ## GUI
 
