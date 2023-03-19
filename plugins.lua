@@ -725,6 +725,7 @@ require('lazy').setup({
 
 
 }, {
+	lockfile = vim.env.ROOT .. '/lazy-lock.json',
 	-- performance = {
 	-- 	rtp = {
 	-- 		reset = false,
