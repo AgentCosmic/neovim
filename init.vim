@@ -3,8 +3,6 @@
 let $ROOT = fnamemodify($MYVIMRC, ':h')
 set runtimepath+=$ROOT
 
-runtime mswin.vim
-
 " ----- ----- ----- -----
 " Behavior
 " ----- ----- ----- -----
@@ -260,9 +258,6 @@ augroup END
 
 " Get syntax under cursor
 noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
-
-" unmap ctrl-z so we can suspend the app
-unmap <c-z>
 
 
 " ----- ----- ----- -----
