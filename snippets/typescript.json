@@ -41,20 +41,25 @@
 		],
 		"description": "Property getter"
 	},
-	"Log to the console": {
-		"prefix": "log",
-		"body": ["console.log($1);", "$0"],
-		"description": "Log to the console"
+	"console.log": {
+		"prefix": "cl",
+		"body": "console.log(${0})"
 	},
-	"Log warning to console": {
-		"prefix": "warn",
-		"body": ["console.warn($1);", "$0"],
-		"description": "Log warning to the console"
+	"console.log a variable": {
+		"prefix": "cv",
+		"body": "console.log('${0}:', ${0})"
 	},
-	"Log error to console": {
-		"prefix": "error",
-		"body": ["console.error($1);", "$0"],
-		"description": "Log error to the console"
+	"console.error": {
+		"prefix": "ce",
+		"body": "console.error(${0})"
+	},
+	"console.warn": {
+		"prefix": "cw",
+		"body": "console.warn(${0})"
+	},
+	"console.dir": {
+		"prefix": "cod",
+		"body": "console.dir('${0}:', ${0})"
 	},
 	"Define a full property": {
 		"prefix": "prop",
