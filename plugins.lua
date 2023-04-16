@@ -246,7 +246,7 @@ require('lazy').setup({
 
 	{
 		'mattn/emmet-vim',
-		ft = {'html', 'css', 'javascriptreact', 'typescriptreact', 'htmldjango'},
+		ft = {'html', 'css', 'javascriptreact', 'typescriptreact', 'htmldjango', 'vue'},
 		init = function()
 			vim.g.user_emmet_leader_key = '<c-y>'
 			vim.g.user_emmet_expandabbr_key = '<c-e>'
@@ -280,7 +280,7 @@ require('lazy').setup({
 	{
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp', 'nvim-lsputils', 'lsp_signature.nvim'},
-		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'java', 'solidity'},
+		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity'},
 		-- event = 'BufRead',
 		config = function()
 			local nvim_lsp = require('lspconfig')
@@ -398,6 +398,7 @@ require('lazy').setup({
 			-- go get github.com/mattn/efm-langserver
 			-- npm install eslint_d prettier
 			-- pip install black isort
+			-- npm i prettier-plugin-solidity
 			local eslint = {
 				lintCommand = lsp_bins .. '/node_modules/.bin/eslint_d -f unix --stdin --stdin-filename ${INPUT}',
 				lintStdin = true,
@@ -423,7 +424,7 @@ require('lazy').setup({
 					documentSymbol = true,
 					codeAction = true,
 				},
-				filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'markdown', 'solidity'},
+				filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'markdown', 'vue', 'solidity'},
 				settings = {
 					rootMarkers = {'.git/', 'node_modules/'},
 					languages = {
@@ -462,8 +463,11 @@ require('lazy').setup({
 						markdown = {
 							{formatCommand = prettier_cmd .. ' --parser markdown', formatStdin = true},
 						},
+						vue = {
+							{formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true},
+						},
 						solidity = {
-							{formatCommand = prettier_path .. ' --parser solidity-parse', formatStdin = true},
+							{formatCommand = prettier_cmd .. ' --parser solidity-parse', formatStdin = true},
 						},
 					}
 				}
@@ -484,10 +488,37 @@ require('lazy').setup({
 			}
 
 			-- https://docs.soliditylang.org/en/latest/installing-solidity.html
-			nvim_lsp.solc.setup{
+			-- nvim_lsp.solc.setup{
+			-- 	on_attach = on_attach,
+			-- 	capabilities = capabilities,
+			-- 	cmd = { lsp_bins .. '/solc', '--lsp' },
+			-- }
+
+			-- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
+			-- npm i @nomicfoundation/solidity-language-server
+			require('lspconfig.configs').solidity = {
+				default_config = {
+					cmd = { lsp_bins .. '/node_modules/.bin/nomicfoundation-solidity-language-server', '--stdio' },
+					filetypes = { 'solidity' },
+					root_dir = nvim_lsp.util.find_git_ancestor,
+					single_file_support = true,
+				},
+			}
+			nvim_lsp.solidity.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/solc.exe', '--lsp' },
+			}
+
+			-- npm i @volar/vue-language-server typescript-language-server
+			nvim_lsp.volar.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vue-language-server', '--stdio' },
+				init_options = {
+					typescript = {
+						tsdk = lsp_bins .. '/node_modules/typescript/lib',
+					},
+				},
 			}
 
 			-- https://github.com/eclipse/eclipse.jdt.ls

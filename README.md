@@ -31,11 +31,10 @@ All LSP servers dependencies are installed at neovim standard path: `:echo stdpa
 
 Link the package files to neovim's config directory:
 ```sh
-ln -s package.json ~/.config/nvim/package.json
-ln -s package-lock.json ~/.config/nvim/package-lock.json
-ln -s requirements.txt ~/.config/nvim/requirements.txt
-ln -s go.mod ~/.config/nvim/go.mod
-ln -s go.sum ~/.config/nvim/go.sum
+cp package.json ~/.config/nvim/package.json
+cp requirements.txt ~/.config/nvim/requirements.txt
+cp go.mod ~/.config/nvim/go.mod
+cp go.sum ~/.config/nvim/go.sum
 ```
 
 Then install dependencies:
