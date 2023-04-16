@@ -1,5 +1,6 @@
 .venv
 node_modules
 jdtls
+solc
 solc.exe
 solang.exe
