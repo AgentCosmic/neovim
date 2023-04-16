@@ -163,8 +163,77 @@ require('lazy').setup({
 
 
 	{
-		'sheerun/vim-polyglot',
-		-- can't lazy load, otherwise filetype won't be set for first file
+		'nvim-treesitter/nvim-treesitter',
+		dependencies = {'nvim-treesitter/nvim-treesitter-textobjects'},
+		build = ':TSUpdate',
+		config = function()
+			require('nvim-treesitter.configs').setup({
+				ensure_installed = {'javascript', 'typescript', 'html', 'css', 'python', 'lua', 'markdown', 'tsx', 'vue'},
+				auto_install = false,
+				indent = {
+					enable = true
+				},
+				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							['ib'] = '@block.inner',
+							['ab'] = '@block.outer',
+							['af'] = '@function.outer',
+							['if'] = '@function.inner',
+							['ic'] = '@conditional.inner',
+							['ac'] = '@conditional.outer',
+							['il'] = '@loop.inner',
+							['al'] = '@loop.outer',
+							['ip'] = '@parameter.inner',
+							['ap'] = '@parameter.outer',
+						},
+					},
+					move = {
+						enable = true,
+						goto_next_start = {
+							[']f'] = '@function.outer',
+							[']c'] = '@conditional.outer',
+							[']l'] = '@loop.outer',
+						},
+						goto_next_end = {
+							[']F'] = '@function.outer',
+							[']C'] = '@conditional.outer',
+							[']L'] = '@loop.outer',
+						},
+						goto_previous_start = {
+							['[f'] = '@function.outer',
+							['[c'] = '@conditional.outer',
+							['[l'] = '@loop.outer',
+						},
+						goto_previous_end = {
+							['[F'] = '@function.outer',
+							['[C'] = '@conditional.outer',
+							['[L'] = '@loop.outer',
+						},
+					},
+				},
+			})
+			-- Repeat movement with ; and ,
+			local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
+			-- ensure ; goes forward and , goes backward regardless of the last direction
+			vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move_next)
+			vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_previous)
+		end
+	},
+
+	{
+		'nvim-treesitter/playground',
+		dependencies = {'nvim-treesitter/nvim-treesitter'},
+		enabled = false,
+		config = function()
+			require 'nvim-treesitter.configs'.setup {
+				playground = {
+					enable = true,
+				}
+			}
+		end
 	},
 
 	{
@@ -203,9 +272,19 @@ require('lazy').setup({
 
 	{
 		'numToStr/Comment.nvim',
+		dependencies = {'nvim-treesitter/nvim-treesitter', 'JoosepAlviste/nvim-ts-context-commentstring'},
 		event = 'BufRead',
 		config = function()
-			require('Comment').setup()
+			-- support correct comment string in files with multiple languages
+			require'nvim-treesitter.configs'.setup {
+				context_commentstring = {
+					enable = true,
+					enable_autocmd = false,
+				}
+			}
+			require('Comment').setup({
+				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+			})
 			vim.api.nvim_set_keymap('n', '<leader>c', ':normal gcc<cr>', {silent = true})
 			vim.api.nvim_set_keymap('v', '<leader>c', ':normal gbc<cr>', {silent = true})
 		end
@@ -683,13 +762,6 @@ require('lazy').setup({
 		end
 	},
 
-
-
-	------------------------------------------------------------------------------
-	-- Evaluating
-	------------------------------------------------------------------------------
-
-
 	{
 		'akinsho/toggleterm.nvim',
 		cmd = {'ToggleTerm', 'TermExec'},
@@ -712,7 +784,7 @@ require('lazy').setup({
 			-- mapping to easliy navigate terminals
 			function _G.set_terminal_keymaps()
 				local opts = {buffer = 0}
-				vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+				-- vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
 				vim.keymap.set('t', '<a-h>', [[<Cmd>wincmd h<CR>]], opts)
 				vim.keymap.set('t', '<a-j>', [[<Cmd>wincmd j<CR>]], opts)
 				vim.keymap.set('t', '<a-k>', [[<Cmd>wincmd k<CR>]], opts)
@@ -722,6 +794,13 @@ require('lazy').setup({
 			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 		end
 	},
+
+
+
+	------------------------------------------------------------------------------
+	-- Evaluating
+	------------------------------------------------------------------------------
+
 
 	{
 		'lewis6991/gitsigns.nvim',
@@ -740,8 +819,14 @@ require('lazy').setup({
 
 	{
 		'andymass/vim-matchup',
+		dependencies = {'nvim-treesitter/nvim-treesitter'},
 		config = function()
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+			require('nvim-treesitter.configs').setup {
+				matchup = {
+					enable = true,
+				},
+			}
 		end
 	},
 
