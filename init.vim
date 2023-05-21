@@ -119,10 +119,13 @@ set fileformats=unix,dos
 
 " Wordwrap
 set linebreak
+set breakindent " indent line after breaking
+let &showbreak = 'Ĺ '
+set breakindentopt=sbr,list:2
 
 " Formatting
 set textwidth=119
-set formatoptions=croq " only comments
+set formatoptions=crqnj " auto formatting for comments and list
 
 " Indentation
 set tabstop=4
