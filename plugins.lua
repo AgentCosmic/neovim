@@ -690,6 +690,9 @@ require('lazy').setup({
 					filtered_items = {
 						hide_dotfiles = false,
 					}
+				},
+				window = {
+					position = 'right'
 				}
 			})
 		end,
@@ -720,8 +723,16 @@ require('lazy').setup({
 		end,
 		config = function()
 			require('toggleterm').setup({
-					shade_terminals = false,
-				})
+				shade_terminals = false,
+				direction = 'vertical',
+				size = function(term)
+					if term.direction == 'horizontal' then
+						return 15
+					elseif term.direction == 'vertical' then
+						return vim.o.columns * 0.25
+					end
+				end,
+			})
 			-- mapping to easliy navigate terminals
 			function _G.set_terminal_keymaps()
 				local opts = {buffer = 0}
