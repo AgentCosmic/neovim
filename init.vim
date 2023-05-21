@@ -233,11 +233,15 @@ nnoremap <leader>q :q<cr>
 vnoremap <leader>p "_dP
 nnoremap <leader>ou :update<cr>:source %<cr>
 " Substitute
-nnoremap <F2> yiw:%s/\<<c-r>0\>/
+nnoremap <F2> yiw:%s/\<<c-r>0\>/<c-r>0
 " Grep
 nnoremap <F3> g*Nyiw:cw<cr>:grep <c-r>0
 " Delete buffer without closing the split
 nnoremap <F4> :bn\|bd #<cr>
+" Save with ctrl-s
+noremap <silent> <c-s> :update<cr>
+vnoremap <silent> <c-s> <c-c>:update<cr>
+inoremap <silent> <c-s> <c-o>:update<cr>
 
 " Disable function keys in insert mode
 inoremap <F2> <esc><F2>
