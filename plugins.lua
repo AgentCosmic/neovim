@@ -395,6 +395,7 @@ require('lazy').setup({
 				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' }
 			}
 
+			-- css, html, json, eslint
 			-- npm i vscode-langservers-extracted
 			nvim_lsp.cssls.setup{
 				on_attach = on_attach,
@@ -419,19 +420,17 @@ require('lazy').setup({
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
 			}
+			nvim_lsp.eslint.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
+				root_dir = nvim_lsp.util.find_git_ancestor,
+			}
 
 			-- go get github.com/mattn/efm-langserver
-			-- npm install eslint_d prettier
+			-- npm install prettier
 			-- pip install black isort
 			-- npm i prettier-plugin-solidity
-			local eslint = {
-				lintCommand = lsp_bins .. '/node_modules/.bin/eslint_d -f unix --stdin --stdin-filename ${INPUT}',
-				lintStdin = true,
-				lintFormats = {'%f:%l:%c: %m'},
-				lintIgnoreExitCode = true,
-				formatCommand = 'eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}',
-				formatStdin = true
-			}
 			local prettier_path = './node_modules/.bin/prettier' -- default to local
 			local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
 			-- use our own if project doesn't have
@@ -439,7 +438,7 @@ require('lazy').setup({
 				prettier_path = lsp_bins .. '/node_modules/.bin/prettier'
 			end
 			prettier_cmd = prettier_path .. prettier_config
-			nvim_lsp.efm.setup {
+			nvim_lsp.efm.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/efm-langserver' },
@@ -455,19 +454,15 @@ require('lazy').setup({
 					languages = {
 						typescript = {
 							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
-							eslint,
 						},
 						typescriptreact = {
 							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
-							eslint,
 						},
 						javascript = {
 							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
-							eslint,
 						},
 						javascriptreact = {
 							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
-							eslint,
 						},
 						css = {
 							{formatCommand = prettier_cmd .. ' --parser css', formatStdin = true},
