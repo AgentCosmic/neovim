@@ -216,24 +216,6 @@ require('lazy').setup({
 					},
 				},
 			})
-			-- Repeat movement with ; and ,
-			local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
-			-- ensure ; goes forward and , goes backward regardless of the last direction
-			vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move_next)
-			vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_previous)
-		end
-	},
-
-	{
-		'nvim-treesitter/playground',
-		dependencies = {'nvim-treesitter/nvim-treesitter'},
-		enabled = false,
-		config = function()
-			require 'nvim-treesitter.configs'.setup {
-				playground = {
-					enable = true,
-				}
-			}
 		end
 	},
 
@@ -772,12 +754,6 @@ require('lazy').setup({
 		config = function()
 			require('gitsigns').setup()
 		end
-	},
-
-
-	{
-		'liuchengxu/vista.vim',
-		cmd = 'Vista',
 	},
 
 
