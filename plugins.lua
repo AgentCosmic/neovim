@@ -25,7 +25,7 @@ require('lazy').setup({
 
 	{
 		'hrsh7th/nvim-cmp',
-		dependencies = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip'},
+		dependencies = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp-signature-help', 'L3MON4D3/LuaSnip'},
 		event = 'InsertEnter',
 		config = function()
 			vim.opt.completeopt = 'menu,menuone,noselect'
@@ -59,6 +59,7 @@ require('lazy').setup({
 						},
 					},
 					{ name = 'path' },
+					{ name = 'nvim_lsp_signature_help' },
 					{ name = 'luasnip' },
 				},
 				window = {
@@ -339,48 +340,23 @@ require('lazy').setup({
 
 
 	------------------------------------------------------------------------------
-	-- IDE
+	-- LSP
 	------------------------------------------------------------------------------
 
 
 	{
-		'ray-x/lsp_signature.nvim',
-		lazy = true,
-		-- event = 'BufRead',
-	},
-
-	{
-		'RishabhRD/nvim-lsputils',
-		dependencies = {'RishabhRD/popfix'},
-		lazy = true,
-		-- event = 'BufRead',
-	},
-
-	{
 		'neovim/nvim-lspconfig',
-		dependencies = {'cmp-nvim-lsp', 'nvim-lsputils', 'lsp_signature.nvim'},
+		dependencies = {'cmp-nvim-lsp'},
 		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity'},
 		-- event = 'BufRead',
 		config = function()
 			local nvim_lsp = require('lspconfig')
 
 			function organize_imports()
-				local params = vim.lsp.util.make_range_params()
-				params.context = {diagnostics = {}, only = {'source.organizeImports'}}
-				local responses = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-				if not responses or vim.tbl_isempty(responses) then
-					return
-				end
-				for _, response in pairs(responses) do
-					for _, result in pairs(response.result or {}) do
-						if result.edit then
-							vim.lsp.util.apply_workspace_edit(result.edit)
-						else
-							vim.lsp.buf.execute_command(result.command)
-						end
-					end
-				end
-				vim.cmd('normal zz')
+				vim.lsp.buf.execute_command({
+					command = '_typescript.organizeImports',
+					arguments = {vim.api.nvim_buf_get_name(0)},
+				})
 			end
 
 			-- Use an on_attach function to only map the following keys after the language server attaches to the current buffer
@@ -390,8 +366,6 @@ require('lazy').setup({
 
 				-- Enable completion triggered by <c-x><c-o>
 				buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-				-- show signature
-				require('lsp_signature').on_attach({}, bufnr)
 
 				-- Mappings.
 				local opts = { noremap=true, silent=true }
@@ -420,16 +394,6 @@ require('lazy').setup({
 				vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 					virtual_text = { prefix = '❱' },
 				})
-
-				-- lsputils
-				vim.lsp.handlers['textDocument/codeAction'] = require('lsputil.codeAction').code_action_handler
-				vim.lsp.handlers['textDocument/references'] = require('lsputil.locations').references_handler
-				vim.lsp.handlers['textDocument/definition'] = require('lsputil.locations').definition_handler
-				vim.lsp.handlers['textDocument/declaration'] = require('lsputil.locations').declaration_handler
-				vim.lsp.handlers['textDocument/typeDefinition'] = require('lsputil.locations').typeDefinition_handler
-				vim.lsp.handlers['textDocument/implementation'] = require('lsputil.locations').implementation_handler
-				vim.lsp.handlers['textDocument/documentSymbol'] = require('lsputil.symbols').document_handler
-				vim.lsp.handlers['workspace/symbol'] = require('lsputil.symbols').workspace_handler
 			end
 
 			-- this is where we install all the language servers
@@ -755,7 +719,7 @@ require('lazy').setup({
 	},
 
 	{
-		'lukas-reineke/virt-column.nvim',
+		'lukas-reineke/virt-column.nvim', -- nicer column line
 		event = 'BufRead',
 		config = function()
 			require('virt-column').setup()
