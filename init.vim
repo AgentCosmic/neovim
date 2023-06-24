@@ -302,17 +302,6 @@ endif
 set guicursor+=v:hor50
 set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 
-" neovide
-if exists("g:neovide")
-    set guifont=Hack\ NF:h9
-	let g:neovide_scroll_animation_length = 0.2 " not working yet
-	let g:neovide_cursor_animation_length=0.1
-	let g:neovide_cursor_trail_size = 0.2
-	" it always use the wrong size and position
-	let g:neovide_remember_window_size = v:false	
-	let g:neovide_remember_window_position = v:false	
-endif
-
 " ----- ----- ----- -----
 " Others
 " ----- ----- ----- -----
