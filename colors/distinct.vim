@@ -208,3 +208,23 @@ call s:h('VirtColumn', {'fg': s:grey20})
 
 call s:h('MatchParen', {'bg': s:green})
 call s:h('MatchWord', {'gui': 'underline,bold'})
+
+
+
+" Treesitter
+
+hi link javaScript Normal
+hi link javaScriptBraces Normal
+
+hi link typescriptVariable Statement
+hi link typescriptObjectLabel Normal
+hi link typescriptBraces Normal
+hi link typescriptPredefinedType Normal
+hi link typescriptOperator Operator
+call s:h('typescriptEndColons', {'fg': s:grey65})
+call s:h('typescriptAsyncFuncKeyword ', {'fg': s:purple})
+
+" LSP semantic tokens
+
+hi link @lsp.type.property.javascript Normal
+hi link @lsp.type.property.typescript Normal
