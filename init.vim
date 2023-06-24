@@ -109,6 +109,9 @@ augroup keepCursorPosition
 	autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 augroup END
 
+" always move quickfix window to bottom
+autocmd FileType qf wincmd J
+
 
 " ----- ----- ----- -----
 " Text and formatting
