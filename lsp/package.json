@@ -9,7 +9,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@nomicfoundation/solidity-language-server": "^0.6.15",
+		"@nomicfoundation/solidity-language-server": "^0.7.1",
 		"@volar/vue-language-server": "^1.2.0",
 		"eslint_d": "^12.1.0",
 		"prettier": "^2.6.2",

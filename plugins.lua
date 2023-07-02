@@ -69,7 +69,7 @@ require('lazy').setup({
 				},
 				sorting = {
 					comparators = {
-						cmp.config.compare.exact,
+						cmp.config.compare.exact, -- so that snippets are near the top
 						cmp.config.compare.score,
 						function(...) return cmp_buffer:compare_locality(...) end,
 						cmp.config.compare.recently_used,
@@ -113,21 +113,15 @@ require('lazy').setup({
 
 	{
 		'phaazon/hop.nvim',
-		cmd = 'HopWord',
+		cmd = 'HopChar1',
 		init = function()
-			vim.api.nvim_set_keymap('n', '<leader>w', ':HopWord<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<leader>w', ':HopChar1<cr>', {noremap = true, silent = true})
 		end,
 		config = function()
-			require('hop').setup()
-		end
-	},
-
-	{
-		'unblevable/quick-scope',
-		event = 'BufRead',
-		init = function()
-			vim.g.qs_highlight_on_keys = {'f', 'F', 't', 'T'}
-			vim.g.qs_max_chars = 160
+			require('hop').setup({
+				-- customized for custom keyboard layout, excluding Q & Z
+				keys = 'etahiscnodywkrgpjmbfulxv',
+			})
 		end
 	},
 
@@ -169,7 +163,7 @@ require('lazy').setup({
 		build = ':TSUpdate',
 		config = function()
 			require('nvim-treesitter.configs').setup({
-				ensure_installed = {'javascript', 'typescript', 'html', 'css', 'python', 'lua', 'markdown', 'tsx', 'vue'},
+				ensure_installed = {'javascript', 'typescript', 'html', 'css', 'python', 'lua', 'markdown', 'tsx', 'vue', 'go'},
 				auto_install = false,
 				indent = {
 					enable = true
@@ -329,7 +323,7 @@ require('lazy').setup({
 	{
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp'},
-		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity'},
+		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity', 'go'},
 		-- event = 'BufRead',
 		config = function()
 			local nvim_lsp = require('lspconfig')
@@ -368,14 +362,27 @@ require('lazy').setup({
 				-- buf_set_keymap('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
 				-- use telescope instead
 				-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+			end
 
-				-- floating windows
-				vim.lsp.handlers["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = 'rounded'})
-				vim.lsp.handlers["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'rounded'})
-				-- diagnostics options
-				vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-					virtual_text = { prefix = '❱' },
-				})
+			-- floating windows
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+				vim.lsp.handlers.hover, {
+				border = 'rounded'
+			})
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+				vim.lsp.handlers.signature_help, {
+				border = 'rounded'
+			})
+			-- diagnostics messages
+			vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+				vim.lsp.diagnostic.on_publish_diagnostics, {
+				virtual_text = { prefix = '' },
+			})
+			-- diagnostic signs
+			local signs = { Error = '', Warn = '', Hint = '', Info = '' }
+			for type, icon in pairs(signs) do
+				local hl = 'DiagnosticSign' .. type
+				vim.fn.sign_define(hl, { text = icon, texthl = hl })
 			end
 
 			-- this is where we install all the language servers
@@ -541,6 +548,12 @@ require('lazy').setup({
 				},
 			}
 
+			-- go install -v golang.org/x/tools/gopls
+			require'lspconfig'.gopls.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+			}
+
 			-- https://github.com/eclipse/eclipse.jdt.ls
 			-- using v0.57 because we're using java 8
 			nvim_lsp.jdtls.setup{
@@ -637,18 +650,18 @@ require('lazy').setup({
 
 	{
 		'nvim-telescope/telescope.nvim',
-		dependencies = {'nvim-lua/plenary.nvim'},
+		dependencies = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig'}, -- lsp must load first to enable lsp pickers
 		cmd = {'Telescope'},
 		init = function()
 			-- use git_files if available, else find_files
-			vim.keymap.set('n', '\\', function()
+			vim.keymap.set('n', '<leader>f', function()
 				-- vim.cmd(':PackerLoad telescope.nvim') -- we need to manually load it cos we're not calling :Telescope
 				local opts = {} -- add additional options here
 				local ok = pcall(require('telescope.builtin').git_files, opts)
 				if not ok then require('telescope.builtin').find_files(opts) end
 			end, {noremap = true, silent = true})
-			vim.api.nvim_set_keymap('n', 'gh', ':Telescope oldfiles<cr>', {noremap = true, silent = true})
-			vim.api.nvim_set_keymap('n', 'gt', ':Telescope lsp_document_symbols<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<leader>of', ':Telescope oldfiles<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<leader>ds', ':Telescope lsp_document_symbols<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', 'g/', ':Telescope current_buffer_fuzzy_find<cr>', {noremap = true, silent = true})
 		end,
@@ -710,16 +723,18 @@ require('lazy').setup({
 		'akinsho/toggleterm.nvim',
 		cmd = {'ToggleTerm', 'TermExec'},
 		init = function ()
+			vim.keymap.set('n', '<leader>tt', ':ToggleTerm<cr>')
 			local Terminal  = require('toggleterm.terminal').Terminal
 			local lazygit = Terminal:new({
 				cmd = 'lazygit',
 				direction = 'float',
 				hidden = true
 			})
-				function _lazygit_toggle()
-					lazygit:toggle()
+			function _lazygit_toggle()
+				lazygit:toggle()
 			end
-			vim.cmd('command! LazyGit :lua _lazygit_toggle()')
+			-- vim.cmd('command! LazyGit :lua _lazygit_toggle()')
+			vim.keymap.set('n', '<leader>lg', ':lua _lazygit_toggle()<cr>', opts)
 		end,
 		config = function()
 			require('toggleterm').setup({
@@ -765,6 +780,7 @@ require('lazy').setup({
 
 	{
 		'andymass/vim-matchup',
+		event = 'BufRead',
 		dependencies = {'nvim-treesitter/nvim-treesitter'},
 		config = function()
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
@@ -776,6 +792,20 @@ require('lazy').setup({
 		end
 	},
 
+
+	-- {
+	-- 	'gabrielpoca/replacer.nvim',
+	-- 	ft = {'qf'},
+	-- 	-- :lua require("replacer").run()
+	-- },
+
+	-- {
+	-- 	'ggandor/leap.nvim',
+	-- 	config = function()
+	-- 		require('leap').add_default_mappings()
+	-- 		vim.keymap.set('n', 'S', '<Plug>(leap-backward-to)', { silent = true })
+	-- 	end
+	-- },
 
 	-- {
 	-- 	'perost/modelica-vim',
