@@ -29,23 +29,20 @@ All LSP servers dependencies are installed at neovim standard path: `:echo stdpa
 
 Link/copy the package files to neovim's config directory:
 
-```sh
-cp package.json ~/.config/nvim/package.json
-cp requirements.txt ~/.config/nvim/requirements.txt
-cp go.mod ~/.config/nvim/go.mod
-```
+    mkdir ~/.config/nvim
+    cp package.json ~/.config/nvim/package.json
+    cp requirements.txt ~/.config/nvim/requirements.txt
+    cp efm.sh ~/.config/nvim/efm.sh
+    cp gopls.sh ~/.config/nvim/gopls.sh
 
 Then install dependencies:
 
-```sh
-cd ~/.config/nvim
-npm i
-python -m venv .venv
-.venv/bin/pip install -r requirements.txt
-go install
-# or just download binary for Go e.g.
-wget https://github.com/mattn/efm-langserver/releases/download/v0.0.44/efm-langserver_v0.0.44_linux_amd64.tar.gz
-```
+    cd ~/.config/nvim
+    npm i
+    python -m venv .venv
+    .venv/bin/pip install -r requirements.txt
+    sh efm.sh
+    sh gopls.sh
 
 ## GUI
 
