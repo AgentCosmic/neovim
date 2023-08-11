@@ -136,14 +136,6 @@ require('lazy').setup({
 	},
 
 	{
-		'dyng/ctrlsf.vim',
-		cmd = 'CtrlSF',
-		config = function()
-			vim.g.ctrlsf_ackprg = 'rg'
-		end
-	},
-
-	{
 		'mbbill/undotree',
 		cmd = 'UndotreeToggle',
 		init = function()
@@ -806,10 +798,19 @@ require('lazy').setup({
 	},
 
 
+	{
+		'gabrielpoca/replacer.nvim',
+		ft = {'qf'},
+		-- :lua require("replacer").run()
+	},
+
+
 	-- {
-	-- 	'gabrielpoca/replacer.nvim',
-	-- 	ft = {'qf'},
-	-- 	-- :lua require("replacer").run()
+	-- 	'dyng/ctrlsf.vim',
+	-- 	cmd = 'CtrlSF',
+	-- 	config = function()
+	-- 		vim.g.ctrlsf_ackprg = 'rg'
+	-- 	end
 	-- },
 
 	-- {
