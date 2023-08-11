@@ -323,7 +323,7 @@ require('lazy').setup({
 	{
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp'},
-		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity', 'go'},
+		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity', 'go', 'rust'},
 		-- event = 'BufRead',
 		config = function()
 			local nvim_lsp = require('lspconfig')
@@ -552,6 +552,19 @@ require('lazy').setup({
 			require'lspconfig'.gopls.setup{
 				on_attach = on_attach,
 				capabilities = capabilities,
+			}
+
+			-- rustup component add rust-analyzer
+			nvim_lsp.rust_analyzer.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					['rust-analyzer'] = {
+						diagnostics = {
+							enable = false;
+						}
+					}
+				}
 			}
 
 			-- https://github.com/eclipse/eclipse.jdt.ls
