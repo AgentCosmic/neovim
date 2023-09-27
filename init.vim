@@ -258,7 +258,6 @@ command! CdToFile cd %:p:h
 command! DeleteControlM %s/$//
 command! EVimrc :e $MYVIMRC
 command! SS :syntax sync fromstart
-command! -nargs=? Count :%s/<f-args>//gn
 
 " edit a macro using cq(macro name)
 fun! ChangeReg() abort
