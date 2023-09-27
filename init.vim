@@ -9,7 +9,7 @@ set runtimepath+=$ROOT
 
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !package-lock.json\ -g\ !Pipfile.lock\ -g\ !node_modules\ -g\ !venv\ -g\ !.venv
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !package-lock.json\ -g\ !node_modules\ -g\ !venv\ -g\ !.venv
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
@@ -57,24 +57,19 @@ set statusline+=\ %{&ff}\ ∴\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, form
 set statusline+=%#MyStatusLineFiletype#
 set statusline+=\ %{&ft}\ |
 
-" Hide command line
-" set cmdheight=0
-
 augroup vimrcBehavior
 	autocmd!
 
-	" When editing a file, always jump to the last known cursor position.
-	" Don't do it when the position is invalid or when inside an event handler
-	" (happens when dropping a file on gvim).
-	" Also don't do it when the mark is in the first line, that is the default
-	" position when opening a file.
+	" When editing a file, always jump to the last known cursor position. Don't do it when the position is invalid or
+	" when inside an event handler (happens when dropping a file on gvim). Also don't do it when the mark is in the
+	" first line, that is the default position when opening a file.
 	autocmd BufReadPost *
 		\ if line("'\"") > 1 && line("'\"") <= line("$") |
 		\   exe "normal! g`\"" |
 		\ endif
 
 	" Remove trailing whitespace before saving
-	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.xml,*.java,*.php,*.vue :%s/\(\s\+\|\)$//e
+	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.toml,*.xml,*.java,*.php,*.vue,*.go :%s/\(\s\+\|\)$//e
 
 	" Don't list preview window
 	autocmd BufEnter * :call <SID>DelistWindow()
@@ -83,6 +78,9 @@ augroup vimrcBehavior
 
 	" Highlight yanked region
 	au TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=100, on_visual=true}
+
+	" always move quickfix window to bottom
+	autocmd FileType qf wincmd J
 augroup END
 
 function! s:DelistWindow()
@@ -91,7 +89,7 @@ function! s:DelistWindow()
 	endif
 endf
 
-" visual paste doesn't replace paste buffer
+" so visual paste doesn't replace paste buffer
 function! RestoreRegister()
 	let @" = s:restore_reg
 	return ''
@@ -102,15 +100,14 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 
-" keep cursor position when changing buffer
-augroup keepCursorPosition
-	autocmd!
-	autocmd BufLeave * let b:winview = winsaveview()
-	autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
-augroup END
 
-" always move quickfix window to bottom
-autocmd FileType qf wincmd J
+" Disable some native plugins to improve performance
+let g:loaded_gzip = 1 " for editing compressed files
+let g:loaded_netrwPlugin = 1 " for editing remote files
+let g:loaded_tarPlugin = 1 " for browsing tar files
+let g:loaded_2html_plugin = 1 " for generating HTML files with syntax highlight
+let g:loaded_tutor_mode_plugin = 1 " vim tutor
+let g:loaded_zipPlugin = 1 " for browsing zip files
 
 
 " ----- ----- ----- -----
@@ -154,14 +151,6 @@ fun! FoldIndent() abort
     setlocal foldmethod=manual
 endfun
 nnoremap za :call FoldIndent()<cr>
-
-" Disable some native plugins to improve performance
-let g:loaded_gzip = 1 " for editing compressed files
-let g:loaded_netrwPlugin = 1 " for editing remote files
-let g:loaded_tarPlugin = 1 " for browsing tar files
-let g:loaded_2html_plugin = 1 " for generating HTML files with syntax highlight
-let g:loaded_tutor_mode_plugin = 1 " vim tutor
-let g:loaded_zipPlugin = 1 " for browsing zip files
 
 
 " ----- ----- ----- -----
@@ -256,15 +245,6 @@ inoremap <F7> <esc><F7>
 inoremap <F8> <esc><F8>
 inoremap <F9> <esc><F9>
 inoremap <F10> <esc><F10>
-
-" Highlight when double click
-nnoremap <silent> <2-leftmouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>viwg<c-h>
-" remove double click mapping in help file so we can navigate the link
-augroup doubleClick
-    autocmd!
-    autocmd FileType help :silent! unmap <2-leftmouse>
-	autocmd FileType qf :silent! unmap <2-leftmouse>
-augroup END
 
 " Get syntax under cursor
 noremap <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
