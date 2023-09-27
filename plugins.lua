@@ -46,7 +46,7 @@ require('lazy').setup({
 						else
 							fallback()
 						end
-					end, { "i", "s" }),
+					end, { 'i', 's' }),
 				},
 				sources = {
 					{ name = 'nvim_lsp' },
@@ -97,7 +97,7 @@ require('lazy').setup({
 		event = 'InsertEnter',
 		config = function()
 			-- luasnip needs to load snippets before nvim-cmp is loaded
-			require("luasnip.loaders.from_vscode").lazy_load({paths = {vim.env.ROOT .. '/snippets'}})
+			require('luasnip.loaders.from_vscode').lazy_load({paths = {vim.env.ROOT .. '/snippets'}})
 		end
 	},
 
@@ -357,11 +357,11 @@ require('lazy').setup({
 			end
 
 			-- floating windows
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+			vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
 				vim.lsp.handlers.hover, {
 				border = 'rounded'
 			})
-			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+			vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
 				vim.lsp.handlers.signature_help, {
 				border = 'rounded'
 			})
