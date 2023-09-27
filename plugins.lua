@@ -832,12 +832,11 @@ require('lazy').setup({
 
 }, {
 	lockfile = vim.env.ROOT .. '/lazy-lock.json',
-	-- performance = {
-	-- 	rtp = {
-	-- 		reset = false,
-	-- 	}	
-	-- }
+	performance = {
+		rtp = {
+			-- lazy.nvim will reset the runtime path so we have to add it back
+			paths = { vim.env.ROOT },
+		}	
+	}
 })
 
--- add back our runtime path
-vim.opt.rtp:prepend(vim.env.ROOT)
