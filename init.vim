@@ -81,6 +81,10 @@ augroup vimrcBehavior
 
 	" always move quickfix window to bottom
 	autocmd FileType qf wincmd J
+
+	" automatically open quickfix and loclist window when it changes
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l* lwindow
 augroup END
 
 function! s:DelistWindow()
