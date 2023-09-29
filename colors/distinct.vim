@@ -84,7 +84,7 @@ call s:h('Ignore', {'fg': s:grey65, 'bg': 'bg'})
 call s:h('Error', {'fg': s:red, 'bg': 'NONE', 'sp': s:red})
 call s:h('Todo', {'fg': s:grey95, 'bg': 'bg', 'gui': 'bold'})
 
-" Highlighting Groups (descriptions and ordering from `:h highlight-groups`) {{{
+" Highlighting Groups (descriptions and ordering from `:h highlight-groups`)
 
 call s:h('ColorColumn', {'bg': s:grey10})
 call s:h('Conceal', {'bg': 'bg', 'fg': s:grey25})
@@ -198,11 +198,12 @@ call s:h('CmpItemKind', {'fg': s:orange})
 
 " indent-blankline
 
-call s:h('IndentBlanklineChar', {'fg': s:grey20})
+call s:h('IblIndent', {'fg': s:grey20, 'bg': 'none'})
+call s:h('IblScope', {'fg': s:highlight, 'bg': 'none'})
 
 " virt-column
 
-call s:h('VirtColumn', {'fg': s:grey20})
+call s:h('VirtColumn', {'fg': s:grey20, 'bg': s:grey15})
 
 " vim-matchup
 

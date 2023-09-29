@@ -581,11 +581,6 @@ require('lazy').setup({
 
 
 	{
-		'lukas-reineke/indent-blankline.nvim', -- indent guides for spaces
-		event = 'BufRead',
-	},
-
-	{
 		'noib3/nvim-cokeline',
 		event = 'BufRead',
 		config = function()
@@ -691,15 +686,15 @@ require('lazy').setup({
 
 	{
 		'nvim-neo-tree/neo-tree.nvim',
-		branch = 'v2.x',
+		branch = 'v3.x',
 		dependencies = { 
 			'nvim-lua/plenary.nvim',
 			'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
 			'MunifTanjim/nui.nvim',
 		},
-		cmd = {'Neotree', 'NeoTreeReveal'},
+		cmd = {'Neotree'},
 		init = function()
-			vim.cmd('cabbrev NTR NeoTreeReveal')
+			vim.cmd('cabbrev NTR Neotree reveal')
 			vim.api.nvim_set_keymap('n', '<leader>nt', ':Neotree<cr>', {silent = true})
 		end,
 		config = function()
@@ -717,29 +712,50 @@ require('lazy').setup({
 	},
 
 	{
-		'lukas-reineke/virt-column.nvim', -- nicer column line
+		'lukas-reineke/indent-blankline.nvim', -- indent guides for spaces
 		event = 'BufRead',
-		config = function()
-			require('virt-column').setup()
+		main = 'ibl',
+		opts = {
+			scope = {
+				show_start = false,
+				show_end = false,
+			}
+		},
+		setup = function ()
+			require('ibl').setup()
 		end
 	},
 
 	{
+		'lukas-reineke/virt-column.nvim', -- nicer column line
+		event = 'BufRead',
+		config = function()
+			require('virt-column').setup({
+				highlight = 'VirtColumn'
+			})
+		end
+	},
+
+	{
+		enabled = false,
 		'akinsho/toggleterm.nvim',
-		cmd = {'ToggleTerm', 'TermExec'},
+		-- no point lazy loading since we require it during init
 		init = function ()
 			vim.keymap.set('n', '<leader>tt', ':ToggleTerm<cr>')
 			local Terminal  = require('toggleterm.terminal').Terminal
 			local lazygit = Terminal:new({
 				cmd = 'lazygit',
 				direction = 'float',
-				hidden = true
+				hidden = true, 
+				on_open = function(term)
+					vim.cmd('startinsert!')
+					vim.keymap.del('t', '<esc>', {buffer = 0})
+				end,
 			})
 			function _lazygit_toggle()
 				lazygit:toggle()
 			end
-			-- vim.cmd('command! LazyGit :lua _lazygit_toggle()')
-			vim.keymap.set('n', '<leader>lg', ':lua _lazygit_toggle()<cr>', opts)
+			vim.keymap.set('n', '<leader>tg', ':lua _lazygit_toggle()<cr>', opts)
 		end,
 		config = function()
 			require('toggleterm').setup({
@@ -756,13 +772,12 @@ require('lazy').setup({
 			-- mapping to easliy navigate terminals
 			function _G.set_terminal_keymaps()
 				local opts = {buffer = 0}
-				-- vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+				vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
 				vim.keymap.set('t', '<a-h>', [[<Cmd>wincmd h<CR>]], opts)
 				vim.keymap.set('t', '<a-j>', [[<Cmd>wincmd j<CR>]], opts)
 				vim.keymap.set('t', '<a-k>', [[<Cmd>wincmd k<CR>]], opts)
 				vim.keymap.set('t', '<a-l>', [[<Cmd>wincmd l<CR>]], opts)
 			end
-			-- if you only want these mappings for toggle term use term://*toggleterm#* instead
 			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 		end
 	},
@@ -783,25 +798,42 @@ require('lazy').setup({
 	},
 
 
-	{
-		'andymass/vim-matchup',
-		event = 'BufRead',
-		dependencies = {'nvim-treesitter/nvim-treesitter'},
-		config = function()
-			vim.g.matchup_matchparen_offscreen = { method = "popup" }
-			require('nvim-treesitter.configs').setup {
-				matchup = {
-					enable = true,
-				},
-			}
-		end
-	},
+	-- {
+	-- 	'andymass/vim-matchup',
+	-- 	event = 'BufRead',
+	-- 	dependencies = {'nvim-treesitter/nvim-treesitter'},
+	-- 	config = function()
+	-- 		vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+	-- 		require('nvim-treesitter.configs').setup {
+	-- 			matchup = {
+	-- 				enable = true,
+	-- 			},
+	-- 		}
+	-- 	end
+	-- },
 
 
 	{
 		'gabrielpoca/replacer.nvim',
 		ft = {'qf'},
-		-- :lua require("replacer").run()
+		-- :lua require('replacer').run()
+	},
+
+
+	{
+		'preservim/vimux',
+		config = function ()
+			vim.g.VimuxOrientation = 'h'
+			vim.g.VimuxCloseOnExit = 1
+			vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', {})
+			vim.keymap.set('n', '<leader>th', ':call VimuxSendKeys("c-c enter up enter")<cr>', {})
+			vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>', {})
+			vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>', {})
+			vim.keymap.set('n', '<leader>tg', function ()
+				vim.cmd('VimuxRunCommand("lazygit && exit")')
+				vim.cmd('VimuxZoomRunner')
+			end, {})
+		end
 	},
 
 
