@@ -163,6 +163,10 @@ let mapleader = ' '
 " Re-select after copying
 vnoremap <c-c> "+ygv
 
+" Paste from clipboard
+imap <c-v> <esc>"+p']']a
+cnoremap <c-v> <c-r>+
+
 " Delete without jumping http://vim.1045645.n5.nabble.com/How-to-delete-range-of-lines-without-moving-cursor-td5713219.html
 command! -range D <line1>,<line2>d | norm <c-o>
 
@@ -224,6 +228,7 @@ nnoremap <leader>nh :nohlsearch<cr>
 nnoremap <leader>q :q<cr>
 vnoremap <leader>p "_dP
 nnoremap <leader>ou :update<cr>:source %<cr>
+noremap <leader>y "+y
 " Substitute
 nnoremap <F2> yiw:%s/\<<c-r>0\>/<c-r>0
 " Grep
