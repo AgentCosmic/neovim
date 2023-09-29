@@ -194,28 +194,28 @@ inoremap . <c-g>u.
 inoremap , <c-g>u,
 inoremap = <c-g>u=
 
-" Move line use ctrl-j and ctrl-k http://vim.wikia.com/wiki/Moving_lines_up_or_down
-nnoremap <c-j> :m .+1<cr>==
-nnoremap <c-k> :m .-2<cr>==
-inoremap <c-j> <esc>:m .+1<cr>==gi
-inoremap <c-k> <esc>:m .-2<cr>==gi
-vnoremap <c-j> :m '>+1<cr>gv=gv
-vnoremap <c-k> :m '<-2<cr>gv=gv
+" Move line use alt-j and alt-k http://vim.wikia.com/wiki/Moving_lines_up_or_down
+nnoremap <a-j> :m .+1<cr>==
+nnoremap <a-k> :m .-2<cr>==
+inoremap <a-j> <esc>:m .+1<cr>==gi
+inoremap <a-k> <esc>:m .-2<cr>==gi
+vnoremap <a-j> :m '>+1<cr>gv=gv
+vnoremap <a-k> :m '<-2<cr>gv=gv
 
 " Select last modified/pasted http://vim.wikia.com/wiki/Selecting_your_pasted_text
 nnoremap <expr> <leader>v '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " Navigate between windows
-noremap <a-j> <c-w>j
-noremap <a-k> <c-w>k
-noremap <a-h> <c-w>h
-noremap <a-l> <c-w>l
+noremap <c-j> <c-w>j
+noremap <c-k> <c-w>k
+noremap <c-h> <c-w>h
+noremap <c-l> <c-w>l
 
 " Increment, decrement number
-nnoremap <c-up> <C-a>
-nnoremap <c-down> <C-x>
-nnoremap <c-s-up> 10<C-a>
-nnoremap <c-s-down> 10<C-x>
+nnoremap <a-up> <C-a>
+nnoremap <a-down> <C-x>
+nnoremap <a-s-up> 10<C-a>
+nnoremap <a-s-down> 10<C-x>
 
 " Shortcuts
 nnoremap <leader>s :update<cr>

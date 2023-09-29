@@ -263,8 +263,8 @@ require('lazy').setup({
 		'AndrewRadev/sideways.vim',
 		cmd = {'SidewaysLeft', 'SidewaysRight'},
 		init = function()
-			vim.api.nvim_set_keymap('n', '<c-h>', ':SidewaysLeft<cr>', {noremap = true, silent = true})
-			vim.api.nvim_set_keymap('n', '<c-l>', ':SidewaysRight<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<a-h>', ':SidewaysLeft<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<a-l>', ':SidewaysRight<cr>', {noremap = true, silent = true})
 		end
 	},
 
