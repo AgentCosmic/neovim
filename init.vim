@@ -236,7 +236,7 @@ noremap <leader>y "+y
 " Substitute
 nnoremap <F2> yiw:%s/\<<c-r>0\>/<c-r>0
 " Grep
-nnoremap <F3> g*Nyiw:cw<cr>:grep <c-r>0
+nnoremap <F3> g*Nyiw:cw<cr>:Grep <c-r>0
 " Delete buffer without closing the split
 nnoremap <F4> :bn\|bd #<cr>
 " Save with ctrl-s
@@ -274,6 +274,14 @@ fun! ChangeReg() abort
 	call feedkeys("q:ilet @" . x . " = \<c-r>\<c-r>=string(@" . x . ")\<cr>\<esc>0f'", 'n')
 endfun
 nnoremap cr :call ChangeReg()<cr>
+
+" add :gr as a shortcut to run :grep without needing to press <cr>
+" https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+function! Grep(...)
+	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+endfunction
+command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
+cnoreabbrev <expr> gr  (getcmdtype() ==# ':' && getcmdline() ==# 'gr')  ? 'Grep' : 'grep'
 
 
 " ----- ----- ----- -----
