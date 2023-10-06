@@ -44,17 +44,21 @@ set number
 " Status line
 set laststatus=3 " always show only 1 statusline
 set statusline=
-set statusline+=%{%&modified?'%#MyStatusLineModified#':'%#MyStatusLineUnmodified#'%} " highlight modified
-set statusline+=\ \ |
-set statusline+=%#MyStatusLinePath#
+set statusline+=%{%&modified?'%#StatusModified#':'%#StatusUnmodified#'%} " highlight modified
+set statusline+=\ \ %{%&modified?'%#StatusArrowModified#':'%#StatusArrowUnmodified#'%}|
+set statusline+=%#StatusPath#
 set statusline+=\ %f " working directory followed by file path
-set statusline+=\ %r%h%w%q%m " flags: readonly, help, preview, list, modified
+set statusline+=\ %r%h%w%q%m\  " flags: readonly, help, preview, list, modified
+set statusline+=%#StatusArrowPath#%#StatusArrowPath2#
 set statusline+=%= " right align from here
-set statusline+=%#MyStatusLinePosition#
+set statusline+=%#StatusPositionArrow#%#StatusPositionArrow2#
+set statusline+=%#StatusPosition#
 set statusline+=\ %l,%c\ ≡\ %L\ | " current line, cursor column, line/total percent
-set statusline+=%#MyStatusLineMisc#
+set statusline+=%#StatusMiscArrow#
+set statusline+=%#StatusMisc#
 set statusline+=\ %{&ff}\ ∴\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
-set statusline+=%#MyStatusLineFiletype#
+set statusline+=%#StatusFiletypeArrow#
+set statusline+=%#StatusFiletype#
 set statusline+=\ %{&ft}\ |
 
 augroup vimrcBehavior

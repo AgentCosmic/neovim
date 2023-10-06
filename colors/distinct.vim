@@ -143,12 +143,20 @@ call s:h('WildMenu', {'fg': s:grey15, 'bg': s:green})
 
 " custom status line highlight groups
 
-call s:h('MyStatusLineUnmodified', {'fg': s:green, 'bg': s:grey10})
-call s:h('MyStatusLineModified', {'fg': s:grey15, 'bg': s:green})
-call s:h('MyStatusLinePath', {'fg': s:grey85, 'bg': s:grey25})
-call s:h('MyStatusLinePosition', {'fg': s:grey65, 'bg': s:grey10})
-call s:h('MyStatusLineMisc', {'fg': s:grey75, 'bg': s:grey25})
-call s:h('MyStatusLineFiletype', {'fg': s:grey65, 'bg': s:grey10})
+call s:h('StatusUnmodified', {'fg': s:green, 'bg': s:grey25})
+call s:h('StatusModified', {'fg': s:grey15, 'bg': s:green})
+call s:h('StatusArrowUnmodified', {'fg': s:grey25, 'bg': s:grey10})
+call s:h('StatusArrowModified', {'fg': s:green, 'bg': s:grey25})
+call s:h('StatusPath', {'fg': s:grey75, 'bg': s:grey10})
+call s:h('StatusArrowPath', {'fg': s:grey10, 'bg': s:grey25})
+call s:h('StatusArrowPath2', {'fg': s:grey25, 'bg': s:grey15})
+call s:h('StatusPositionArrow', {'fg': s:grey25, 'bg': s:grey15})
+call s:h('StatusPositionArrow2', {'fg': s:grey10, 'bg': s:grey25})
+call s:h('StatusPosition', {'fg': s:grey65, 'bg': s:grey10})
+call s:h('StatusMiscArrow', {'fg': s:grey25, 'bg': s:grey10})
+call s:h('StatusMisc', {'fg': s:grey75, 'bg': s:grey25})
+call s:h('StatusFiletypeArrow', {'fg': s:grey10, 'bg': s:grey25})
+call s:h('StatusFiletype', {'fg': s:grey65, 'bg': s:grey10})
 
 " languages
 
