@@ -23,7 +23,7 @@ set colorcolumn=120 " set ruler to show at 120
 set cursorline " highlight current line
 set previewheight=8 " smaller preview window
 set ruler " show the cursor position all the time
-set scrolloff=1 " keep padding around cursor
+set scrolloff=4 " keep padding around cursor
 set showcmd " display incomplete commands
 set selection=inclusive " include the last character, required by some plugins
 
@@ -75,8 +75,6 @@ augroup vimrcBehavior
 	" Remove trailing whitespace before saving
 	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.toml,*.xml,*.java,*.php,*.vue,*.go :%s/\(\s\+\|\)$//e
 
-	" Don't list preview window
-	autocmd BufEnter * :call <SID>DelistWindow()
 	" Don't list quickfix window
 	autocmd FileType qf set nobuflisted
 
@@ -91,12 +89,6 @@ augroup vimrcBehavior
     autocmd QuickFixCmdPost l* lwindow
 augroup END
 
-function! s:DelistWindow()
-	if &previewwindow
-		set nobuflisted
-	endif
-endf
-
 " so visual paste doesn't replace paste buffer
 function! RestoreRegister()
 	let @" = s:restore_reg
@@ -108,6 +100,8 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 
+" enable cfilter plugin for filtering quickfix list
+packadd cfilter
 
 " Disable some native plugins to improve performance
 let g:loaded_gzip = 1 " for editing compressed files
