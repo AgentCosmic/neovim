@@ -712,21 +712,6 @@ require('lazy').setup({
 	},
 
 	{
-		'lukas-reineke/indent-blankline.nvim', -- indent guides for spaces
-		event = 'BufRead',
-		main = 'ibl',
-		opts = {
-			scope = {
-				show_start = false,
-				show_end = false,
-			}
-		},
-		setup = function ()
-			require('ibl').setup()
-		end
-	},
-
-	{
 		'lukas-reineke/virt-column.nvim', -- nicer column line
 		event = 'BufRead',
 		config = function()
@@ -842,14 +827,6 @@ require('lazy').setup({
 	-- 	cmd = 'CtrlSF',
 	-- 	config = function()
 	-- 		vim.g.ctrlsf_ackprg = 'rg'
-	-- 	end
-	-- },
-
-	-- {
-	-- 	'ggandor/leap.nvim',
-	-- 	config = function()
-	-- 		require('leap').add_default_mappings()
-	-- 		vim.keymap.set('n', 'S', '<Plug>(leap-backward-to)', { silent = true })
 	-- 	end
 	-- },
 

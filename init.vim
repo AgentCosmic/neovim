@@ -135,7 +135,18 @@ set shiftwidth=4
 set softtabstop=4
 set smartindent
 set nocindent
-set list lcs=tab:\|\ " show tab guides
+" Auto tab guides for 4 and 2 spaces
+set list listchars=tab:▏\ ,leadmultispace:▏\ \ \ ,
+function! s:UpdateLead()
+	if (&tabstop == 2)
+        setlocal listchars=leadmultispace:▏\ ,
+    endif
+endfun
+augroup indentGuide
+    autocmd!
+    autocmd OptionSet tabstop call s:UpdateLead()
+    autocmd BufEnter * call s:UpdateLead()
+augroup END
 
 " Folding
 set foldnestmax=12
