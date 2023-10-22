@@ -270,6 +270,7 @@ require('lazy').setup({
 
 	{
 		'norcalli/nvim-colorizer.lua',
+		enabled = false,
 		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
 		config = function()
 			require('colorizer').setup({
@@ -590,7 +591,7 @@ require('lazy').setup({
 			require('cokeline').setup({
 				default_hl = {
 					fg = function(buffer)
-						return buffer.is_focused and get_hex('Todo', 'fg') or get_hex('Comment', 'fg')
+						return buffer.is_focused and get_hex('Search', 'fg') or get_hex('Comment', 'fg')
 					end,
 					bg = function(buffer)
 						return buffer.is_focused and get_hex('Normal', 'bg') or get_hex('ColorColumn', 'bg')
@@ -623,7 +624,7 @@ require('lazy').setup({
 								return get_hex('ModeMsg', 'fg')
 							end
 							if buffer.is_focused then
-								return get_hex('Todo', 'fg')
+								return get_hex('Search', 'fg')
 							end
 							return get_hex('Comment', 'fg')
 						end,
@@ -722,57 +723,45 @@ require('lazy').setup({
 	},
 
 	{
-		enabled = false,
-		'akinsho/toggleterm.nvim',
-		-- no point lazy loading since we require it during init
+		'preservim/vimux',
+		cmd = {'VimuxPromptCommand', 'VimuxSendKeys', 'VimuxOpenRunner', 'VimuxRunCommand'},
 		init = function ()
-			vim.keymap.set('n', '<leader>tt', ':ToggleTerm<cr>')
-			local Terminal  = require('toggleterm.terminal').Terminal
-			local lazygit = Terminal:new({
-				cmd = 'lazygit',
-				direction = 'float',
-				hidden = true, 
-				on_open = function(term)
-					vim.cmd('startinsert!')
-					vim.keymap.del('t', '<esc>', {buffer = 0})
-				end,
-			})
-			function _lazygit_toggle()
-				lazygit:toggle()
-			end
-			vim.keymap.set('n', '<leader>tg', ':lua _lazygit_toggle()<cr>', opts)
-		end,
-		config = function()
-			require('toggleterm').setup({
-				shade_terminals = false,
-				direction = 'vertical',
-				size = function(term)
-					if term.direction == 'horizontal' then
-						return 15
-					elseif term.direction == 'vertical' then
-						return vim.o.columns * 0.25
-					end
-				end,
-			})
-			-- mapping to easliy navigate terminals
-			function _G.set_terminal_keymaps()
-				local opts = {buffer = 0}
-				vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-				vim.keymap.set('t', '<a-h>', [[<Cmd>wincmd h<CR>]], opts)
-				vim.keymap.set('t', '<a-j>', [[<Cmd>wincmd j<CR>]], opts)
-				vim.keymap.set('t', '<a-k>', [[<Cmd>wincmd k<CR>]], opts)
-				vim.keymap.set('t', '<a-l>', [[<Cmd>wincmd l<CR>]], opts)
-			end
-			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+			vim.g.VimuxOrientation = 'h'
+			vim.g.VimuxCloseOnExit = 1
+			local opts = {noremap = true, silent = true}
+			vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', opts)
+			vim.keymap.set('n', '<leader>th', ':call VimuxSendKeys("c-c enter up enter")<cr>', opts)
+			vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>', opts)
+			vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>', opts)
+			vim.keymap.set('n', '<leader>tg', function ()
+				vim.cmd('VimuxRunCommand("lazygit && exit")')
+				vim.cmd('VimuxZoomRunner')
+			end, opts)
+			vim.keymap.set('n', '<leader>ts', function ()
+				vim.cmd('VimuxRunCommand(trim(getline(".")))')
+			end, opts)
+			vim.keymap.set('v', '<leader>ts', function ()
+				local vstart = vim.fn.getpos("'<")[2]
+				local vend = vim.fn.getpos("'>")[2]
+				local lstart = math.min(vstart, vend)
+				local lend = math.max(vstart, vend)
+				for i = lstart, lend, 1 do
+					vim.cmd('VimuxRunCommand(trim(getline(' .. i .. ')))')
+				end
+			end, opts)
 		end
 	},
 
-
-
-	------------------------------------------------------------------------------
-	-- Evaluating
-	------------------------------------------------------------------------------
-
+	{
+		'christoomey/vim-tmux-navigator',
+		setup = function ()
+			vim.g.tmux_navigator_no_mappings = 1
+			vim.keymap.set('n', '<c-h>', ':<c-u>TmuxNavigateLeft<cr>', {})
+			vim.keymap.set('n', '<c-l>', ':<c-u>TmuxNavigateRight<cr>', {})
+			vim.keymap.set('n', '<c-j>', ':<c-u>TmuxNavigateDown<cr>', {})
+			vim.keymap.set('n', '<c-k>', ':<c-u>TmuxNavigateUp<cr>', {})
+		end
+	},
 
 	{
 		'lewis6991/gitsigns.nvim',
@@ -783,19 +772,9 @@ require('lazy').setup({
 	},
 
 
-	-- {
-	-- 	'andymass/vim-matchup',
-	-- 	event = 'BufRead',
-	-- 	dependencies = {'nvim-treesitter/nvim-treesitter'},
-	-- 	config = function()
-	-- 		vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-	-- 		require('nvim-treesitter.configs').setup {
-	-- 			matchup = {
-	-- 				enable = true,
-	-- 			},
-	-- 		}
-	-- 	end
-	-- },
+	------------------------------------------------------------------------------
+	-- Evaluating
+	------------------------------------------------------------------------------
 
 
 	{
@@ -806,20 +785,23 @@ require('lazy').setup({
 
 
 	{
-		'preservim/vimux',
+		'uga-rosa/ccc.nvim',
+		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
 		config = function ()
-			vim.g.VimuxOrientation = 'h'
-			vim.g.VimuxCloseOnExit = 1
-			vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', {})
-			vim.keymap.set('n', '<leader>th', ':call VimuxSendKeys("c-c enter up enter")<cr>', {})
-			vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>', {})
-			vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>', {})
-			vim.keymap.set('n', '<leader>tg', function ()
-				vim.cmd('VimuxRunCommand("lazygit && exit")')
-				vim.cmd('VimuxZoomRunner')
-			end, {})
+			local ccc = require("ccc")
+			ccc.setup({
+				highlighter = {
+					auto_enable = true,
+					lsp = true,
+				},
+				inputs = {
+					ccc.input.rgb,
+					ccc.input.okhsl,
+					ccc.input.oklch,
+				},
+			})
 		end
-	},
+	}
 
 
 	-- {
@@ -829,15 +811,6 @@ require('lazy').setup({
 	-- 		vim.g.ctrlsf_ackprg = 'rg'
 	-- 	end
 	-- },
-
-	-- {
-	-- 	'perost/modelica-vim',
-	-- 	ft = {'modelica'},
-	-- 	config = function()
-	-- 		vim.cmd('au BufRead,BufNewFile *.mo set filetype=modelica')
-	-- 	end
-	-- },
-
 
 }, {
 	lockfile = vim.env.ROOT .. '/lazy-lock.json',
