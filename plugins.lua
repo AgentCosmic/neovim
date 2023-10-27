@@ -245,12 +245,12 @@ require('lazy').setup({
 		event = 'BufRead',
 		config = function()
 			-- support correct comment string in files with multiple languages
-			require'nvim-treesitter.configs'.setup {
+			require'nvim-treesitter.configs'.setup({
 				context_commentstring = {
 					enable = true,
 					enable_autocmd = false,
 				}
-			}
+			})
 			require('Comment').setup({
 				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 			})
@@ -265,23 +265,6 @@ require('lazy').setup({
 		init = function()
 			vim.api.nvim_set_keymap('n', '<a-h>', ':SidewaysLeft<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<a-l>', ':SidewaysRight<cr>', {noremap = true, silent = true})
-		end
-	},
-
-	{
-		'norcalli/nvim-colorizer.lua',
-		enabled = false,
-		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
-		config = function()
-			require('colorizer').setup({
-					'css',
-					'html',
-					'javascript',
-					'typescript',
-					'javascriptreact',
-					'typescriptreact',
-					'vim',
-				}, { no_names = true })
 		end
 	},
 
@@ -383,7 +366,7 @@ require('lazy').setup({
 
 			-- nvim-cmp
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+			capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
 
 			-- npm i typescript-language-server
 			nvim_lsp.tsserver.setup{
@@ -730,7 +713,7 @@ require('lazy').setup({
 			vim.g.VimuxCloseOnExit = 1
 			local opts = {noremap = true, silent = true}
 			vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', opts)
-			vim.keymap.set('n', '<leader>th', ':call VimuxSendKeys("c-c enter up enter")<cr>', opts)
+			vim.keymap.set('n', '<leader>th', ':update | call VimuxSendKeys("c-c enter up enter")<cr>', opts)
 			vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>', opts)
 			vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>', opts)
 			vim.keymap.set('n', '<leader>tg', function ()
@@ -764,6 +747,25 @@ require('lazy').setup({
 	},
 
 	{
+		'uga-rosa/ccc.nvim',
+		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
+		config = function ()
+			local ccc = require("ccc")
+			ccc.setup({
+				highlighter = {
+					auto_enable = true,
+					lsp = true,
+				},
+				inputs = {
+					ccc.input.okhsl,
+					ccc.input.rgb,
+					ccc.input.oklch,
+				},
+			})
+		end
+	}
+
+	{
 		'lewis6991/gitsigns.nvim',
 		cmd = 'Gitsigns',
 		config = function()
@@ -780,28 +782,12 @@ require('lazy').setup({
 	{
 		'gabrielpoca/replacer.nvim',
 		ft = {'qf'},
-		-- :lua require('replacer').run()
-	},
-
-
-	{
-		'uga-rosa/ccc.nvim',
-		ft = {'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim'},
 		config = function ()
-			local ccc = require("ccc")
-			ccc.setup({
-				highlighter = {
-					auto_enable = true,
-					lsp = true,
-				},
-				inputs = {
-					ccc.input.rgb,
-					ccc.input.okhsl,
-					ccc.input.oklch,
-				},
-			})
+			vim.keymap.set('n', '<leader>eq', function ()
+				require('replacer').run()
+			end, {})
 		end
-	}
+	},
 
 
 	-- {
