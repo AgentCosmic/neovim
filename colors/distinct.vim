@@ -82,7 +82,7 @@ call s:h('Debug', {'fg': s:purple})
 call s:h('Underlined', {'fg': s:grey65, 'gui': 'underline'})
 call s:h('Ignore', {'fg': s:grey65, 'bg': 'bg'})
 call s:h('Error', {'fg': s:red, 'bg': 'NONE', 'sp': s:red})
-call s:h('Todo', {'fg': s:grey95, 'bg': 'bg', 'gui': 'bold'})
+call s:h('Todo', {'fg': s:grey95, 'gui': 'bold,italic'})
 
 " Highlighting Groups (descriptions and ordering from `:h highlight-groups`)
 
@@ -166,6 +166,33 @@ hi link cssPseudoClassId Type
 
 hi link jsxAttrib Statement
 
+" Treesitter
+
+hi link javaScript Normal
+hi link javaScriptBraces Normal
+
+hi link typescriptVariable Statement
+hi link typescriptObjectLabel Normal
+hi link typescriptBraces Normal
+hi link typescriptPredefinedType Normal
+hi link typescriptOperator Operator
+call s:h('typescriptEndColons', {'fg': s:grey65})
+call s:h('typescriptAsyncFuncKeyword ', {'fg': s:purple})
+
+" LSP semantic tokens
+
+hi link @lsp.type.property.javascript Normal
+hi link @lsp.type.property.typescript Normal
+hi link @lsp.type.property.javascriptreact Normal
+hi link @lsp.type.property.typescriptreact Normal
+hi link @lsp.type.variable.typescriptreact Normal
+hi link @lsp.type.variable.rust Normal
+hi link @lsp.type.property.rust Normal
+hi link @lsp.mod.declaration.rust Normal
+hi link rustSigil Special
+
+" ------------------------------------------------------------------------------
+
 " LSP
 
 call s:h('DiagnosticError', {'fg': s:red, 'sp': s:red})
@@ -180,11 +207,6 @@ call s:h('DiagnosticignError', {'fg': s:red})
 call s:h('LspReferenceText', {'gui': 'underline'})
 hi link LspReferenceWrite LspReferenceText
 hi link LspReferenceRead LspReferenceText
-
-" quick-scope
-
-call s:h('QuickScopePrimary', {'fg': s:grey95, 'gui': 'underline'})
-call s:h('QuickScopeSecondary', {'fg': s:grey65, 'gui': 'underline'})
 
 " illuminate
 
@@ -204,35 +226,7 @@ call s:h('HopUnmatched', {'fg': s:grey65})
 call s:h('CmpItemAbbrMatch', {'fg': s:grey85, 'gui': 'none'})
 call s:h('CmpItemKind', {'fg': s:orange})
 
-" indent-blankline
-
-call s:h('IblIndent', {'fg': s:grey20, 'bg': 'none'})
-call s:h('IblScope', {'fg': s:highlight, 'bg': 'none'})
-
 " virt-column
 
 call s:h('VirtColumn', {'fg': s:grey20, 'bg': s:grey15})
 
-" vim-matchup
-
-call s:h('MatchWord', {'gui': 'underline,bold'})
-
-
-
-" Treesitter
-
-hi link javaScript Normal
-hi link javaScriptBraces Normal
-
-hi link typescriptVariable Statement
-hi link typescriptObjectLabel Normal
-hi link typescriptBraces Normal
-hi link typescriptPredefinedType Normal
-hi link typescriptOperator Operator
-call s:h('typescriptEndColons', {'fg': s:grey65})
-call s:h('typescriptAsyncFuncKeyword ', {'fg': s:purple})
-
-" LSP semantic tokens
-
-hi link @lsp.type.property.javascript Normal
-hi link @lsp.type.property.typescript Normal
