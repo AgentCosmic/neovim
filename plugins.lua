@@ -696,16 +696,6 @@ require('lazy').setup({
 	},
 
 	{
-		'lukas-reineke/virt-column.nvim', -- nicer column line
-		event = 'BufRead',
-		config = function()
-			require('virt-column').setup({
-				highlight = 'VirtColumn'
-			})
-		end
-	},
-
-	{
 		'preservim/vimux',
 		cmd = {'VimuxPromptCommand', 'VimuxSendKeys', 'VimuxOpenRunner', 'VimuxRunCommand'},
 		init = function ()
