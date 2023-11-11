@@ -1,64 +1,54 @@
 {
-  "name": "snippets",
-  "engines": {
-    "vscode": "^1.11.0"
-  },
-  "contributes": {
-    "snippets": [
-      {
-        "language": "solidity",
-        "path": "./solidity.json"
-      },
-      {
-        "language": "sql",
-        "path": "./sql.json"
-      },
-      {
-        "language": [
-          "shellscript",
-          "shell",
-          "sh"
-        ],
-        "path": "./shell.json"
-      },
-      {
-        "language": [
-          "markdown",
-          "rmd"
-        ],
-        "path": "./markdown.json"
-      },
-      {
-        "language": [
-          "javascript",
-          "javascriptreact",
-          "vue"
-        ],
-        "path": "./javascript.json"
-      },
-      {
-        "language": [
-          "typescript",
-          "typescriptreact"
-        ],
-        "path": "./typescript.json"
-      },
-      {
-        "language": "javascriptreact",
-        "path": "./react.json"
-      },
-      {
-        "language": "typescriptreact",
-        "path": "./react-ts.json"
-      },
-      {
-        "language": "python",
-        "path": "./python.json"
-      },
-      {
-        "language": "lua",
-        "path": "./lua.json"
-      }
-    ]
-  }
+	"name": "snippets",
+	"engines": {
+		"vscode": "^1.11.0"
+	},
+	"contributes": {
+		"snippets": [
+			{
+				"language": "solidity",
+				"path": "./solidity.json"
+			},
+			{
+				"language": "sql",
+				"path": "./sql.json"
+			},
+			{
+				"language": ["shellscript", "shell", "sh"],
+				"path": "./shell.json"
+			},
+			{
+				"language": ["markdown", "rmd"],
+				"path": "./markdown.json"
+			},
+			{
+				"language": ["javascript", "javascriptreact", "vue"],
+				"path": "./javascript.json"
+			},
+			{
+				"language": ["typescript", "typescriptreact"],
+				"path": "./typescript.json"
+			},
+			{
+				"language": "javascriptreact",
+				"path": "./react.json"
+			},
+			{
+				"language": "typescriptreact",
+				"path": "./react-ts.json"
+			},
+			{
+				"language": "go",
+				"path": "./go.json"
+			},
+			{
+				"language": "python",
+				"path": "./python.json"
+			},
+			{
+				"language": "lua",
+				"path": "./lua.json"
+			}
+		]
+	}
 }
