@@ -162,11 +162,12 @@ call s:h('StatusFiletype', {'fg': s:grey65, 'bg': s:grey10})
 
 hi link javaScript Normal
 hi link javaScriptBraces Normal
+hi link tsxAttrib Normal
 
 hi link typescriptVariable Statement
 hi link typescriptObjectLabel Normal
 hi link typescriptBraces Normal
-hi link typescriptPredefinedType Normal
+hi link typescriptPredefinedType Define
 hi link typescriptOperator Operator
 call s:h('typescriptEndColons', {'fg': s:grey65})
 call s:h('typescriptAsyncFuncKeyword ', {'fg': s:purple})
@@ -190,15 +191,18 @@ hi link rustSigil Special
 
 " LSP
 
-call s:h('DiagnosticError', {'fg': s:red, 'sp': s:red})
-call s:h('DiagnosticWarn', {'fg': s:orange, 'sp': s:orange})
-call s:h('DiagnosticInfo', {'fg': s:grey85})
+call s:h('DiagnosticError', {'fg': s:red})
+call s:h('DiagnosticWarn', {'fg': s:orange})
+call s:h('DiagnosticInfo', {'fg': s:grey75})
 call s:h('DiagnosticHint', {'fg': s:grey65})
+call s:h('DiagnosticVirtualTextError', {'fg': s:red, 'bg': s:grey20})
+call s:h('DiagnosticVirtualTextWarn', {'fg': s:orange, 'bg': s:grey20})
+call s:h('DiagnosticVirtualTextInfo', {'fg': s:grey75, 'bg': s:grey20})
+call s:h('DiagnosticVirtualTextHint', {'fg': s:grey65, 'bg': s:grey20})
 call s:h('DiagnosticUnderlineError', {'gui': 'underline', 'sp': s:red})
 call s:h('DiagnosticUnderlineWarn', {'gui': 'underline', 'sp': s:orange})
 call s:h('DiagnosticUnderlineInfo', {'gui': 'underline', 'sp': s:blue})
 call s:h('DiagnosticUnderlineHint', {'gui': 'underline', 'sp': s:grey65})
-call s:h('DiagnosticignError', {'fg': s:red})
 call s:h('LspReferenceText', {'gui': 'underline'})
 hi link LspReferenceWrite LspReferenceText
 hi link LspReferenceRead LspReferenceText
