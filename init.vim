@@ -285,7 +285,7 @@ nnoremap cr :call ChangeReg()<cr>
 function! Grep(...)
 	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
 endfunction
-command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
+command! -nargs=+ -complete=file -bar Grep cgetexpr Grep(<f-args>)
 cnoreabbrev <expr> gr  (getcmdtype() ==# ':' && getcmdline() ==# 'gr')  ? 'Grep' : 'grep'
 
 
