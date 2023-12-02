@@ -224,19 +224,10 @@ require('lazy').setup({
 	},
 
 	{
-		'jiangmiao/auto-pairs',
-		event = 'BufRead',
-		config = function()
-			vim.cmd([[
-				augroup AutoPairs
-					autocmd!
-					autocmd FileType html,vue let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'})
-					autocmd FileType css,vue let b:AutoPairs = AutoPairsDefine({'/**' : '*/', '/*' : '*/'})
-					autocmd FileType html,htmldjango let b:AutoPairs = AutoPairsDefine({'{%' : '%}'})
-					autocmd FileType php let b:AutoPairs = AutoPairsDefine({'<?php' : '?>'})
-				augroup end
-			]])
-		end
+		'altermo/ultimate-autopair.nvim',
+		event = {'InsertEnter','CmdlineEnter'},
+		branch = 'v0.6',
+		opts = { -- config },
 	},
 
 	{
