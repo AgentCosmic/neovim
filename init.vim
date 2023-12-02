@@ -44,7 +44,7 @@ set number
 set laststatus=3 " always show only 1 statusline
 set statusline=
 set statusline+=%{%&modified?'%#StatusModified#':'%#StatusUnmodified#'%} " highlight modified
-set statusline+=\ \ %{%&modified?'%#StatusArrowModified#':'%#StatusArrowUnmodified#'%}|
+set statusline+=\ \ %{%&modified?'%#StatusArrowModified#':'%#StatusArrowUnmodified#'%}|
 set statusline+=%#StatusPath#
 set statusline+=\ %f " working directory followed by file path
 set statusline+=\ %r%h%w%q%m\  " flags: readonly, help, preview, list, modified
