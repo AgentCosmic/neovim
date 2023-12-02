@@ -225,8 +225,9 @@ require('lazy').setup({
 
 	{
 		'altermo/ultimate-autopair.nvim',
-		event = {'InsertEnter','CmdlineEnter'},
+		event = {'InsertEnter'},
 		branch = 'v0.6',
+		opts = {}
 	},
 
 	{
