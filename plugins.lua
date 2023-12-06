@@ -152,7 +152,7 @@ require('lazy').setup({
 				autosave_ignore_filetypes = { 'gitcommit', 'gitrebase', 'neo-tree' },
 			})
 		end
-	}
+	},
 
 
 	------------------------------------------------------------------------------
