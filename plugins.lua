@@ -128,6 +128,9 @@ require('lazy').setup({
 	{
 		'numtostr/BufOnly.nvim',
 		cmd = {'BufOnly'},
+		init = function ()
+			vim.api.nvim_set_keymap('n', '<c-f4>', ':BufOnly<cr>', { silent = true, noremap = true })
+		end
 	},
 
 	{
@@ -136,12 +139,20 @@ require('lazy').setup({
 	},
 
 	{
-		'mbbill/undotree',
-		cmd = 'UndotreeToggle',
-		init = function()
-			vim.cmd 'cabbrev UT UndotreeToggle'
+		'Shatur/neovim-session-manager',
+		dependencies = {'nvim-lua/plenary.nvim'},
+		config = function()
+			local Path = require('plenary.path')
+			local config = require('session_manager.config')
+			require('session_manager').setup({
+				sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
+				autoload_mode = config.AutoloadMode.CurrentDir,
+				autosave_last_session = true,
+				autosave_only_in_session = true,
+				autosave_ignore_filetypes = { 'gitcommit', 'gitrebase', 'neo-tree' },
+			})
 		end
-	},
+	}
 
 
 	------------------------------------------------------------------------------
@@ -481,13 +492,6 @@ require('lazy').setup({
 				cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
 			}
 
-			-- https://docs.soliditylang.org/en/latest/installing-solidity.html
-			-- nvim_lsp.solc.setup{
-			-- 	on_attach = on_attach,
-			-- 	capabilities = capabilities,
-			-- 	cmd = { lsp_bins .. '/solc', '--lsp' },
-			-- }
-
 			-- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
 			-- npm i @nomicfoundation/solidity-language-server
 			require('lspconfig.configs').solidity = {
@@ -559,8 +563,9 @@ require('lazy').setup({
 		'noib3/nvim-cokeline',
 		event = 'BufRead',
 		config = function()
-			local is_picking_focus = require('cokeline/mappings').is_picking_focus
-			local is_picking_close = require('cokeline/mappings').is_picking_close
+			local mappings = require('cokeline/mappings')
+			local is_picking_focus = mappings.is_picking_focus
+			local is_picking_close = mappings.is_picking_close
 			local get_hex = require('cokeline/utils').get_hex
 			require('cokeline').setup({
 				default_hl = {
@@ -575,8 +580,7 @@ require('lazy').setup({
 					{
 						text = ' ',
 						bg = function(buffer)
-							-- return buffer.is_focused and get_hex('PmenuSel', 'bg') or get_hex('ColorColumn', 'bg')
-							return buffer.is_focused and get_hex('Normal', 'fg') or get_hex('ColorColumn', 'bg')
+							return buffer.is_focused and get_hex('Comment', 'fg') or get_hex('ColorColumn', 'bg')
 						end,
 					},
 					{
@@ -618,8 +622,13 @@ require('lazy').setup({
 			map('n', '<s-tab>', '<Plug>(cokeline-focus-prev)', { silent = true })
 			map('n', '<c-tab>', '<Plug>(cokeline-switch-next)', { silent = true })
 			map('n', '<c-s-tab>', '<Plug>(cokeline-switch-prev)', { silent = true })
-			map('n', '<c-f4>', ':BufOnly<cr>', { silent = true, noremap = true })
 			map('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
+			vim.api.nvim_create_user_command('MoveTabRight', function(opts)
+				mappings.by_step("switch", 1)
+			end, {})
+			vim.api.nvim_create_user_command('MoveTabLeft', function(opts)
+				mappings.by_step("switch", 11)
+			end, {})
 		end
 	},
 
@@ -684,6 +693,14 @@ require('lazy').setup({
 				}
 			})
 		end,
+	},
+
+	{
+		'mbbill/undotree',
+		cmd = 'UndotreeToggle',
+		init = function()
+			vim.cmd 'cabbrev UT UndotreeToggle'
+		end
 	},
 
 	{
