@@ -409,7 +409,6 @@ require('lazy').setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
-				root_dir = nvim_lsp.util.find_git_ancestor,
 			}
 
 			-- go get github.com/mattn/efm-langserver
@@ -478,6 +477,14 @@ require('lazy').setup({
 				}
 			}
 
+			-- npm i stylelint-lsp
+			nvim_lsp.stylelint_lsp.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/stylelint-lsp', '--stdio' },
+				filetypes = { "css", "less", "scss", "vue" },
+			})
+
 			-- npm i pyright
 			nvim_lsp.pyright.setup{
 				on_attach = on_attach,
@@ -498,7 +505,6 @@ require('lazy').setup({
 				default_config = {
 					cmd = { lsp_bins .. '/node_modules/.bin/nomicfoundation-solidity-language-server', '--stdio' },
 					filetypes = { 'solidity' },
-					root_dir = nvim_lsp.util.find_git_ancestor,
 					single_file_support = true,
 				},
 			}
@@ -555,7 +561,7 @@ require('lazy').setup({
 
 
 	------------------------------------------------------------------------------
-	-- GUI
+	-- UI
 	------------------------------------------------------------------------------
 
 
@@ -663,6 +669,9 @@ require('lazy').setup({
 					find_files = {
 						hidden = true
 					},
+					lsp_references = {
+						fname_width = 60
+					}
 				}
 			})
 		end
@@ -678,7 +687,7 @@ require('lazy').setup({
 		},
 		cmd = {'Neotree'},
 		init = function()
-			vim.cmd('cabbrev NTR Neotree reveal')
+			vim.cmd('cabbrev NT Neotree reveal')
 			vim.api.nvim_set_keymap('n', '<leader>nt', ':Neotree<cr>', {silent = true})
 		end,
 		config = function()
@@ -688,9 +697,7 @@ require('lazy').setup({
 						hide_dotfiles = false,
 					}
 				},
-				window = {
-					position = 'right'
-				}
+				close_if_last_window = true,
 			})
 		end,
 	},
