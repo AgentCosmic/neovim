@@ -112,10 +112,10 @@ require('lazy').setup({
 	},
 
 	{
-		'phaazon/hop.nvim',
+		'smoka7/hop.nvim',
 		cmd = 'HopChar1',
 		init = function()
-			vim.api.nvim_set_keymap('n', '<leader>w', ':HopChar1<cr>', {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<leader>h', ':HopChar1<cr>', {noremap = true, silent = true})
 		end,
 		config = function()
 			require('hop').setup({
@@ -644,12 +644,12 @@ require('lazy').setup({
 		cmd = {'Telescope'},
 		init = function()
 			-- use git_files if available, else find_files
-			vim.keymap.set('n', '<leader>f', function()
-				-- vim.cmd(':PackerLoad telescope.nvim') -- we need to manually load it cos we're not calling :Telescope
-				local opts = {} -- add additional options here
-				local ok = pcall(require('telescope.builtin').git_files, opts)
-				if not ok then require('telescope.builtin').find_files(opts) end
-			end, {noremap = true, silent = true})
+			-- vim.keymap.set('n', '<leader>f', function()
+			-- 	local opts = {} -- add additional options here
+			-- 	local ok = pcall(require('telescope.builtin').git_files, opts)
+			-- 	if not ok then require('telescope.builtin').find_files(opts) end
+			-- end, {noremap = true, silent = true})
+			vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>of', ':Telescope oldfiles<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>ds', ':Telescope lsp_document_symbols<cr>', {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', {noremap = true, silent = true})
@@ -658,7 +658,7 @@ require('lazy').setup({
 		config = function()
 			require('telescope').setup({
 				defaults = {
-					file_ignore_patterns = {'%.jpg$', '%.png$', '%.gif$', '%.psd$', '%.ai$'},
+					file_ignore_patterns = {'.git/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$'},
 					preview = {
 						filesize_limit = 1,
 						timeout = 250,
