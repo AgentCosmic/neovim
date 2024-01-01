@@ -30,10 +30,10 @@ All LSP servers dependencies are installed at neovim standard path: `:echo stdpa
 Link/copy the package files to neovim's config directory:
 
     mkdir ~/.config/nvim
-    cp package.json ~/.config/nvim/package.json
-    cp requirements.txt ~/.config/nvim/requirements.txt
-    cp efm.sh ~/.config/nvim/efm.sh
-    cp gopls.sh ~/.config/nvim/gopls.sh
+    cp lsp/package.json ~/.config/nvim/package.json
+    cp lsp/requirements.txt ~/.config/nvim/requirements.txt
+    cp lsp/efm.sh ~/.config/nvim/efm.sh
+    cp lsp/gopls.sh ~/.config/nvim/gopls.sh
 
 Then install dependencies:
 
