@@ -25,24 +25,8 @@ LSP installation instruction for Linux.
 
 ### Installation
 
-All LSP servers dependencies are installed at neovim standard path: `:echo stdpath('config')`.
-
-Link/copy the package files to neovim's config directory:
-
-    mkdir ~/.config/nvim
-    cp lsp/package.json ~/.config/nvim/package.json
-    cp lsp/requirements.txt ~/.config/nvim/requirements.txt
-    cp lsp/efm.sh ~/.config/nvim/efm.sh
-    cp lsp/gopls.sh ~/.config/nvim/gopls.sh
-
-Then install dependencies:
-
-    cd ~/.config/nvim
-    npm i
-    python -m venv .venv
-    .venv/bin/pip install -r requirements.txt
-    sh efm.sh
-    sh gopls.sh
+All LSP servers are installed at neovim standard path: `:echo stdpath('data') . '/lsp'`. Run `./lsp-install.sh [lsp]`
+to install language servers. Leave the first argument empty to install only essential servers.
 
 ## GUI
 

@@ -301,8 +301,12 @@ require('lazy').setup({
 	{
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp'},
-		ft = {'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python', 'htmldjango', 'json', 'yaml', 'markdown', 'vue', 'java', 'solidity', 'go', 'rust'},
-		-- event = 'BufRead',
+		ft = {
+			'json', 'yaml', 'markdown',
+			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+			'python', 'htmldjango',
+			'go', 'vue', 'java', 'solidity', 'rust'
+		},
 		config = function()
 			local nvim_lsp = require('lspconfig')
 
@@ -364,52 +368,11 @@ require('lazy').setup({
 			end
 
 			-- this is where we install all the language servers
-			local lsp_bins = vim.fn.stdpath('config')
+			local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
 
 			-- nvim-cmp
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
-
-			-- npm i typescript-language-server
-			nvim_lsp.tsserver.setup{
-				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false	
-					on_attach(client, bufnr)
-				end,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' }
-			}
-
-			-- css, html, json, eslint
-			-- npm i vscode-langservers-extracted
-			nvim_lsp.cssls.setup{
-				on_attach = on_attach,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/vscode-css-language-server', '--stdio' },
-				settings = {
-					css = {
-						validate = false,
-					}
-				}
-			}
-			nvim_lsp.html.setup{
-				on_attach = on_attach,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/vscode-html-language-server', '--stdio' },
-			}
-			nvim_lsp.jsonls.setup{
-				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false	
-					on_attach(client, bufnr)
-				end,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
-			}
-			nvim_lsp.eslint.setup{
-				on_attach = on_attach,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
-			}
 
 			-- go get github.com/mattn/efm-langserver
 			-- npm install prettier
@@ -422,7 +385,7 @@ require('lazy').setup({
 				prettier_path = lsp_bins .. '/node_modules/.bin/prettier'
 			end
 			prettier_cmd = prettier_path .. prettier_config
-			nvim_lsp.efm.setup{
+			nvim_lsp.efm.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/efm-langserver' },
@@ -432,40 +395,45 @@ require('lazy').setup({
 					documentSymbol = true,
 					codeAction = true,
 				},
-				filetypes = {'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'css', 'html', 'json', 'python', 'yaml', 'markdown', 'vue', 'solidity'},
+				filetypes = {
+					'json', 'yaml', 'markdown',
+					'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+					'python',
+					'vue', 'solidity'
+				},
 				settings = {
 					rootMarkers = {'.git/', 'node_modules/'},
 					languages = {
-						typescript = {
-							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
-						},
-						typescriptreact = {
-							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
-						},
-						javascript = {
-							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
-						},
-						javascriptreact = {
-							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
-						},
-						css = {
-							{formatCommand = prettier_cmd .. ' --parser css', formatStdin = true},
-						},
-						html = {
-							{formatCommand = prettier_cmd .. ' --parser html', formatStdin = true},
-						},
 						json = {
 							{formatCommand = prettier_cmd .. ' --parser json', formatStdin = true},
-						},
-						python = {
-							{formatCommand = lsp_bins .. '/.venv/bin/black --quiet -', formatStdin = true},
-							{formatCommand = lsp_bins .. '/.venv/bin/isort --quiet -', formatStdin = true},
 						},
 						yaml = {
 							{formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true},
 						},
 						markdown = {
 							{formatCommand = prettier_cmd .. ' --parser markdown', formatStdin = true},
+						},
+						html = {
+							{formatCommand = prettier_cmd .. ' --parser html', formatStdin = true},
+						},
+						css = {
+							{formatCommand = prettier_cmd .. ' --parser css', formatStdin = true},
+						},
+						javascript = {
+							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
+						},
+						typescript = {
+							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
+						},
+						javascriptreact = {
+							{formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true},
+						},
+						typescriptreact = {
+							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
+						},
+						python = {
+							{formatCommand = lsp_bins .. '/.venv/bin/black --quiet -', formatStdin = true},
+							{formatCommand = lsp_bins .. '/.venv/bin/isort --quiet -', formatStdin = true},
 						},
 						vue = {
 							{formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true},
@@ -475,29 +443,76 @@ require('lazy').setup({
 						},
 					}
 				}
-			}
+			})
+
+			-- npm i yaml-language-server
+			nvim_lsp.yamlls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
+			})
+
+			-- npm i typescript-language-server
+			nvim_lsp.tsserver.setup({
+				on_attach = function(client, bufnr)
+					client.server_capabilities.document_formatting = false	
+					on_attach(client, bufnr)
+				end,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' }
+			})
+
+			-- json, css, html, eslint
+			-- npm i vscode-langservers-extracted
+			nvim_lsp.jsonls.setup({
+				on_attach = function(client, bufnr)
+					client.server_capabilities.document_formatting = false	
+					on_attach(client, bufnr)
+				end,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
+			})
+			nvim_lsp.html.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-html-language-server', '--stdio' },
+			})
+			nvim_lsp.cssls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-css-language-server', '--stdio' },
+				settings = {
+					css = {
+						validate = false,
+					}
+				}
+			})
+			nvim_lsp.eslint.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
+			})
 
 			-- npm i stylelint-lsp
 			nvim_lsp.stylelint_lsp.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/stylelint-lsp', '--stdio' },
-				filetypes = { "css", "less", "scss", "vue" },
+				filetypes = { 'css', 'less', 'scss', 'vue' },
 			})
 
 			-- npm i pyright
-			nvim_lsp.pyright.setup{
+			nvim_lsp.pyright.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/pyright-langserver', '--stdio' }
-			}
+			})
 
-			-- npm i yaml-language-server
-			nvim_lsp.yamlls.setup{
+			-- go install -v golang.org/x/tools/gopls
+			nvim_lsp.gopls.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
-			}
+			})
 
 			-- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
 			-- npm i @nomicfoundation/solidity-language-server
@@ -508,13 +523,13 @@ require('lazy').setup({
 					single_file_support = true,
 				},
 			}
-			nvim_lsp.solidity.setup{
+			nvim_lsp.solidity.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-			}
+			})
 
 			-- npm i @volar/vue-language-server typescript-language-server
-			nvim_lsp.volar.setup{
+			nvim_lsp.volar.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vue-language-server', '--stdio' },
@@ -523,16 +538,10 @@ require('lazy').setup({
 						tsdk = lsp_bins .. '/node_modules/typescript/lib',
 					},
 				},
-			}
-
-			-- go install -v golang.org/x/tools/gopls
-			require'lspconfig'.gopls.setup{
-				on_attach = on_attach,
-				capabilities = capabilities,
-			}
+			})
 
 			-- rustup component add rust-analyzer
-			nvim_lsp.rust_analyzer.setup{
+			nvim_lsp.rust_analyzer.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -542,11 +551,11 @@ require('lazy').setup({
 						}
 					}
 				}
-			}
+			})
 
 			-- https://github.com/eclipse/eclipse.jdt.ls
 			-- using v0.57 because we're using java 8
-			nvim_lsp.jdtls.setup{
+			nvim_lsp.jdtls.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { 'java.exe', '-jar', lsp_bins .. '/jdtls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
@@ -555,7 +564,7 @@ require('lazy').setup({
 					'-Xmx2G', '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens',
 					'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '/jdtls/config_win', '-data',
 				lsp_bins .. '/jdtls/workspace' }
-			}
+			})
 		end
 	},
 
