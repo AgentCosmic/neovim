@@ -25,8 +25,16 @@ if [ "$#" -ne 1 ]; then
 		rm "$EFM.tar.gz" "$EFM" -rf
 	fi
 
+	# bashls
+	BLS="shellcheck-stable.linux.$(uname -m)"
+	wget "https://github.com/koalaman/shellcheck/releases/download/stable/$BLS.tar.xz"
+	tar -xf "$BLS.tar.xz"
+	mv shellcheck-stable/shellcheck .
+	rm "$BLS.tar.xz"
+
 	# common & web
 	npm i \
+		bash-language-server@^5.1.2 \
 		yaml-language-server@^1.6.0 \
 		prettier@^2.6.2 \
 		vscode-langservers-extracted@^4.1.0 \

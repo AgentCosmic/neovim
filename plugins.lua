@@ -302,7 +302,7 @@ require('lazy').setup({
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp'},
 		ft = {
-			'json', 'yaml', 'markdown',
+			'sh', 'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
 			'python', 'htmldjango',
 			'go', 'vue', 'java', 'solidity', 'rust'
@@ -374,10 +374,17 @@ require('lazy').setup({
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
 
+			-- npm i bash-language-server
+			nvim_lsp.bashls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/bash-language-server', 'start' },
+			})
+
 			-- go get github.com/mattn/efm-langserver
 			-- npm install prettier
 			-- pip install black isort
-			-- npm i prettier-plugin-solidity
+			-- npm i bash-language-server prettier-plugin-solidity
 			local prettier_path = './node_modules/.bin/prettier' -- default to local
 			local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
 			-- use our own if project doesn't have
@@ -396,7 +403,7 @@ require('lazy').setup({
 					codeAction = true,
 				},
 				filetypes = {
-					'json', 'yaml', 'markdown',
+					'sh', 'json', 'yaml', 'markdown',
 					'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
 					'python',
 					'vue', 'solidity'
@@ -404,6 +411,9 @@ require('lazy').setup({
 				settings = {
 					rootMarkers = {'.git/', 'node_modules/'},
 					languages = {
+						sh = {
+							{lintCommand = lsp_bins .. '/shellcheck -f gcc -x'},
+						},
 						json = {
 							{formatCommand = prettier_cmd .. ' --parser json', formatStdin = true},
 						},
