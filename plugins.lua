@@ -302,9 +302,9 @@ require('lazy').setup({
 		'neovim/nvim-lspconfig',
 		dependencies = {'cmp-nvim-lsp'},
 		ft = {
-			'sh', 'json', 'yaml', 'markdown',
+			'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-			'python', 'htmldjango',
+			'sh', 'lua', 'python', 'htmldjango',
 			'go', 'vue', 'java', 'solidity', 'rust'
 		},
 		config = function()
@@ -374,13 +374,6 @@ require('lazy').setup({
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
 
-			-- npm i bash-language-server
-			nvim_lsp.bashls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/bash-language-server', 'start' },
-			})
-
 			-- go get github.com/mattn/efm-langserver
 			-- npm install prettier
 			-- pip install black isort
@@ -403,17 +396,14 @@ require('lazy').setup({
 					codeAction = true,
 				},
 				filetypes = {
-					'sh', 'json', 'yaml', 'markdown',
+					'json', 'yaml', 'markdown',
 					'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-					'python',
+					'sh', 'python',
 					'vue', 'solidity'
 				},
 				settings = {
 					rootMarkers = {'.git/', 'node_modules/'},
 					languages = {
-						sh = {
-							{lintCommand = lsp_bins .. '/shellcheck -f gcc -x'},
-						},
 						json = {
 							{formatCommand = prettier_cmd .. ' --parser json', formatStdin = true},
 						},
@@ -440,6 +430,9 @@ require('lazy').setup({
 						},
 						typescriptreact = {
 							{formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true},
+						},
+						sh = {
+							{lintCommand = lsp_bins .. '/shellcheck -f gcc -x'},
 						},
 						python = {
 							{formatCommand = lsp_bins .. '/.venv/bin/black --quiet -', formatStdin = true},
@@ -509,6 +502,20 @@ require('lazy').setup({
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/stylelint-lsp', '--stdio' },
 				filetypes = { 'css', 'less', 'scss', 'vue' },
+			})
+
+			-- npm i bash-language-server
+			nvim_lsp.bashls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/node_modules/.bin/bash-language-server', 'start' },
+			})
+
+			-- lua https://github.com/LuaLS/lua-language-server/releases
+			nvim_lsp.lua_ls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { lsp_bins .. '/lua_ls/bin/lua-language-server' },
 			})
 
 			-- npm i pyright
