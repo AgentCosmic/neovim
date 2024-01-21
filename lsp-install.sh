@@ -18,7 +18,8 @@ if [ "$#" -ne 1 ]; then
 	# efm
 	EFM="efm-langserver_v0.0.44_linux_$(dpkg --print-architecture)"
 	if [ ! -f "efm-langserver" ]; then
-		wget "https://github.com/mattn/efm-langserver/releases/download/v0.0.44/$EFM.tar.gz"
+		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.44/$EFM.tar.gz"
+		echo "$EFM.tar.gz"
 		tar -xf "$EFM.tar.gz"
 		mv "$EFM/efm-langserver" .
 		rm "$EFM.tar.gz" "$EFM" -rf
@@ -36,7 +37,7 @@ fi
 
 if [ "$1" = 'bash' ]; then
 	SHELLCHECK="shellcheck-stable.linux.$(uname -m)"
-	wget "https://github.com/koalaman/shellcheck/releases/download/stable/$SHELLCHECK.tar.xz"
+	curl -LO "https://github.com/koalaman/shellcheck/releases/download/stable/$SHELLCHECK.tar.xz"
 	tar -xf "$SHELLCHECK.tar.xz"
 	mv shellcheck-stable/shellcheck .
 	rm "$SHELLCHECK.tar.xz" shellcheck-stable -r
@@ -54,7 +55,7 @@ if [ "$1" = 'lua' ]; then
 		exit
 	fi
 	LUALS="lua-language-server-3.7.4-linux-$ARCH.tar.gz"
-	wget "https://github.com/LuaLS/lua-language-server/releases/download/3.7.4/$LUALS"
+	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.7.4/$LUALS"
 	mkdir lua_ls
 	tar -xf "$LUALS" --directory "$PWD/lua_ls"
 	rm "$LUALS"

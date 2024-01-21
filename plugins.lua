@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -310,7 +311,7 @@ require('lazy').setup({
 		config = function()
 			local nvim_lsp = require('lspconfig')
 
-			function organize_imports()
+			function Organize_imports()
 				vim.lsp.buf.execute_command({
 					command = '_typescript.organizeImports',
 					arguments = {vim.api.nvim_buf_get_name(0)},
@@ -339,7 +340,7 @@ require('lazy').setup({
 				buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>', opts)
 				buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>', opts)
 				buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
-				buf_set_keymap('n', '<leader>oi', '<cmd>lua organize_imports()<cr>', opts)
+				buf_set_keymap('n', '<leader>oi', '<cmd>lua Organize_imports()<cr>', opts)
 				buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 				-- buf_set_keymap('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
 				-- use telescope instead
@@ -384,7 +385,7 @@ require('lazy').setup({
 			if vim.fn.executable(prettier_path) ~= 1 then
 				prettier_path = lsp_bins .. '/node_modules/.bin/prettier'
 			end
-			prettier_cmd = prettier_path .. prettier_config
+			local prettier_cmd = prettier_path .. prettier_config
 			nvim_lsp.efm.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
@@ -458,7 +459,7 @@ require('lazy').setup({
 			-- npm i typescript-language-server
 			nvim_lsp.tsserver.setup({
 				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false	
+					client.server_capabilities.document_formatting = false
 					on_attach(client, bufnr)
 				end,
 				capabilities = capabilities,
@@ -469,7 +470,7 @@ require('lazy').setup({
 			-- npm i vscode-langservers-extracted
 			nvim_lsp.jsonls.setup({
 				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false	
+					client.server_capabilities.document_formatting = false
 					on_attach(client, bufnr)
 				end,
 				capabilities = capabilities,
@@ -655,11 +656,11 @@ require('lazy').setup({
 			map('n', '<c-tab>', '<Plug>(cokeline-switch-next)', { silent = true })
 			map('n', '<c-s-tab>', '<Plug>(cokeline-switch-prev)', { silent = true })
 			map('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
-			vim.api.nvim_create_user_command('MoveTabRight', function(opts)
-				mappings.by_step("switch", 1)
+			vim.api.nvim_create_user_command('MoveTabRight', function()
+				mappings.by_step('switch', 1)
 			end, {})
-			vim.api.nvim_create_user_command('MoveTabLeft', function(opts)
-				mappings.by_step("switch", 11)
+			vim.api.nvim_create_user_command('MoveTabLeft', function()
+				mappings.by_step('switch', 11)
 			end, {})
 		end
 	},
@@ -706,7 +707,7 @@ require('lazy').setup({
 	{
 		'nvim-neo-tree/neo-tree.nvim',
 		branch = 'v3.x',
-		dependencies = { 
+		dependencies = {
 			'nvim-lua/plenary.nvim',
 			'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
 			'MunifTanjim/nui.nvim',
@@ -835,7 +836,7 @@ require('lazy').setup({
 		rtp = {
 			-- lazy.nvim will reset the runtime path so we have to add it back
 			paths = { vim.env.ROOT },
-		}	
+		}
 	}
 })
 
