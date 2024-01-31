@@ -608,19 +608,21 @@ require('lazy').setup({
 			require('cokeline').setup({
 				default_hl = {
 					fg = function(buffer)
-						return buffer.is_focused and get_hex('Search', 'fg') or get_hex('Comment', 'fg')
+						return buffer.is_focused and get_hex('TabLineSel', 'fg') or get_hex('TabLine', 'fg')
 					end,
 					bg = function(buffer)
-						return buffer.is_focused and get_hex('Normal', 'bg') or get_hex('ColorColumn', 'bg')
+						return buffer.is_focused and get_hex('TabLineSel', 'bg') or get_hex('TabLine', 'bg')
 					end
 				},
 				components = {
+					-- anchor
 					{
 						text = ' ',
 						bg = function(buffer)
-							return buffer.is_focused and get_hex('Comment', 'fg') or get_hex('ColorColumn', 'bg')
+							return buffer.is_focused and get_hex('Comment', 'fg') or get_hex('TabLine', 'bg')
 						end,
 					},
+					-- icon, selector
 					{
 						text = function(buffer)
 							return (is_picking_focus() or is_picking_close()) and ' ' .. buffer.pick_letter .. ' ' or
@@ -631,10 +633,12 @@ require('lazy').setup({
 								(is_picking_close() and get_hex('Error', 'fg')) or buffer.devicon.color
 						end,
 					},
+					-- path prefix
 					{
 						text = function(buffer) return buffer.unique_prefix end,
 						style = 'italic',
 					},
+					-- filename
 					{
 						text = function(buffer) return buffer.filename .. ' ' end,
 						fg = function(buffer)
@@ -642,15 +646,17 @@ require('lazy').setup({
 								return get_hex('ModeMsg', 'fg')
 							end
 							if buffer.is_focused then
-								return get_hex('Search', 'fg')
+								return get_hex('TabLineSel', 'fg')
 							end
-							return get_hex('Comment', 'fg')
+							return get_hex('TabLine', 'fg')
 						end,
 					},
+					-- close
 					{
 						text = '',
 						delete_buffer_on_left_click = true,
 					},
+					-- padding
 					{
 						text = ' ',
 					}
