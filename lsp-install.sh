@@ -27,10 +27,10 @@ if [ "$#" -ne 1 ]; then
 	# common & web
 	npm i \
 		yaml-language-server@^1.6.0 \
-		prettier@^2.6.2 \
+		prettier@^3.2.4 \
 		vscode-langservers-extracted@^4.1.0 \
-		typescript-language-server@^3.3.2 \
-		stylelint-lsp@^1.2.4
+		typescript-language-server@^4.3.1 \
+		stylelint-lsp@^2.0.0
 fi
 
 # optional
@@ -62,11 +62,11 @@ if [ "$1" = 'lua' ]; then
 fi
 
 if [ "$1" = 'python' ]; then
-	npm i pyright@^1.1.239
+	npm i pyright@^1.1.349
 	python -m venv .venv
 	.venv/bin/pip install \
-		isort==5.12.0 \
-		black==23.7.0
+		isort==5.13.2 \
+		black==24.1.1
 fi
 
 if [ "$1" = 'go' ]; then
