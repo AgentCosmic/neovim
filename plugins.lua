@@ -600,6 +600,7 @@ require('lazy').setup({
 			local is_picking_close = mappings.is_picking_close
 			local get_hex = require('cokeline/utils').get_hex
 			require('cokeline').setup({
+				show_if_buffers_are_at_least = 0,
 				default_hl = {
 					fg = function(buffer)
 						return buffer.is_focused and get_hex('TabLineSel', 'fg') or get_hex('TabLine', 'fg')
@@ -685,7 +686,7 @@ require('lazy').setup({
 			-- end, {noremap = true, silent = true})
 			vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true })
 			vim.api.nvim_set_keymap('n', '<leader>of', ':Telescope oldfiles<cr>', { noremap = true, silent = true })
-			vim.api.nvim_set_keymap('n', '<leader>ds', ':Telescope lsp_document_symbols<cr>',
+			vim.api.nvim_set_keymap('n', '<leader>ls', ':Telescope lsp_document_symbols<cr>',
 				{ noremap = true, silent = true })
 			vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', { noremap = true, silent = true })
 			vim.api.nvim_set_keymap('n', 'g/', ':Telescope current_buffer_fuzzy_find<cr>',
@@ -848,4 +849,3 @@ require('lazy').setup({
 		}
 	}
 })
-
