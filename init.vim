@@ -52,13 +52,13 @@ set statusline+=%#StatusArrowPath#%#StatusArrowPath2#
 set statusline+=%= " right align from here
 set statusline+=%#StatusPositionArrow#%#StatusPositionArrow2#
 set statusline+=%#StatusPosition#
-set statusline+=\ %l,%c\ ≡\ %L\ | " current line, cursor column, line/total percent
+set statusline+=\ %l,%c\ 󰦨\ %L\ | " current line, cursor column, line/total percent
 set statusline+=%#StatusMiscArrow#
 set statusline+=%#StatusMisc#
-set statusline+=\ %{&ff}\ ∴\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
+set statusline+=\ %{&ff}\ 󰇙\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, format, encoding
 set statusline+=%#StatusFiletypeArrow#
 set statusline+=%#StatusFiletype#
-set statusline+=\ %{&ft}\ |
+set statusline+=\ 󰅩\ %{&ft}\ |
 
 augroup vimrcBehavior
 	autocmd!
