@@ -247,13 +247,7 @@ require('lazy').setup({
 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'JoosepAlviste/nvim-ts-context-commentstring' },
 		event = 'BufRead',
 		config = function()
-			-- support correct comment string in files with multiple languages
-			require 'nvim-treesitter.configs'.setup({
-				context_commentstring = {
-					enable = true,
-					enable_autocmd = false,
-				}
-			})
+			vim.g.skip_ts_context_commentstring_module = true -- skip backwards compatibility routines and speed up loading
 			require('Comment').setup({
 				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 			})
