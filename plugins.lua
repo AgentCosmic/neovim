@@ -668,7 +668,7 @@ require('lazy').setup({
 				mappings.by_step('switch', 1)
 			end, {})
 			vim.api.nvim_create_user_command('MoveTabLeft', function()
-				mappings.by_step('switch', 11)
+				mappings.by_step('switch', -1)
 			end, {})
 		end
 	},
