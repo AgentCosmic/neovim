@@ -593,6 +593,7 @@ require('lazy').setup({
 
 	{
 		'noib3/nvim-cokeline',
+		tag = 'v0.4.0',
 		event = 'BufRead',
 		config = function()
 			local mappings = require('cokeline/mappings')
@@ -601,6 +602,10 @@ require('lazy').setup({
 			local get_hex = require('cokeline/utils').get_hex
 			require('cokeline').setup({
 				show_if_buffers_are_at_least = 0,
+				pick = {
+					-- customized for custom keyboard layout, excluding Q & Z
+					letters = 'etahiscnodywkrgpjmbfulxv'
+				},
 				default_hl = {
 					fg = function(buffer)
 						return buffer.is_focused and get_hex('TabLineSel', 'fg') or get_hex('TabLine', 'fg')
