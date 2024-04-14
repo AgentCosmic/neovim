@@ -70,7 +70,7 @@ if [ "$1" = 'python' ]; then
 fi
 
 if [ "$1" = 'go' ]; then
-	go install golang.org/x/tools/gopls@v0.12.2
+	go install golang.org/x/tools/gopls@v0.15.2
 fi
 
 if [ "$1" = 'solidity' ]; then
