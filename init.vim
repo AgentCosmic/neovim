@@ -78,7 +78,7 @@ augroup vimrcBehavior
 	autocmd FileType qf set nobuflisted
 
 	" Highlight yanked region
-	au TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=100, on_visual=true}
+	au TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
 
 	" always move quickfix window to bottom
 	autocmd FileType qf wincmd J
@@ -270,14 +270,14 @@ command! EVimrc :e $MYVIMRC
 command! SS :syntax sync fromstart
 command! CopyPath :let @+ = expand("%")
 
-" edit a macro using cq(macro name)
+" Edit a macro using cq(macro name)
 function! ChangeReg() abort
 	let x = nr2char(getchar())
 	call feedkeys("q:ilet @" . x . " = \<c-r>\<c-r>=string(@" . x . ")\<cr>\<esc>0f'", 'n')
 endfun
 nnoremap cr :call ChangeReg()<cr>
 
-" add :gr as a shortcut to run :grep without needing to press <cr>
+" Add :gr as a shortcut to run :grep without needing to press <cr>
 " https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! Grep(...)
 	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))

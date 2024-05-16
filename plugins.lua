@@ -700,7 +700,7 @@ require('lazy').setup({
 		config = function()
 			require('telescope').setup({
 				defaults = {
-					file_ignore_patterns = { '.git/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
+					file_ignore_patterns = { '.git/', 'node_modules/', '.venv/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
 					preview = {
 						filesize_limit = 1,
 						timeout = 250,
