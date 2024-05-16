@@ -16,9 +16,9 @@ cd "$ROOT"
 # essential
 if [ "$#" -ne 1 ]; then
 	# efm
-	EFM="efm-langserver_v0.0.44_linux_$(dpkg --print-architecture)"
+	EFM="efm-langserver_v0.0.53_linux_$(dpkg --print-architecture)"
 	if [ ! -f "efm-langserver" ]; then
-		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.44/$EFM.tar.gz"
+		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.53/$EFM.tar.gz"
 		echo "$EFM.tar.gz"
 		tar -xf "$EFM.tar.gz"
 		mv "$EFM/efm-langserver" .
@@ -41,7 +41,7 @@ if [ "$1" = 'bash' ]; then
 	tar -xf "$SHELLCHECK.tar.xz"
 	mv shellcheck-stable/shellcheck .
 	rm "$SHELLCHECK.tar.xz" shellcheck-stable -r
-	npm i bash-language-server@^5.1.2
+	npm i bash-language-server@^5.2.0
 fi
 
 if [ "$1" = 'lua' ]; then
@@ -62,11 +62,11 @@ if [ "$1" = 'lua' ]; then
 fi
 
 if [ "$1" = 'python' ]; then
-	npm i pyright@^1.1.349
+	npm i pyright@^1.1.360
 	python -m venv .venv
 	.venv/bin/pip install \
 		isort==5.13.2 \
-		black==24.1.1
+		black==24.4.2
 fi
 
 if [ "$1" = 'go' ]; then
