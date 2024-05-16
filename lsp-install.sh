@@ -6,7 +6,7 @@ ROOT=~/.local/share/nvim/lsp
 
 # init
 if [ ! -d "$ROOT"  ]; then
-	mkdir "$ROOT"
+	mkdir -p "$ROOT"
 	cd "$ROOT"
 	npm init -y
 fi
