@@ -300,7 +300,7 @@ require('lazy').setup({
 			'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
 			'sh', 'lua', 'python', 'htmldjango',
-			'go', 'vue', 'java', 'solidity', 'rust'
+			'go', 'vue', 'java', 'solidity', 'rust', 'cs'
 		},
 		config = function()
 			local nvim_lsp = require('lspconfig')
@@ -555,6 +555,9 @@ require('lazy').setup({
 				},
 			})
 
+			-- https://github.com/razzmatazz/csharp-language-server
+			nvim_lsp.csharp_ls.setup {}
+
 			-- rustup component add rust-analyzer
 			nvim_lsp.rust_analyzer.setup({
 				on_attach = on_attach,
@@ -569,11 +572,12 @@ require('lazy').setup({
 			})
 
 			-- https://github.com/eclipse/eclipse.jdt.ls
-			-- using v0.57 because we're using java 8
+			-- https://download.eclipse.org/jdtls/milestones/0.57.0/
+			-- using v0.57 because newer versions require java 17
 			nvim_lsp.jdtls.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { 'java.exe', '-jar', lsp_bins ..
+				cmd = { 'java', '-jar', lsp_bins ..
 				'/jdtls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
 					'-Declipse.application=org.eclipse.jdt.ls.core.id1', '-Dosgi.bundles.defaultStartLevel=4',
 					'-Declipse.product=org.eclipse.jdt.ls.core.product', '-Dlog.protocol=true', '-Dlog.level=ALL',

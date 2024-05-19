@@ -80,3 +80,12 @@ fi
 if [ "$1" = 'vue' ]; then
 	npm i @volar/vue-language-server@^1.2.0
 fi
+
+if [ "$1" = 'csharp' ]; then
+	dotnet tool install --global csharp-ls
+fi
+
+if [ "$1" = 'java' ]; then
+	mkdir jdtls
+	curl -s -L 'https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz' | tar xz -C jdtls
+fi
