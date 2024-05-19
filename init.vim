@@ -78,7 +78,7 @@ augroup vimrcBehavior
 	autocmd FileType qf set nobuflisted
 
 	" Highlight yanked region
-	au TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
+	autocmd TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
 
 	" always move quickfix window to bottom
 	autocmd FileType qf wincmd J
