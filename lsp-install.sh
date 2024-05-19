@@ -62,9 +62,9 @@ if [ "$1" = 'lua' ]; then
 fi
 
 if [ "$1" = 'python' ]; then
-	npm i pyright@^1.1.360
 	python -m venv .venv
 	.venv/bin/pip install \
+		basedpyright==1.12.2 \
 		isort==5.13.2 \
 		black==24.4.2
 fi

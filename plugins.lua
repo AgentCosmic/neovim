@@ -516,11 +516,11 @@ require('lazy').setup({
 				cmd = { lsp_bins .. '/lua_ls/bin/lua-language-server' },
 			})
 
-			-- npm i pyright
-			nvim_lsp.pyright.setup({
+			-- pip install basedpyright
+			nvim_lsp.basedpyright.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/pyright-langserver', '--stdio' }
+				cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' }
 			})
 
 			-- go install -v golang.org/x/tools/gopls
