@@ -327,17 +327,14 @@ require('lazy').setup({
 				buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
 				buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
 				buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-				buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
 				buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 				buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
 				buf_set_keymap('n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
-				buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = "rounded"}})<cr>',
-					opts)
-				buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = "rounded"}})<cr>',
-					opts)
 				buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
 				buf_set_keymap('n', '<leader>oi', '<cmd>lua Organize_imports()<cr>', opts)
 				buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+				buf_set_keymap('n', '<leader>ih',
+					'<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', opts)
 				-- buf_set_keymap('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
 				-- use telescope instead
 				-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
@@ -389,6 +386,7 @@ require('lazy').setup({
 				cmd = { lsp_bins .. '/efm-langserver' },
 				init_options = {
 					documentFormatting = true,
+					documentRangeFormatting = true,
 					hover = true,
 					documentSymbol = true,
 					codeAction = true,
@@ -460,7 +458,19 @@ require('lazy').setup({
 					on_attach(client, bufnr)
 				end,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' }
+				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' },
+				init_options = {
+					preferences = {
+						includeInlayParameterNameHints = 'all',
+						includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+						includeInlayFunctionParameterTypeHints = true,
+						includeInlayVariableTypeHints = true,
+						includeInlayPropertyDeclarationTypeHints = true,
+						includeInlayFunctionLikeReturnTypeHints = true,
+						includeInlayEnumMemberValueHints = true,
+						importModuleSpecifierPreference = 'non-relative'
+					},
+				},
 			})
 
 			-- json, css, html, eslint
@@ -520,13 +530,31 @@ require('lazy').setup({
 			nvim_lsp.basedpyright.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' }
+				cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' },
+				settings = {
+					basedpyright = {
+						typeCheckingMode = 'standard',
+					},
+				}
 			})
 
 			-- go install -v golang.org/x/tools/gopls
 			nvim_lsp.gopls.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
+				settings = {
+					gopls = {
+						['ui.inlayhint.hints'] = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+					},
+				},
 			})
 
 			-- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
