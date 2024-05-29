@@ -247,6 +247,8 @@ nnoremap <F3> g*Nyiw:cw<cr>:Grep <c-r>0
 noremap <silent> <c-s> :update<cr>
 vnoremap <silent> <c-s> <c-c>:update<cr>
 inoremap <silent> <c-s> <c-o>:update<cr>
+" Comment
+nmap <leader>c gcc
 
 " Disable function keys in insert mode
 inoremap <F2> <esc><F2>

@@ -242,18 +242,24 @@ require('lazy').setup({
 		opts = {}
 	},
 
+	-- {
+	-- 	'numToStr/Comment.nvim',
+	-- 	dependencies = { 'nvim-treesitter/nvim-treesitter', 'JoosepAlviste/nvim-ts-context-commentstring' },
+	-- 	event = 'BufRead',
+	-- 	config = function()
+	-- 		vim.g.skip_ts_context_commentstring_module = true -- skip backwards compatibility routines and speed up loading
+	-- 		require('Comment').setup({
+	-- 			pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+	-- 		})
+	-- 		vim.api.nvim_set_keymap('n', '<leader>c', ':normal gcc<cr>', { silent = true })
+	-- 		vim.api.nvim_set_keymap('v', '<leader>c', ':normal gbc<cr>', { silent = true })
+	-- 	end
+	-- },
+
 	{
-		'numToStr/Comment.nvim',
-		dependencies = { 'nvim-treesitter/nvim-treesitter', 'JoosepAlviste/nvim-ts-context-commentstring' },
-		event = 'BufRead',
-		config = function()
-			vim.g.skip_ts_context_commentstring_module = true -- skip backwards compatibility routines and speed up loading
-			require('Comment').setup({
-				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-			})
-			vim.api.nvim_set_keymap('n', '<leader>c', ':normal gcc<cr>', { silent = true })
-			vim.api.nvim_set_keymap('v', '<leader>c', ':normal gbc<cr>', { silent = true })
-		end
+		'folke/ts-comments.nvim',
+		opts = {},
+		event = 'VeryLazy',
 	},
 
 	{
