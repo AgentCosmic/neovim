@@ -177,7 +177,7 @@ call s:h('typescriptAsyncFuncKeyword ', {'fg': s:purple})
 
 hi link @lsp.type.property Normal
 hi link @lsp.type.variable Normal
-hi link @lsp.type.parameter.typescript Normal
+hi link @lsp.type.parameter Normal
 hi link @lsp.mod.declaration.typescriptreact Normal
 hi link @lsp.mod.declaration.rust Normal
 hi link rustSigil Special

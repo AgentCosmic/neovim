@@ -25,6 +25,7 @@ set ruler " show the cursor position all the time
 set scrolloff=4 " keep padding around cursor
 set showcmd " display incomplete commands
 set selection=inclusive " include the last character, required by some plugins
+set inccommand=split " live preview of substitutions in a split
 
 " Disable backup litters
 set nobackup
@@ -74,18 +75,15 @@ augroup vimrcBehavior
 	" Remove trailing whitespace before saving
 	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.toml,*.xml,*.java,*.php,*.vue,*.go :%s/\(\s\+\|\)$//e
 
-	" Don't list quickfix window
-	autocmd FileType qf set nobuflisted
-
-	" Highlight yanked region
-	autocmd TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
-
-	" always move quickfix window to bottom
-	autocmd FileType qf wincmd J
+	" Don't list quickfix window, always move quickfix window to bottom, fix the buffer to the window
+	autocmd FileType qf set nobuflisted | wincmd J | setlocal winfixbuf
 
 	" automatically open quickfix and loclist window when it changes
     autocmd QuickFixCmdPost [^l]* cwindow
     autocmd QuickFixCmdPost l* lwindow
+
+	" Highlight yanked region
+	autocmd TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
 augroup END
 
 " so visual paste doesn't replace paste buffer
