@@ -876,23 +876,7 @@ require('lazy').setup({
 
 
 	{
-		'gabrielpoca/replacer.nvim',
-		ft = { 'qf' },
-		config = function()
-			vim.keymap.set('n', '<leader>eq', function()
-				require('replacer').run()
-			end, {})
-		end
 	},
-
-
-	-- {
-	-- 	'dyng/ctrlsf.vim',
-	-- 	cmd = 'CtrlSF',
-	-- 	config = function()
-	-- 		vim.g.ctrlsf_ackprg = 'rg'
-	-- 	end
-	-- },
 
 }, {
 	lockfile = vim.env.ROOT .. '/lazy-lock.json',
