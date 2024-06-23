@@ -149,18 +149,6 @@ augroup END
 set foldnestmax=12
 set foldlevel=9 " prefer to be open by default
 set nofoldenable " disable by default
-" define indent folds then allow manual folding
-augroup enhanceFold
-    autocmd!
-    autocmd BufReadPre * setlocal foldmethod=indent
-    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
-function! FoldIndent() abort
-    setlocal foldmethod=indent
-	normal! za
-    setlocal foldmethod=manual
-endfun
-nmap za :call FoldIndent()<cr>
 
 
 " ----- ----- ----- -----
