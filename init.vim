@@ -75,8 +75,8 @@ augroup vimrcBehavior
 	" Remove trailing whitespace before saving
 	autocmd BufWritePre *.css,*.htm,*.html,*.js,*.json,*.py,*.ts,*.tsx,*.jsx,*.yaml,*.yml,*.toml,*.xml,*.java,*.php,*.vue,*.go :%s/\(\s\+\|\)$//e
 
-	" Don't list quickfix window, always move quickfix window to bottom, fix the buffer to the window
-	autocmd FileType qf set nobuflisted | wincmd J | setlocal winfixbuf
+	" Don't list quickfix window, always move quickfix window to bottom, fix the buffer to the window, q to close
+	autocmd FileType qf set nobuflisted | wincmd J | setlocal winfixbuf | nnoremap <buffer> q :q<cr>
 
 	" automatically open quickfix and loclist window when it changes
     autocmd QuickFixCmdPost [^l]* cwindow
@@ -84,6 +84,9 @@ augroup vimrcBehavior
 
 	" Highlight yanked region
 	autocmd TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
+
+	" fix missing sql commentstring
+	autocmd FileType sql setlocal commentstring=--\ %s
 augroup END
 
 " so visual paste doesn't replace paste buffer
