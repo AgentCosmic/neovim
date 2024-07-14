@@ -260,6 +260,8 @@ command! DeleteControlM %s/$//
 command! EVimrc :e $MYVIMRC
 command! SS :syntax sync fromstart
 command! CopyPath :let @+ = expand("%")
+command! SpaceToTab :set smartindent noexpandtab tabstop=4 shiftwidth=4 | retab!
+command! TabToSpace :set expandtab | retab!
 
 " Edit a macro using cq(macro name)
 function! ChangeReg() abort
