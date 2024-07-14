@@ -167,7 +167,7 @@ require('lazy').setup({
 		build = ':TSUpdate',
 		config = function()
 			require('nvim-treesitter.configs').setup({
-				ensure_installed = { 'javascript', 'typescript', 'html', 'css', 'python', 'lua', 'markdown', 'tsx', 'vue', 'go' },
+				ensure_installed = { 'vim', 'vimdoc', 'lua', 'javascript', 'typescript', 'html', 'css', 'python', 'markdown', 'tsx', 'vue', 'go' },
 				auto_install = false,
 				indent = {
 					enable = true
