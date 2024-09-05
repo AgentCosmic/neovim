@@ -1,5 +1,4 @@
 {
-  "BufOnly.nvim": { "branch": "master", "commit": "30579c2851743b00c4547c324a16f2c1cfa5a41c" },
   "LuaSnip": { "branch": "master", "commit": "50fcf17db7c75af80e6b6109acfbfb4504768780" },
   "ccc.nvim": { "branch": "main", "commit": "4fb5abaef2f2e0540fe22d4d74a9841205fff9e4" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },

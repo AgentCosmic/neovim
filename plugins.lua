@@ -127,14 +127,6 @@ require('lazy').setup({
 	},
 
 	{
-		'numtostr/BufOnly.nvim',
-		cmd = { 'BufOnly' },
-		init = function()
-			vim.api.nvim_set_keymap('n', '<c-f4>', ':BufOnly<cr>', { silent = true, noremap = true })
-		end
-	},
-
-	{
 		'tpope/vim-abolish',
 		event = 'BufRead',
 	},
