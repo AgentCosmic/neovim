@@ -62,11 +62,11 @@ if [ "$1" = 'lua' ]; then
 fi
 
 if [ "$1" = 'python' ]; then
-	python -m venv .venv
-	.venv/bin/pip install \
+	python -m venv venv
+	venv/bin/pip install \
 		basedpyright==1.12.2 \
 		isort==5.13.2 \
-		black==24.4.2
+		ruff==0.5.1
 fi
 
 if [ "$1" = 'go' ]; then
@@ -78,7 +78,7 @@ if [ "$1" = 'solidity' ]; then
 fi
 
 if [ "$1" = 'vue' ]; then
-	npm i @volar/vue-language-server@^1.2.0
+	npm i @vue/language-server@^2.0.0
 fi
 
 if [ "$1" = 'csharp' ]; then

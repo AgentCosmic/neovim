@@ -162,7 +162,7 @@ require('lazy').setup({
 				ensure_installed = { 'vim', 'vimdoc', 'lua', 'javascript', 'typescript', 'html', 'css', 'python', 'markdown', 'tsx', 'vue', 'go' },
 				auto_install = false,
 				indent = {
-					enable = true
+					enable = true,
 				},
 				textobjects = {
 					select = {
@@ -206,9 +206,6 @@ require('lazy').setup({
 					},
 				},
 			})
-			-- use treesitter to fold
-			vim.opt.foldmethod = 'expr'
-			vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 		end
 	},
 
@@ -237,24 +234,10 @@ require('lazy').setup({
 		opts = {}
 	},
 
-	-- {
-	-- 	'numToStr/Comment.nvim',
-	-- 	dependencies = { 'nvim-treesitter/nvim-treesitter', 'JoosepAlviste/nvim-ts-context-commentstring' },
-	-- 	event = 'BufRead',
-	-- 	config = function()
-	-- 		vim.g.skip_ts_context_commentstring_module = true -- skip backwards compatibility routines and speed up loading
-	-- 		require('Comment').setup({
-	-- 			pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-	-- 		})
-	-- 		vim.api.nvim_set_keymap('n', '<leader>c', ':normal gcc<cr>', { silent = true })
-	-- 		vim.api.nvim_set_keymap('v', '<leader>c', ':normal gbc<cr>', { silent = true })
-	-- 	end
-	-- },
-
 	{
 		'folke/ts-comments.nvim',
-		opts = {},
 		event = 'VeryLazy',
+		opts = {},
 	},
 
 	{
@@ -380,7 +363,7 @@ require('lazy').setup({
 
 			-- go get github.com/mattn/efm-langserver
 			-- npm install prettier
-			-- pip install black isort
+			-- pip install ruff isort
 			-- npm i bash-language-server prettier-plugin-solidity
 			local prettier_path = './node_modules/.bin/prettier' -- default to local
 			local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
@@ -440,8 +423,8 @@ require('lazy').setup({
 							{ lintCommand = lsp_bins .. '/shellcheck -f gcc -x' },
 						},
 						python = {
-							{ formatCommand = lsp_bins .. '/.venv/bin/black --quiet -', formatStdin = true },
-							{ formatCommand = lsp_bins .. '/.venv/bin/isort --quiet -', formatStdin = true },
+							{ formatCommand = lsp_bins .. '/venv/bin/ruff format --quiet -', formatStdin = true },
+							{ formatCommand = lsp_bins .. '/venv/bin/isort --quiet -',       formatStdin = true },
 						},
 						vue = {
 							{ formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true },
@@ -539,7 +522,7 @@ require('lazy').setup({
 			nvim_lsp.basedpyright.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-				cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' },
+				cmd = { lsp_bins .. '/venv/bin/basedpyright-langserver', '--stdio' },
 				settings = {
 					basedpyright = {
 						typeCheckingMode = 'standard',
@@ -580,7 +563,7 @@ require('lazy').setup({
 				capabilities = capabilities,
 			})
 
-			-- npm i @volar/vue-language-server typescript-language-server
+			-- npm i @vue/language-server typescript-language-server
 			nvim_lsp.volar.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
@@ -741,7 +724,7 @@ require('lazy').setup({
 		config = function()
 			require('telescope').setup({
 				defaults = {
-					file_ignore_patterns = { '.git/', 'node_modules/', '.venv/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
+					file_ignore_patterns = { '.git/', 'node_modules/', 'venv/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
 					preview = {
 						filesize_limit = 1,
 						timeout = 250,
