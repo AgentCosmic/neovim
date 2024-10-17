@@ -444,7 +444,7 @@ require('lazy').setup({
 			})
 
 			-- npm i typescript-language-server
-			nvim_lsp.tsserver.setup({
+			nvim_lsp.ts_ls.setup({
 				on_attach = function(client, bufnr)
 					client.server_capabilities.document_formatting = false
 					on_attach(client, bufnr)
