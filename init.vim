@@ -149,6 +149,7 @@ augroup indentGuide
 augroup END
 
 " Folding
+set foldmethod=indent
 set foldnestmax=12
 set foldlevel=9 " prefer to be open by default
 set nofoldenable " disable by default
@@ -238,6 +239,9 @@ vnoremap <silent> <c-s> <c-c>:update<cr>
 inoremap <silent> <c-s> <c-o>:update<cr>
 " Comment
 nmap <leader>c gcc
+
+" don't jump when search
+nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <bar> set hls <cr>
 
 " Disable function keys in insert mode
 inoremap <F2> <esc><F2>
