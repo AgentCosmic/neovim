@@ -27,7 +27,7 @@ if [ "$#" -ne 1 ]; then
 	# common & web
 	npm i \
 		yaml-language-server@^1.6.0 \
-		prettier@^3.2.4 \
+		prettier@^3.5.0 \
 		vscode-langservers-extracted@^4.1.0 \
 		typescript-language-server@^4.3.1 \
 		stylelint-lsp@^2.0.0
@@ -41,7 +41,7 @@ if [ "$1" = 'bash' ]; then
 	tar -xf "$SHELLCHECK.tar.xz"
 	mv shellcheck-stable/shellcheck .
 	rm "$SHELLCHECK.tar.xz" shellcheck-stable -r
-	npm i bash-language-server@^5.2.0
+	npm i bash-language-server@^5.4.3
 fi
 
 if [ "$1" = 'lua' ]; then
@@ -54,9 +54,9 @@ if [ "$1" = 'lua' ]; then
 		echo Architecture not supported
 		exit
 	fi
-	LUALS="lua-language-server-3.7.4-linux-$ARCH.tar.gz"
-	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.7.4/$LUALS"
-	mkdir lua_ls
+	LUALS="lua-language-server-3.13.6-linux-$ARCH.tar.gz"
+	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.13.6/$LUALS"
+	mkdir -p lua_ls
 	tar -xf "$LUALS" --directory "$PWD/lua_ls"
 	rm "$LUALS"
 fi
@@ -64,13 +64,13 @@ fi
 if [ "$1" = 'python' ]; then
 	python -m venv venv
 	venv/bin/pip install \
-		basedpyright==1.12.2 \
-		isort==5.13.2 \
-		ruff==0.5.1
+		basedpyright==1.27.1 \
+		isort==6.0.0 \
+		ruff==0.9.6
 fi
 
 if [ "$1" = 'go' ]; then
-	go install golang.org/x/tools/gopls@v0.15.2
+	go install golang.org/x/tools/gopls@v0.17.1
 fi
 
 if [ "$1" = 'solidity' ]; then
@@ -78,7 +78,7 @@ if [ "$1" = 'solidity' ]; then
 fi
 
 if [ "$1" = 'vue' ]; then
-	npm i @vue/language-server@^2.0.0
+	npm i @vue/language-server@^2.2.0
 fi
 
 if [ "$1" = 'csharp' ]; then
