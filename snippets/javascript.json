@@ -433,19 +433,19 @@
   },
   "console.log": {
     "prefix": "csl",
-    "body": "console.log(${0})"
+    "body": "console.log(${0});"
   },
   "console.error": {
     "prefix": "cse",
-    "body": "console.error(${0})"
+    "body": "console.error(${0});"
   },
   "console.warn": {
     "prefix": "csw",
-    "body": "console.warn(${0})"
+    "body": "console.warn(${0});"
   },
   "console.dir": {
     "prefix": "csd",
-    "body": "console.dir('${0}:', ${0})"
+    "body": "console.dir('${0}:', ${0});"
   },
   "constructor": {
     "prefix": "cn",

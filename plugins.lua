@@ -653,7 +653,7 @@ require('lazy').setup({
 								' ' .. buffer.devicon.icon
 						end,
 						fg = function(buffer)
-							return (is_picking_focus() and get_hex('DiffAdd', 'fg')) or
+							return (is_picking_focus() and get_hex('WarningMsg', 'fg')) or
 								(is_picking_close() and get_hex('Error', 'fg')) or buffer.devicon.color
 						end,
 					},
