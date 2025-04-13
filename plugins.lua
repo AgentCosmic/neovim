@@ -25,81 +25,63 @@ require('lazy').setup({
 	},
 
 	{
-		'hrsh7th/nvim-cmp',
-		dependencies = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp-signature-help', 'L3MON4D3/LuaSnip' },
-		event = 'InsertEnter',
-		config = function()
-			vim.opt.completeopt = 'menu,menuone,noselect'
-			local cmp = require('cmp')
-			local cmp_buffer = require('cmp_buffer')
-			local luasnip = require('luasnip')
-			cmp.setup({
-				mapping = {
-					['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-					['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-					['<C-Space>'] = cmp.mapping.complete(),
-					['<CR>'] = cmp.mapping.confirm({ select = true }),
-					['<C-D>'] = cmp.mapping.scroll_docs(-4),
-					['<C-F>'] = cmp.mapping.scroll_docs(4),
-					['<C-N>'] = cmp.mapping(function(fallback)
-						if luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
+		'saghen/blink.cmp',
+		version = '1.*',
+		---@module 'blink.cmp'
+		---@type blink.cmp.Config
+		opts = {
+			keymap = {
+				preset = 'default',
+				['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+				['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+				['<CR>'] = { 'accept', 'fallback' },
+				['<C-e>'] = {},
+			},
+			completion = {
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 500,
 				},
-				sources = {
-					{ name = 'nvim_lsp' },
-					{
-						name = 'buffer',
-						options = {
-							get_bufnrs = function()
-								return vim.api.nvim_list_bufs() -- use all buffers
-							end,
-						},
-					},
-					{ name = 'path' },
-					{ name = 'nvim_lsp_signature_help' },
-					{ name = 'luasnip' },
+				keyword = { range = 'prefix' },
+				trigger = {
+					show_on_keyword = true,
+					show_on_trigger_character = true,
+					show_in_snippet = false,
 				},
-				window = {
-					documentation = {
-						border = 'single'
-					},
-				},
-				sorting = {
-					comparators = {
-						cmp.config.compare.exact, -- so that snippets are near the top
-						cmp.config.compare.score,
-						function(...) return cmp_buffer:compare_locality(...) end,
-						cmp.config.compare.recently_used,
-						cmp.config.compare.offset,
-						cmp.config.compare.kind,
-						cmp.config.compare.sort_text,
-						cmp.config.compare.length,
-						cmp.config.compare.order,
+				list = {
+					selection = {
+						preselect = false,
+						auto_insert = true,
 					}
 				},
-				snippet = {
-					expand = function(args)
-						-- required even if not used
-						require('luasnip').lsp_expand(args.body)
-					end,
+				menu = {
+					max_height = 20,
 				},
-			})
-		end
-	},
-
-	{
-		-- snippet plugin in requried for nvim-cmp to work
-		'L3MON4D3/LuaSnip',
-		dependencies = { 'saadparwaiz1/cmp_luasnip' },
-		event = 'InsertEnter',
-		config = function()
-			-- luasnip needs to load snippets before nvim-cmp is loaded
-			require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.env.ROOT .. '/snippets' } })
-		end
+			},
+			cmdline = { enabled = true },
+			signature = { enabled = true },
+			sources = {
+				default = { 'lsp', 'buffer', 'path', 'snippets' },
+				providers = {
+					lsp = {
+						-- remove language keywords/constants (if, else, while, etc.) provided by the language server
+						name = 'LSP',
+						module = 'blink.cmp.sources.lsp',
+						transform_items = function(_, items)
+							return vim.tbl_filter(function(item)
+								return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
+							end, items)
+						end,
+					},
+					snippets = {
+						opts = {
+							search_paths = { vim.env.ROOT .. '/snippets' },
+						},
+					},
+				},
+			},
+		},
+		opts_extend = { 'sources.default' }
 	},
 
 	{
@@ -206,6 +188,8 @@ require('lazy').setup({
 					},
 				},
 			})
+			vim.opt.foldmethod = 'expr'
+			vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 		end
 	},
 
@@ -271,14 +255,6 @@ require('lazy').setup({
 		end
 	},
 
-	{
-		'Exafunction/codeium.vim',
-		event = 'BufEnter',
-		config = function()
-			vim.keymap.set('i', '<c-b>', function() return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-		end
-	},
-
 
 	------------------------------------------------------------------------------
 	-- LSP
@@ -287,7 +263,7 @@ require('lazy').setup({
 
 	{
 		'neovim/nvim-lspconfig',
-		dependencies = { 'cmp-nvim-lsp' },
+		dependencies = { 'saghen/blink.cmp' },
 		ft = {
 			'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
@@ -318,34 +294,16 @@ require('lazy').setup({
 				-- See `:help vim.lsp.*` for documentation on any of the below functions
 				buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
 				buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-				buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-				buf_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 				buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
 				buf_set_keymap('n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
 				buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
 				buf_set_keymap('n', '<leader>oi', '<cmd>lua Organize_imports()<cr>', opts)
-				buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 				buf_set_keymap('n', '<leader>ih',
 					'<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', opts)
-				-- buf_set_keymap('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-				-- use telescope instead
-				-- buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
 			end
 
-			-- floating windows
-			vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-				vim.lsp.handlers.hover, {
-					border = 'rounded'
-				})
-			vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-				vim.lsp.handlers.signature_help, {
-					border = 'rounded'
-				})
 			-- diagnostics messages
-			vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-				vim.lsp.diagnostic.on_publish_diagnostics, {
-					virtual_text = { prefix = '' },
-				})
+			vim.diagnostic.config({ virtual_text = { current_line = true } })
 			-- diagnostic signs
 			local signs = { Error = '', Warn = '', Hint = '', Info = '' }
 			for type, icon in pairs(signs) do
@@ -353,13 +311,15 @@ require('lazy').setup({
 				vim.fn.sign_define(hl, { text = icon, texthl = hl })
 			end
 
+			-- set capabilities from plugins
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = vim.tbl_deep_extend('force', capabilities,
+				require('blink.cmp').get_lsp_capabilities({}, false))
+			capabilities = vim.tbl_deep_extend('force', capabilities,
+				require('lsp-file-operations').default_capabilities())
+
 			-- this is where we install all the language servers
 			local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
-
-			-- nvim-cmp
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument
-				.completion
 
 			-- go get github.com/mattn/efm-langserver
 			-- npm install prettier
@@ -445,10 +405,7 @@ require('lazy').setup({
 
 			-- npm i typescript-language-server
 			nvim_lsp.ts_ls.setup({
-				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false
-					on_attach(client, bufnr)
-				end,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' },
 				init_options = {
@@ -468,10 +425,7 @@ require('lazy').setup({
 			-- json, css, html, eslint
 			-- npm i vscode-langservers-extracted
 			nvim_lsp.jsonls.setup({
-				on_attach = function(client, bufnr)
-					client.server_capabilities.document_formatting = false
-					on_attach(client, bufnr)
-				end,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
 			})
@@ -838,7 +792,7 @@ require('lazy').setup({
 
 	{
 		'lewis6991/gitsigns.nvim',
-		cmd = 'Gitsigns',
+		event = 'BufEnter',
 		config = function()
 			require('gitsigns').setup()
 		end

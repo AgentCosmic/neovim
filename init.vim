@@ -26,6 +26,8 @@ set scrolloff=4 " keep padding around cursor
 set showcmd " display incomplete commands
 set selection=inclusive " include the last character, required by some plugins
 set inccommand=split " live preview of substitutions in a split
+set winborder=rounded
+set completeopt=menu,menuone,noselect,popup,fuzzy
 
 " Disable backup litters
 set nobackup
