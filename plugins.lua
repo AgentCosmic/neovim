@@ -196,9 +196,7 @@ require('lazy').setup({
 	{
 		'kylechui/nvim-surround',
 		event = 'BufRead',
-		config = function()
-			require('nvim-surround').setup({})
-		end
+		opts = {}
 	},
 
 	{
@@ -263,7 +261,10 @@ require('lazy').setup({
 
 	{
 		'neovim/nvim-lspconfig',
-		dependencies = { 'saghen/blink.cmp' },
+		dependencies = {
+			'saghen/blink.cmp',
+			'antosha417/nvim-lsp-file-operations',
+		},
 		ft = {
 			'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
@@ -723,6 +724,15 @@ require('lazy').setup({
 	},
 
 	{
+		'antosha417/nvim-lsp-file-operations',
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			'nvim-neo-tree/neo-tree.nvim',
+		},
+		opts = {}
+	},
+
+	{
 		'mbbill/undotree',
 		cmd = 'UndotreeToggle',
 		init = function()
@@ -793,9 +803,7 @@ require('lazy').setup({
 	{
 		'lewis6991/gitsigns.nvim',
 		event = 'BufEnter',
-		config = function()
-			require('gitsigns').setup()
-		end
+		opts = {}
 	},
 
 
