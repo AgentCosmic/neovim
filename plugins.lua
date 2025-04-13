@@ -27,60 +27,65 @@ require('lazy').setup({
 	{
 		'saghen/blink.cmp',
 		version = '1.*',
-		---@module 'blink.cmp'
-		---@type blink.cmp.Config
-		opts = {
-			keymap = {
-				preset = 'default',
-				['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
-				['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
-				['<CR>'] = { 'accept', 'fallback' },
-				['<C-e>'] = {},
-			},
-			completion = {
-				documentation = {
-					auto_show = true,
-					auto_show_delay_ms = 500,
+		config = function()
+			local blink = require('blink.cmp')
+			blink.setup({
+				keymap = {
+					preset = 'default',
+					['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+					['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+					['<CR>'] = { 'accept', 'fallback' },
+					['<C-e>'] = {},
 				},
-				keyword = { range = 'prefix' },
-				trigger = {
-					show_on_keyword = true,
-					show_on_trigger_character = true,
-					show_in_snippet = false,
-				},
-				list = {
-					selection = {
-						preselect = false,
-						auto_insert = true,
-					}
-				},
-				menu = {
-					max_height = 20,
-				},
-			},
-			cmdline = { enabled = true },
-			signature = { enabled = true },
-			sources = {
-				default = { 'lsp', 'buffer', 'path', 'snippets' },
-				providers = {
-					lsp = {
-						-- remove language keywords/constants (if, else, while, etc.) provided by the language server
-						name = 'LSP',
-						module = 'blink.cmp.sources.lsp',
-						transform_items = function(_, items)
-							return vim.tbl_filter(function(item)
-								return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-							end, items)
-						end,
+				completion = {
+					documentation = {
+						auto_show = true,
+						auto_show_delay_ms = 500,
 					},
-					snippets = {
-						opts = {
-							search_paths = { vim.env.ROOT .. '/snippets' },
+					keyword = { range = 'prefix' },
+					trigger = {
+						show_on_keyword = true,
+						show_on_trigger_character = true,
+						show_in_snippet = false,
+					},
+					list = {
+						selection = {
+							preselect = false,
+							auto_insert = true,
+						}
+					},
+					menu = {
+						max_height = 20,
+					},
+				},
+				cmdline = { enabled = true },
+				signature = { enabled = true },
+				sources = {
+					default = { 'lsp', 'buffer', 'path', 'snippets' },
+					providers = {
+						lsp = {
+							-- remove language keywords/constants (if, else, while, etc.) provided by the language server
+							name = 'LSP',
+							module = 'blink.cmp.sources.lsp',
+							transform_items = function(_, items)
+								return vim.tbl_filter(function(item)
+									return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
+								end, items)
+							end,
+						},
+						snippets = {
+							opts = {
+								search_paths = { vim.env.ROOT .. '/snippets' },
+							},
 						},
 					},
 				},
-			},
-		},
+			})
+
+			vim.lsp.config('*', {
+				capabilities = blink.get_lsp_capabilities({}, false),
+			})
+		end,
 		opts_extend = { 'sources.default' }
 	},
 
@@ -261,10 +266,6 @@ require('lazy').setup({
 
 	{
 		'neovim/nvim-lspconfig',
-		dependencies = {
-			'saghen/blink.cmp',
-			'antosha417/nvim-lsp-file-operations',
-		},
 		ft = {
 			'json', 'yaml', 'markdown',
 			'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
@@ -274,50 +275,28 @@ require('lazy').setup({
 		config = function()
 			local nvim_lsp = require('lspconfig')
 
-			function Organize_imports()
-				vim.lsp.buf.execute_command({
-					command = '_typescript.organizeImports',
-					arguments = { vim.api.nvim_buf_get_name(0) },
-				})
-			end
+			-- set keybindings once the language server attaches to the buffer
+			vim.api.nvim_create_autocmd('LspAttach', {
+				group = vim.api.nvim_create_augroup('my.lsp', {}),
+				callback = function(args)
+					local opts = { noremap = true, silent = true }
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
+					vim.api.nvim_buf_set_keymap(args.buf, 'n', '<leader>ih',
+						'<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', opts)
+				end,
+			})
 
-			-- Use an on_attach function to only map the following keys after the language server attaches to the current buffer
-			local on_attach = function(client, bufnr)
-				local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-				local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-				-- Enable completion triggered by <c-x><c-o>
-				buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-				-- Mappings.
-				local opts = { noremap = true, silent = true }
-
-				-- See `:help vim.lsp.*` for documentation on any of the below functions
-				buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-				buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-				buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
-				buf_set_keymap('n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
-				buf_set_keymap('n', 'g=', '<cmd>lua vim.lsp.buf.format({ async = true })<cr>', opts)
-				buf_set_keymap('n', '<leader>oi', '<cmd>lua Organize_imports()<cr>', opts)
-				buf_set_keymap('n', '<leader>ih',
-					'<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', opts)
-			end
-
-			-- diagnostics messages
+			-- diagnostics
 			vim.diagnostic.config({ virtual_text = { current_line = true } })
-			-- diagnostic signs
 			local signs = { Error = '', Warn = '', Hint = '', Info = '' }
 			for type, icon in pairs(signs) do
 				local hl = 'DiagnosticSign' .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl })
 			end
-
-			-- set capabilities from plugins
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend('force', capabilities,
-				require('blink.cmp').get_lsp_capabilities({}, false))
-			capabilities = vim.tbl_deep_extend('force', capabilities,
-				require('lsp-file-operations').default_capabilities())
 
 			-- this is where we install all the language servers
 			local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
@@ -334,8 +313,6 @@ require('lazy').setup({
 			end
 			local prettier_cmd = prettier_path .. prettier_config
 			nvim_lsp.efm.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/efm-langserver' },
 				init_options = {
 					documentFormatting = true,
@@ -399,15 +376,11 @@ require('lazy').setup({
 
 			-- npm i yaml-language-server
 			nvim_lsp.yamlls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
 			})
 
 			-- npm i typescript-language-server
 			nvim_lsp.ts_ls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/typescript-language-server', '--stdio' },
 				init_options = {
 					preferences = {
@@ -421,74 +394,62 @@ require('lazy').setup({
 						importModuleSpecifierPreference = 'non-relative'
 					},
 				},
+				commands = {
+					OrganizeImports = {
+						function()
+							vim.lsp.buf.execute_command({
+								command = '_typescript.organizeImports',
+								arguments = { vim.api.nvim_buf_get_name(0) },
+							})
+						end,
+						description = 'Fix all eslint problems for this buffer',
+					},
+				},
 			})
 
 			-- json, css, html, eslint
 			-- npm i vscode-langservers-extracted
 			nvim_lsp.jsonls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
 			})
 			nvim_lsp.html.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-html-language-server', '--stdio' },
 			})
 			nvim_lsp.cssls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-css-language-server', '--stdio' },
-				settings = {
-					css = {
-						validate = false,
-					}
-				}
 			})
 			nvim_lsp.eslint.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
 			})
 
 			-- npm i stylelint-lsp
 			nvim_lsp.stylelint_lsp.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/stylelint-lsp', '--stdio' },
 				filetypes = { 'css', 'less', 'scss', 'vue' },
 			})
 
 			-- npm i bash-language-server
 			nvim_lsp.bashls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/bash-language-server', 'start' },
 			})
 
 			-- lua https://github.com/LuaLS/lua-language-server/releases
 			nvim_lsp.lua_ls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/lua_ls/bin/lua-language-server' },
 			})
 
 			-- pip install basedpyright
 			nvim_lsp.basedpyright.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/venv/bin/basedpyright-langserver', '--stdio' },
 				settings = {
 					basedpyright = {
-						typeCheckingMode = 'standard',
+						-- typeCheckingMode = 'standard',
 					},
 				}
 			})
 
 			-- go install -v golang.org/x/tools/gopls
 			nvim_lsp.gopls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				settings = {
 					gopls = {
 						['ui.inlayhint.hints'] = {
@@ -504,24 +465,8 @@ require('lazy').setup({
 				},
 			})
 
-			-- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
-			-- npm i @nomicfoundation/solidity-language-server
-			require('lspconfig.configs').solidity = {
-				default_config = {
-					cmd = { lsp_bins .. '/node_modules/.bin/nomicfoundation-solidity-language-server', '--stdio' },
-					filetypes = { 'solidity' },
-					single_file_support = true,
-				},
-			}
-			nvim_lsp.solidity.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
-
 			-- npm i @vue/language-server typescript-language-server
 			nvim_lsp.volar.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
 				cmd = { lsp_bins .. '/node_modules/.bin/vue-language-server', '--stdio' },
 				init_options = {
 					typescript = {
@@ -530,37 +475,45 @@ require('lazy').setup({
 				},
 			})
 
-			-- https://github.com/razzmatazz/csharp-language-server
-			nvim_lsp.csharp_ls.setup {}
+			------------------------------------------------------------------------------
+			-- Unused, outdated, or not working
+			------------------------------------------------------------------------------
 
-			-- rustup component add rust-analyzer
-			nvim_lsp.rust_analyzer.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				settings = {
-					['rust-analyzer'] = {
-						diagnostics = {
-							enable = false,
-						}
-					}
-				}
-			})
-
-			-- https://github.com/eclipse/eclipse.jdt.ls
-			-- https://download.eclipse.org/jdtls/milestones/0.57.0/
-			-- using v0.57 because newer versions require java 17
-			nvim_lsp.jdtls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				cmd = { 'java', '-jar', lsp_bins ..
-				'/jdtls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
-					'-Declipse.application=org.eclipse.jdt.ls.core.id1', '-Dosgi.bundles.defaultStartLevel=4',
-					'-Declipse.product=org.eclipse.jdt.ls.core.product', '-Dlog.protocol=true', '-Dlog.level=ALL',
-					'-Xms1g',
-					'-Xmx2G', '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens',
-					'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '/jdtls/config_win', '-data',
-					lsp_bins .. '/jdtls/workspace' }
-			})
+			-- -- https://github.com/NomicFoundation/hardhat-vscode/blob/development/server/README.md
+			-- -- npm i @nomicfoundation/solidity-language-server
+			-- nvim_lsp.solidity.setup({
+			-- 	cmd = { lsp_bins .. '/node_modules/.bin/nomicfoundation-solidity-language-server', '--stdio' },
+			-- 	filetypes = { 'solidity' },
+			-- 	single_file_support = true,
+			-- })
+			--
+			-- -- https://github.com/razzmatazz/csharp-language-server
+			-- nvim_lsp.csharp_ls.setup {}
+			--
+			-- -- rustup component add rust-analyzer
+			-- nvim_lsp.rust_analyzer.setup({
+			-- 	settings = {
+			-- 		['rust-analyzer'] = {
+			-- 			diagnostics = {
+			-- 				enable = false,
+			-- 			}
+			-- 		}
+			-- 	}
+			-- })
+			--
+			-- -- https://github.com/eclipse/eclipse.jdt.ls
+			-- -- https://download.eclipse.org/jdtls/milestones/0.57.0/
+			-- -- using v0.57 because newer versions require java 17
+			-- nvim_lsp.jdtls.setup({
+			-- 	cmd = { 'java', '-jar', lsp_bins ..
+			-- 	'/jdtls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar',
+			-- 		'-Declipse.application=org.eclipse.jdt.ls.core.id1', '-Dosgi.bundles.defaultStartLevel=4',
+			-- 		'-Declipse.product=org.eclipse.jdt.ls.core.product', '-Dlog.protocol=true', '-Dlog.level=ALL',
+			-- 		'-Xms1g',
+			-- 		'-Xmx2G', '--add-modules=ALL-SYSTEM', '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens',
+			-- 		'java.base/java.lang=ALL-UNNAMED', '-configuration', lsp_bins .. '/jdtls/config_win', '-data',
+			-- 		lsp_bins .. '/jdtls/workspace' }
+			-- })
 		end
 	},
 
@@ -729,7 +682,13 @@ require('lazy').setup({
 			'nvim-lua/plenary.nvim',
 			'nvim-neo-tree/neo-tree.nvim',
 		},
-		opts = {}
+		config = function()
+			local lsp_file_operations = require('lsp-file-operations')
+			lsp_file_operations.setup({})
+			vim.lsp.config('*', {
+				capabilities = lsp_file_operations.default_capabilities(),
+			})
+		end,
 	},
 
 	{
