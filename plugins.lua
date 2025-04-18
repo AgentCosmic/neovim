@@ -142,7 +142,8 @@ require('lazy').setup({
 	{
 		'neovim/nvim-lspconfig',
 		event = 'BufRead',
-		opts = {},
+		config = function()
+		end
 	},
 
 	{

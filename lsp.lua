@@ -37,10 +37,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 		if client.name == 'ts_ls' then
 			vim.api.nvim_buf_create_user_command(args.buf, 'OrganizeImports', function()
-				vim.lsp.buf.execute_command({
-					command = '_typescript.organizeImports',
-					arguments = { vim.api.nvim_buf_get_name(0) },
-				})
+				client:exec_cmd({
+						title = 'organize_imports',
+						command = '_typescript.organizeImports',
+						arguments = {
+							vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+						}
+					},
+					{ bufnr = vim.api.nvim_get_current_buf() })
 			end, {})
 		end
 	end,
