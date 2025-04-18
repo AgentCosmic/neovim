@@ -339,3 +339,5 @@ set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 
 command! EPlugin :e $ROOT/plugins.lua
 luafile $ROOT/plugins.lua
+command! ELsp :e $ROOT/lsp.lua
+luafile $ROOT/lsp.lua
