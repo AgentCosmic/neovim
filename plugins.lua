@@ -263,6 +263,21 @@ require('lazy').setup({
 		end
 	},
 
+	{
+		'supermaven-inc/supermaven-nvim',
+		config = function()
+			require('supermaven-nvim').setup({
+				keymaps = {
+					accept_suggestion = '<c-tab>',
+				},
+			})
+		end,
+		-- alternatives
+		-- Exafunction/windsurf.nvim
+		-- Exafunction/windsurf.vim
+		-- monkoose/neocodeium
+	},
+
 
 	------------------------------------------------------------------------------
 	-- UI
@@ -423,21 +438,6 @@ require('lazy').setup({
 	},
 
 	{
-		'antosha417/nvim-lsp-file-operations',
-		dependencies = {
-			'nvim-lua/plenary.nvim',
-			'nvim-neo-tree/neo-tree.nvim',
-		},
-		config = function()
-			local lsp_file_operations = require('lsp-file-operations')
-			lsp_file_operations.setup({})
-			vim.lsp.config('*', {
-				capabilities = lsp_file_operations.default_capabilities(),
-			})
-		end,
-	},
-
-	{
 		'mbbill/undotree',
 		cmd = 'UndotreeToggle',
 		init = function()
@@ -516,6 +516,39 @@ require('lazy').setup({
 	-- Evaluating
 	------------------------------------------------------------------------------
 
+
+	{
+		-- not working?
+		'antosha417/nvim-lsp-file-operations',
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			'nvim-neo-tree/neo-tree.nvim',
+		},
+		config = function()
+			local lsp_file_operations = require('lsp-file-operations')
+			lsp_file_operations.setup()
+			vim.lsp.config('*', {
+				capabilities = lsp_file_operations.default_capabilities(),
+			})
+		end,
+	},
+
+	{
+		'folke/trouble.nvim',
+		opts = {
+			auto_preview = false,
+		},
+		cmd = 'Trouble',
+	},
+
+	-- {
+	-- 	'sindrets/diffview.nvim',
+	-- 	opts = {},
+	-- },
+
+	-- {
+	-- 	'NeogitOrg/neogit',
+	-- },
 
 }, {
 	lockfile = vim.env.ROOT .. '/lazy-lock.json',
