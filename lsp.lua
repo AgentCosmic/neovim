@@ -123,7 +123,6 @@ vim.lsp.config('efm', {
 			},
 			python = {
 				{ formatCommand = lsp_bins .. '/venv/bin/ruff format --quiet -', formatStdin = true },
-				{ formatCommand = lsp_bins .. '/venv/bin/isort --quiet -',       formatStdin = true },
 			},
 			vue = {
 				{ formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true },

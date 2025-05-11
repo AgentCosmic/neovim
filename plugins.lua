@@ -141,7 +141,6 @@ require('lazy').setup({
 
 	{
 		'neovim/nvim-lspconfig',
-		event = 'BufRead',
 		config = function()
 		end
 	},
@@ -166,10 +165,8 @@ require('lazy').setup({
 							['ab'] = '@block.outer',
 							['af'] = '@function.outer',
 							['if'] = '@function.inner',
-							['ic'] = '@conditional.inner',
-							['ac'] = '@conditional.outer',
-							['il'] = '@loop.inner',
-							['al'] = '@loop.outer',
+							['ic'] = '@class.inner',
+							['ac'] = '@class.outer',
 							['ip'] = '@parameter.inner',
 							['ap'] = '@parameter.outer',
 						},
@@ -178,23 +175,17 @@ require('lazy').setup({
 						enable = true,
 						goto_next_start = {
 							[']f'] = '@function.outer',
-							[']c'] = '@conditional.outer',
-							[']l'] = '@loop.outer',
+							[']r'] = '@return.outer',
 						},
 						goto_next_end = {
 							[']F'] = '@function.outer',
-							[']C'] = '@conditional.outer',
-							[']L'] = '@loop.outer',
 						},
 						goto_previous_start = {
 							['[f'] = '@function.outer',
-							['[c'] = '@conditional.outer',
-							['[l'] = '@loop.outer',
+							['[r'] = '@return.outer',
 						},
 						goto_previous_end = {
 							['[F'] = '@function.outer',
-							['[C'] = '@conditional.outer',
-							['[L'] = '@loop.outer',
 						},
 					},
 				},
