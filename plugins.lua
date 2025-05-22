@@ -442,7 +442,8 @@ require('lazy').setup({
 		cmd = { 'VimuxPromptCommand', 'VimuxSendKeys', 'VimuxOpenRunner', 'VimuxRunCommand' },
 		init = function()
 			vim.g.VimuxOrientation = 'h'
-			vim.g.VimuxCloseOnExit = 1
+			vim.g.VimuxHeight = '33%'
+			-- vim.g.VimuxCloseOnExit = 1
 			local opts = { noremap = true, silent = true }
 			vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', opts)
 			vim.keymap.set('n', '<leader>th', ':update | call VimuxSendKeys("c-c enter up enter")<cr>', opts)
