@@ -16,9 +16,9 @@ cd "$ROOT"
 # essential
 if [ "$#" -ne 1 ]; then
 	# efm
-	EFM="efm-langserver_v0.0.53_linux_$(dpkg --print-architecture)"
+	EFM="efm-langserver_v0.0.54_linux_$(dpkg --print-architecture)"
 	if [ ! -f "efm-langserver" ]; then
-		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.53/$EFM.tar.gz"
+		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.54/$EFM.tar.gz"
 		echo "$EFM.tar.gz"
 		tar -xf "$EFM.tar.gz"
 		mv "$EFM/efm-langserver" .

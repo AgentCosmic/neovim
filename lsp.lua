@@ -64,7 +64,7 @@ local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
 
 -- go get github.com/mattn/efm-langserver
 -- npm install prettier
--- pip install ruff isort
+-- pip install ruff
 -- npm i bash-language-server prettier-plugin-solidity
 local prettier_path = './node_modules/.bin/prettier' -- default to local
 local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
@@ -123,6 +123,7 @@ vim.lsp.config('efm', {
 			},
 			python = {
 				{ formatCommand = lsp_bins .. '/venv/bin/ruff format --quiet -', formatStdin = true },
+				{ formatCommand = lsp_bins .. '/venv/bin/ruff check --fix --quiet -', formatStdin = true },
 			},
 			vue = {
 				{ formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true },
