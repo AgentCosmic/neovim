@@ -10,6 +10,7 @@ vim.lsp.enable({
 	'bashls',
 	'lua_ls',
 	'basedpyright',
+	'ruff',
 	'gopls',
 })
 
@@ -46,6 +47,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 					{ bufnr = vim.api.nvim_get_current_buf() })
 			end, {})
 		end
+
+		-- disable Ruff hover in favor of Pyright
+		if client.name == 'ruff' then
+			client.server_capabilities.hoverProvider = false
+		end
 	end,
 })
 
@@ -63,7 +69,6 @@ local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
 
 -- go get github.com/mattn/efm-langserver
 -- npm install prettier
--- pip install ruff
 -- npm i bash-language-server prettier-plugin-solidity
 local prettier_path = './node_modules/.bin/prettier' -- default to local
 local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
@@ -84,7 +89,7 @@ vim.lsp.config('efm', {
 	filetypes = {
 		'json', 'yaml', 'markdown',
 		'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-		'sh', 'python',
+		'sh',
 		'vue', 'solidity'
 	},
 	settings = {
@@ -119,10 +124,6 @@ vim.lsp.config('efm', {
 			},
 			sh = {
 				{ lintCommand = lsp_bins .. '/shellcheck -f gcc -x' },
-			},
-			python = {
-				{ formatCommand = lsp_bins .. '/venv/bin/ruff format --quiet -', formatStdin = true },
-				{ formatCommand = lsp_bins .. '/venv/bin/ruff check --fix --quiet -', formatStdin = true },
 			},
 			vue = {
 				{ formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true },
@@ -218,6 +219,17 @@ vim.lsp.config('lua_ls', {
 -- pip install basedpyright
 vim.lsp.config('basedpyright', {
 	cmd = { lsp_bins .. '/venv/bin/basedpyright-langserver', '--stdio' },
+	settings = {
+		pyright = {
+			-- using Ruff's import organizer
+			disableOrganizeImports = true,
+		},
+	},
+})
+
+-- pip install ruff
+vim.lsp.config('ruff', {
+	cmd = { lsp_bins .. '/venv/bin/ruff', 'server' },
 })
 
 -- go install -v golang.org/x/tools/gopls

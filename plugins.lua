@@ -277,7 +277,7 @@ require('lazy').setup({
 
 
 	{
-		'noib3/nvim-cokeline',
+		'willothy/nvim-cokeline',
 		tag = 'v0.4.0',
 		event = 'BufRead',
 		config = function()
