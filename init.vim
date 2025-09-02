@@ -22,7 +22,7 @@ set signcolumn=yes " always show signcolumns
 set cursorline " highlight current line
 set previewheight=8 " smaller preview window
 set ruler " show the cursor position all the time
-set scrolloff=4 " keep padding around cursor
+set scrolloff=1 " keep padding around cursor
 set showcmd " display incomplete commands
 set selection=inclusive " include the last character, required by some plugins
 set inccommand=split " live preview of substitutions in a split
