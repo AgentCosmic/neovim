@@ -218,7 +218,7 @@ vim.lsp.config('lua_ls', {
 
 -- pip install basedpyright
 vim.lsp.config('basedpyright', {
-	cmd = { lsp_bins .. '/venv/bin/basedpyright-langserver', '--stdio' },
+	cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' },
 	settings = {
 		pyright = {
 			-- using Ruff's import organizer
@@ -229,7 +229,7 @@ vim.lsp.config('basedpyright', {
 
 -- pip install ruff
 vim.lsp.config('ruff', {
-	cmd = { lsp_bins .. '/venv/bin/ruff', 'server' },
+	cmd = { lsp_bins .. '/.venv/bin/ruff', 'server' },
 })
 
 -- go install -v golang.org/x/tools/gopls

@@ -62,8 +62,8 @@ if [ "$1" = 'lua' ]; then
 fi
 
 if [ "$1" = 'python' ]; then
-	python -m venv venv
-	venv/bin/pip install \
+	python -m venv .venv
+	.venv/bin/pip install \
 		basedpyright==1.27.1 \
 		ruff==0.9.6
 fi
