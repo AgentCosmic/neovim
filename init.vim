@@ -178,8 +178,8 @@ map Q gq
 nnoremap <bs> <c-^>
 
 " Use 0 to move to first non-whitespace since I already have home button
-nnoremap 0 ^
-vnoremap 0 ^
+" nnoremap 0 ^
+" vnoremap 0 ^
 
 " make k and l move one extra character
 onoremap l 2l
@@ -244,6 +244,9 @@ nmap <leader>c gcc
 
 " don't jump when search
 nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <bar> set hls <cr>
+
+" bring back <c-i> because it was used by <tab>
+nnoremap <c-s-i> <c-i>
 
 " Disable function keys in insert mode
 inoremap <F2> <esc><F2>

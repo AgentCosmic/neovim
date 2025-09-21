@@ -29,7 +29,7 @@ if [ "$#" -ne 1 ]; then
 		yaml-language-server@^1.6.0 \
 		prettier@^3.5.0 \
 		vscode-langservers-extracted@^4.1.0 \
-		typescript-language-server@^4.3.1 \
+		typescript-language-server@^5.0.0 \
 		stylelint-lsp@^2.0.0
 fi
 
@@ -54,8 +54,8 @@ if [ "$1" = 'lua' ]; then
 		echo Architecture not supported
 		exit
 	fi
-	LUALS="lua-language-server-3.13.6-linux-$ARCH.tar.gz"
-	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.13.6/$LUALS"
+	LUALS="lua-language-server-3.15.0-linux-$ARCH.tar.gz"
+	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.15.0/$LUALS"
 	mkdir -p lua_ls
 	tar -xf "$LUALS" --directory "$PWD/lua_ls"
 	rm "$LUALS"
@@ -64,8 +64,8 @@ fi
 if [ "$1" = 'python' ]; then
 	python -m venv .venv
 	.venv/bin/pip install \
-		basedpyright==1.27.1 \
-		ruff==0.9.6
+		basedpyright~=1.31 \
+		ruff~=0.13
 fi
 
 if [ "$1" = 'go' ]; then

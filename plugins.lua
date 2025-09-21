@@ -351,8 +351,6 @@ require('lazy').setup({
 			local map = vim.api.nvim_set_keymap
 			map('n', '<tab>', '<Plug>(cokeline-focus-next)', { silent = true })
 			map('n', '<s-tab>', '<Plug>(cokeline-focus-prev)', { silent = true })
-			map('n', '<c-tab>', '<Plug>(cokeline-switch-next)', { silent = true })
-			map('n', '<c-s-tab>', '<Plug>(cokeline-switch-prev)', { silent = true })
 			map('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
 			vim.api.nvim_create_user_command('MoveTabRight', function()
 				mappings.by_step('switch', 1)
@@ -530,10 +528,6 @@ require('lazy').setup({
 	},
 
 
-	------------------------------------------------------------------------------
-	-- Evaluating
-	------------------------------------------------------------------------------
-
 	{
 		'folke/trouble.nvim',
 		cmd = 'Trouble',
@@ -542,15 +536,74 @@ require('lazy').setup({
 		},
 	},
 
+	------------------------------------------------------------------------------
+	-- Evaluating
+	------------------------------------------------------------------------------
 
-	-- {
-	-- 	'sindrets/diffview.nvim',
-	-- 	opts = {},
-	-- },
-
-	-- {
-	-- 	'NeogitOrg/neogit',
-	-- },
+	{
+		'robitx/gp.nvim',
+		config = function()
+			local conf = {
+				providers = {
+					openrouter = {
+						endpoint = 'https://openrouter.ai/api/v1/chat/completions',
+						secret = os.getenv('OPENROUTER_API_KEY'),
+					},
+					googleai = {
+						endpoint =
+						'https://generativelanguage.googleapis.com/v1beta/models/{{model}}:streamGenerateContent?key={{secret}}',
+						secret = os.getenv("GEMINI_API_KEY"),
+					},
+					openai = {
+						disable = true,
+					}
+				},
+				agents = {
+					{
+						name = 'CodeDeepSeek',
+						provider = 'openrouter',
+						chat = false,
+						command = true,
+						model = { model = 'deepseek/deepseek-chat-v3-0324:free' },
+						system_prompt = require('gp.defaults').code_system_prompt,
+					},
+					{
+						name = 'CodeDevstral',
+						provider = 'openrouter',
+						chat = false,
+						command = true,
+						model = { model = 'mistralai/devstral-small-2505:free' },
+						system_prompt = require('gp.defaults').code_system_prompt,
+					},
+					{
+						name = 'ChatGeminiPro',
+						provider = 'googleai',
+						chat = true,
+						command = false,
+						model = { model = 'gemini-2.5-pro' },
+						system_prompt = require('gp.defaults').chat_system_prompt,
+					},
+					{
+						name = 'CodeGemini',
+						provider = 'googleai',
+						chat = false,
+						command = true,
+						model = { model = 'gemini-2.5-flash' },
+						system_prompt = require('gp.defaults').code_system_prompt,
+					},
+					{
+						name = 'ChatGemini',
+						provider = 'googleai',
+						chat = true,
+						command = false,
+						model = { model = 'gemini-2.5-flash' },
+						system_prompt = require('gp.defaults').chat_system_prompt,
+					},
+				},
+			}
+			require('gp').setup(conf)
+		end,
+	},
 
 }, {
 	lockfile = vim.env.ROOT .. '/lazy-lock.json',
