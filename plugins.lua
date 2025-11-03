@@ -260,7 +260,7 @@ require('lazy').setup({
 		config = function()
 			require('supermaven-nvim').setup({
 				keymaps = {
-					accept_suggestion = '<c-tab>',
+					accept_suggestion = '<c-b>',
 				},
 			})
 		end,
@@ -545,14 +545,14 @@ require('lazy').setup({
 		config = function()
 			local conf = {
 				providers = {
-					openrouter = {
-						endpoint = 'https://openrouter.ai/api/v1/chat/completions',
-						secret = os.getenv('OPENROUTER_API_KEY'),
-					},
 					googleai = {
 						endpoint =
 						'https://generativelanguage.googleapis.com/v1beta/models/{{model}}:streamGenerateContent?key={{secret}}',
 						secret = os.getenv("GEMINI_API_KEY"),
+					},
+					openrouter = {
+						endpoint = 'https://openrouter.ai/api/v1/chat/completions',
+						secret = os.getenv('OPENROUTER_API_KEY'),
 					},
 					openai = {
 						disable = true,
@@ -560,19 +560,11 @@ require('lazy').setup({
 				},
 				agents = {
 					{
-						name = 'CodeDeepSeek',
-						provider = 'openrouter',
+						name = 'CodeGemini',
+						provider = 'googleai',
 						chat = false,
 						command = true,
-						model = { model = 'deepseek/deepseek-chat-v3-0324:free' },
-						system_prompt = require('gp.defaults').code_system_prompt,
-					},
-					{
-						name = 'CodeDevstral',
-						provider = 'openrouter',
-						chat = false,
-						command = true,
-						model = { model = 'mistralai/devstral-small-2505:free' },
+						model = { model = 'gemini-2.5-flash' },
 						system_prompt = require('gp.defaults').code_system_prompt,
 					},
 					{
@@ -584,20 +576,28 @@ require('lazy').setup({
 						system_prompt = require('gp.defaults').chat_system_prompt,
 					},
 					{
-						name = 'CodeGemini',
-						provider = 'googleai',
-						chat = false,
-						command = true,
-						model = { model = 'gemini-2.5-flash' },
-						system_prompt = require('gp.defaults').code_system_prompt,
-					},
-					{
 						name = 'ChatGemini',
 						provider = 'googleai',
 						chat = true,
 						command = false,
 						model = { model = 'gemini-2.5-flash' },
 						system_prompt = require('gp.defaults').chat_system_prompt,
+					},
+					{
+						name = 'CodeDeepSeek',
+						provider = 'openrouter',
+						chat = false,
+						command = true,
+						model = { model = 'deepseek/deepseek-chat-v3.1:free' },
+						system_prompt = require('gp.defaults').code_system_prompt,
+					},
+					{
+						name = 'CodeQwen',
+						provider = 'openrouter',
+						chat = false,
+						command = true,
+						model = { model = 'qwen/qwen3-235b-a22b:free' },
+						system_prompt = require('gp.defaults').code_system_prompt,
 					},
 				},
 			}
