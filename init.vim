@@ -219,6 +219,8 @@ noremap <c-l> <c-w>l
 " Increment, decrement number
 nnoremap <a-up> <C-a>
 nnoremap <a-down> <C-x>
+vnoremap <a-up> <C-a>gv
+vnoremap <a-down> <C-x>gv
 nnoremap <a-s-up> 10<C-a>
 nnoremap <a-s-down> 10<C-x>
 

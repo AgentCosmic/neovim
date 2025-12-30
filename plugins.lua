@@ -570,10 +570,10 @@ require('lazy').setup({
 					{
 						name = 'ChatGeminiPro',
 						provider = 'googleai',
-						chat = true,
-						command = false,
+						chat = false,
+						command = true,
 						model = { model = 'gemini-2.5-pro' },
-						system_prompt = require('gp.defaults').chat_system_prompt,
+						system_prompt = require('gp.defaults').code_system_prompt,
 					},
 					{
 						name = 'ChatGemini',
