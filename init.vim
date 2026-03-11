@@ -14,7 +14,7 @@ set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
 set wildmenu " Auto complete on command line
-set wildignore+=*.swp,.git,*/node_modules/*,*/.venv/*,*/venv/*,*.pyc,*.png,*.jpg,*.jpeg,*.gif,desktop.ini,Thumbs.db " Ignore these files when searching
+set wildignore+=*.swp,.git,*/node_modules/*,*/.venv/*,*/venv/*,*/__pycache__/*,*.pyc,*.png,*.jpg,*.jpeg,*.gif,desktop.ini,Thumbs.db " Ignore these files when searching
 set hidden " Don't unload buffer when it's hidden
 set lazyredraw " Don't redraw while executing macros (good performance config)
 set synmaxcol=500 " Don't try to highlight lines longer than this
@@ -176,10 +176,6 @@ map Q gq
 
 " Alternate file switching
 nnoremap <bs> <c-^>
-
-" Use 0 to move to first non-whitespace since I already have home button
-" nnoremap 0 ^
-" vnoremap 0 ^
 
 " make k and l move one extra character
 onoremap l 2l
