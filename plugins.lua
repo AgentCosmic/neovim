@@ -207,7 +207,6 @@ require('lazy').setup({
 	{
 		'kylechui/nvim-surround',
 		event = 'BufRead',
-		opts = {}
 	},
 
 	{
