@@ -57,7 +57,16 @@ require('lazy').setup({
 						max_height = 20,
 					},
 				},
-				cmdline = { enabled = true },
+				cmdline = {
+					completion = {
+						list = {
+							selection = {
+								preselect = false,
+								auto_insert = true,
+							}
+						},
+					}
+				},
 				signature = { enabled = true },
 				sources = {
 					default = { 'lsp', 'buffer', 'path', 'snippets' },
@@ -542,6 +551,7 @@ require('lazy').setup({
 
 	{
 		'robitx/gp.nvim',
+		event = 'BufRead',
 		config = function()
 			local conf = {
 				providers = {
