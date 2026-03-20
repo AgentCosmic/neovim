@@ -28,6 +28,7 @@ set selection=inclusive " include the last character, required by some plugins
 set inccommand=split " live preview of substitutions in a split
 set winborder=rounded
 set completeopt=menu,menuone,noselect,popup,fuzzy
+set smoothscroll " smooth scroll for wrapped lines
 
 " Disable backup litters
 set nobackup
@@ -101,17 +102,6 @@ function! s:Repl()
 	return "p@=RestoreRegister()\<cr>"
 endfunction
 vmap <silent> <expr> p <sid>Repl()
-
-" enable cfilter plugin for filtering quickfix list
-packadd cfilter
-
-" Disable some native plugins to improve performance
-let g:loaded_gzip = 1 " for editing compressed files
-let g:loaded_netrwPlugin = 1 " for editing remote files
-let g:loaded_tarPlugin = 1 " for browsing tar files
-let g:loaded_2html_plugin = 1 " for generating HTML files with syntax highlight
-let g:loaded_tutor_mode_plugin = 1 " vim tutor
-let g:loaded_zipPlugin = 1 " for browsing zip files
 
 
 " ----- ----- ----- -----
@@ -333,6 +323,25 @@ endif
 " Make the cursor look nicer
 set guicursor+=v:hor50
 set guicursor+=a:blinkwait250-blinkon500-blinkoff250
+
+
+" ----- ----- ----- -----
+" Built-in Plugins
+" ----- ----- ----- -----
+
+packadd! cfilter
+
+" Disable some native plugins to improve performance
+let g:loaded_2html_plugin = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_gzip = 1
+let g:loaded_logiPat = 1
+let g:loaded_rrhelper = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_zipPlugin = 1
+
 
 " ----- ----- ----- -----
 " Others
