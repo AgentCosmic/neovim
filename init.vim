@@ -9,7 +9,7 @@ set runtimepath+=$ROOT
 
 set ignorecase " Ignore case when searching, but search capital if used
 set smartcase " But use it when there is uppercase
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !package-lock.json\ -g\ !poetry.lock\ -g\ !requirements.txt
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --fixed-strings\ --hidden\ -g\ !.git/*\ -g\ !package-lock.json\ -g\ !requirements.txt
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set history=50 " Keep 50 lines of command line history
 set path+=** " let's you fuzzy :find all files
