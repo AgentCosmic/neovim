@@ -85,10 +85,13 @@ augroup vimrcBehavior
     autocmd QuickFixCmdPost [^l]* cwindow
     autocmd QuickFixCmdPost l* lwindow
 
+	" Quit help buffer with q keymap
+	autocmd FileType help nnoremap <buffer> q :q<cr>
+
 	" Highlight yanked region
 	autocmd TextYankPost * lua vim.highlight.on_yank {higroup="Visual", timeout=200, on_visual=true}
 
-	" fix missing sql commentstring
+	" Fix missing sql commentstring
 	autocmd FileType sql setlocal commentstring=--\ %s
 augroup END
 
@@ -262,11 +265,11 @@ command! TabToSpace :set expandtab | retab!
 command! BufOnly :%bd | e# | bd#
 
 " Edit a macro using cq(macro name)
-function! ChangeReg() abort
+function! s:ChangeReg() abort
 	let x = nr2char(getchar())
 	call feedkeys("q:ilet @" . x . " = \<c-r>\<c-r>=string(@" . x . ")\<cr>\<esc>0f'", 'n')
 endfun
-nnoremap cr :call ChangeReg()<cr>
+nnoremap cr :call <sid>ChangeReg()<cr>
 
 " Add :gr as a shortcut to run :grep without needing to press <cr>
 " https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
@@ -277,7 +280,7 @@ command! -nargs=+ -complete=file -bar Grep cgetexpr Grep(<f-args>)
 cnoreabbrev <expr> gr  (getcmdtype() ==# ':' && getcmdline() ==# 'gr')  ? 'Grep' : 'grep'
 
 " When using `dd` in the quickfix list, remove the item from the quickfix list.
-function! RemoveQFItem(mode) range abort
+function! s:RemoveQFItem(mode) range abort
   let l:qf_list = getqflist()
 
   " distinguish mode for getting delete index and delete count
@@ -303,8 +306,8 @@ function! RemoveQFItem(mode) range abort
   endif
 endfunction
 
-autocmd FileType qf nmap <buffer> dd :call RemoveQFItem('n')<cr>
-autocmd FileType qf vmap <buffer> dd :call RemoveQFItem('v')<cr>
+autocmd FileType qf nmap <buffer> dd :call <sid>RemoveQFItem('n')<cr>
+autocmd FileType qf vmap <buffer> dd :call <sid>RemoveQFItem('v')<cr>
 
 
 " ----- ----- ----- -----
