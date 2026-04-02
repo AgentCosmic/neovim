@@ -28,6 +28,7 @@ set selection=inclusive " include the last character, required by some plugins
 set inccommand=split " live preview of substitutions in a split
 set winborder=rounded
 set completeopt=menu,menuone,noselect,popup,fuzzy
+set pumborder=rounded
 set smoothscroll " smooth scroll for wrapped lines
 
 " Disable backup litters
@@ -46,13 +47,13 @@ set number
 
 " Status line
 set laststatus=3 " always show only 1 statusline
-set statusline=
-set statusline+=%{%&modified?'%#StatusModified#':'%#StatusUnmodified#'%} " highlight modified
+set statusline=%{%&modified?'%#StatusModified#':'%#StatusUnmodified#'%} " highlight modified
 set statusline+=\ \ %{%&modified?'%#StatusArrowModified#':'%#StatusArrowUnmodified#'%}|
 set statusline+=%#StatusPath#
 set statusline+=\ %f " working directory followed by file path
 set statusline+=\ %r%h%w%q%m\  " flags: readonly, help, preview, list, modified
 set statusline+=%#StatusArrowPath#%#StatusArrowPath2#
+set statusline+=\ %#StatusDiagnostics#%{StatuslineDiagnostics()}
 set statusline+=%= " right align from here
 set statusline+=%#StatusPositionArrow#%#StatusPositionArrow2#
 set statusline+=%#StatusPosition#
@@ -63,6 +64,14 @@ set statusline+=\ %{&ff}\ 󰇙\ %{strlen(&fenc)?&fenc:'none'}\ | " filetype, for
 set statusline+=%#StatusFiletypeArrow#
 set statusline+=%#StatusFiletype#
 set statusline+=\ 󰅩\ %{&ft}\ |
+function! StatuslineDiagnostics()
+	let total = len(v:lua.vim.diagnostic.get(0, { 'severity': 1 }))
+	if total > 0
+		return ' ' . total
+	else
+		return ''
+	endif
+endfunc
 
 augroup vimrcBehavior
 	autocmd!
@@ -335,7 +344,6 @@ set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 packadd! cfilter
 
 " Disable some native plugins to improve performance
-let g:loaded_2html_plugin = 1
 let g:loaded_getscriptPlugin = 1
 let g:loaded_gzip = 1
 let g:loaded_logiPat = 1

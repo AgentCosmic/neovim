@@ -19,11 +19,6 @@ require('lazy').setup({
 
 
 	{
-		'wellle/targets.vim',
-		event = 'BufRead',
-	},
-
-	{
 		'saghen/blink.cmp',
 		version = '1.*',
 		config = function()
@@ -86,6 +81,9 @@ require('lazy').setup({
 								search_paths = { vim.env.ROOT .. '/snippets' },
 							},
 						},
+						cmdline = {
+							enabled = true,
+						}
 					},
 				},
 			})
@@ -156,52 +154,95 @@ require('lazy').setup({
 
 	{
 		'nvim-treesitter/nvim-treesitter',
+		branch = 'main',
 		dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
+		lazy = false,
 		build = ':TSUpdate',
 		config = function()
-			require('nvim-treesitter.configs').setup({
-				ensure_installed = { 'vim', 'vimdoc', 'lua', 'javascript', 'typescript', 'html', 'css', 'python', 'markdown', 'tsx', 'vue', 'go' },
-				auto_install = false,
-				indent = {
-					enable = true,
-				},
-				textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
-						keymaps = {
-							['ib'] = '@block.inner',
-							['ab'] = '@block.outer',
-							['af'] = '@function.outer',
-							['if'] = '@function.inner',
-							['ic'] = '@class.inner',
-							['ac'] = '@class.outer',
-							['ip'] = '@parameter.inner',
-							['ap'] = '@parameter.outer',
-						},
-					},
-					move = {
-						enable = true,
-						goto_next_start = {
-							[']f'] = '@function.outer',
-							[']r'] = '@return.outer',
-						},
-						goto_next_end = {
-							[']F'] = '@function.outer',
-						},
-						goto_previous_start = {
-							['[f'] = '@function.outer',
-							['[r'] = '@return.outer',
-						},
-						goto_previous_end = {
-							['[F'] = '@function.outer',
-						},
-					},
-				},
-			})
+			require('nvim-treesitter').install({ 'vim', 'vimdoc', 'lua', 'javascript', 'typescript', 'html', 'css',
+				'python', 'markdown', 'tsx', 'vue', 'go' })
 			vim.opt.foldmethod = 'expr'
 			vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+			vim.bo.indentexpr = 'v:lua.require("nvim-treesitter").indentexpr()'
 		end
+	},
+
+	{
+		'nvim-treesitter/nvim-treesitter-textobjects',
+		branch = 'main',
+		lazy = false,
+		init = function()
+			-- Disable entire built-in ftplugin mappings to avoid conflicts.
+			vim.g.no_plugin_maps = true
+		end,
+		config = function()
+			require('nvim-treesitter-textobjects').setup {
+				select = {
+					-- Automatically jump forward to textobj
+					lookahead = true,
+					-- Use linewise selection for some textobj
+					selection_modes = {
+						['@function.outer'] = 'V',
+						['@class.outer'] = 'V',
+						['@block.outer'] = 'V',
+					},
+				},
+			}
+
+			vim.keymap.set({ 'x', 'o' }, 'af', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@function.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'x', 'o' }, 'if', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@function.inner', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
+				require('nvim-treesitter-textobjects.move').goto_next_start('@function.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
+				require('nvim-treesitter-textobjects.move').goto_previous_start('@function.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'x', 'o' }, 'ac', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@class.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'x', 'o' }, 'ic', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@class.inner', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, ']C', function()
+				require('nvim-treesitter-textobjects.move').goto_next_start('@class.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, '[C', function()
+				require('nvim-treesitter-textobjects.move').goto_previous_start('@class.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'x', 'o' }, 'ab', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@block.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'x', 'o' }, 'ib', function()
+				require 'nvim-treesitter-textobjects.select'.select_textobject('@block.inner', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, ']b', function()
+				require('nvim-treesitter-textobjects.move').goto_next_start('@block.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, '[b', function()
+				require('nvim-treesitter-textobjects.move').goto_previous_start('@block.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, ']r', function()
+				require('nvim-treesitter-textobjects.move').goto_next_start('@return.outer', 'textobjects')
+			end)
+			vim.keymap.set({ 'n', 'x', 'o' }, '[r', function()
+				require('nvim-treesitter-textobjects.move').goto_previous_start('@return.outer', 'textobjects')
+			end)
+
+			local ts_repeat_move = require 'nvim-treesitter-textobjects.repeatable_move'
+			-- Repeat movement with ; and ,
+			-- vim way: ; goes to the direction you were moving.
+			vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
+			vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
+			-- make builtin f, F, t, T also repeatable with ; and ,
+			vim.keymap.set({ 'n', 'x', 'o' }, 'f', ts_repeat_move.builtin_f_expr, { expr = true })
+			vim.keymap.set({ 'n', 'x', 'o' }, 'F', ts_repeat_move.builtin_F_expr, { expr = true })
+			vim.keymap.set({ 'n', 'x', 'o' }, 't', ts_repeat_move.builtin_t_expr, { expr = true })
+			vim.keymap.set({ 'n', 'x', 'o' }, 'T', ts_repeat_move.builtin_T_expr, { expr = true })
+		end,
 	},
 
 	{
@@ -286,13 +327,12 @@ require('lazy').setup({
 
 	{
 		'willothy/nvim-cokeline',
-		tag = 'v0.4.0',
 		event = 'BufRead',
 		config = function()
 			local mappings = require('cokeline/mappings')
 			local is_picking_focus = mappings.is_picking_focus
 			local is_picking_close = mappings.is_picking_close
-			local get_hex = require('cokeline/utils').get_hex
+			local get_hex = require('cokeline.hlgroups').get_hl_attr
 			require('cokeline').setup({
 				show_if_buffers_are_at_least = 0,
 				pick = {
@@ -461,14 +501,6 @@ require('lazy').setup({
 	},
 
 	{
-		'mbbill/undotree',
-		cmd = 'UndotreeToggle',
-		init = function()
-			vim.cmd 'cabbrev UT UndotreeToggle'
-		end
-	},
-
-	{
 		'preservim/vimux',
 		cmd = { 'VimuxPromptCommand', 'VimuxSendKeys', 'VimuxOpenRunner', 'VimuxRunCommand' },
 		init = function()
@@ -514,7 +546,7 @@ require('lazy').setup({
 		'uga-rosa/ccc.nvim',
 		ft = { 'css', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'vim' },
 		config = function()
-			local ccc = require("ccc")
+			local ccc = require('ccc')
 			ccc.setup({
 				highlighter = {
 					auto_enable = true,
@@ -557,7 +589,7 @@ require('lazy').setup({
 					googleai = {
 						endpoint =
 						'https://generativelanguage.googleapis.com/v1beta/models/{{model}}:streamGenerateContent?key={{secret}}',
-						secret = os.getenv("GEMINI_API_KEY"),
+						secret = os.getenv('GEMINI_API_KEY'),
 					},
 					openrouter = {
 						endpoint = 'https://openrouter.ai/api/v1/chat/completions',

@@ -115,7 +115,8 @@ call s:h('NonText', {'fg': s:fg3})
 call s:h('Normal', {'fg': s:fg1, 'bg': s:bg1})
 call s:h('NormalFloat', {'fg': s:fg1, 'bg': s:bg1})
 call s:h('FloatBorder', {'fg': s:fg3, 'bg': s:bg1})
-call s:h('Pmenu', {'fg': s:fg1, 'bg': s:bg3})
+call s:h('Pmenu', {'fg': s:fg1, 'bg': s:bg1})
+call s:h('PmenuBorder', {'fg': s:fg3, 'bg':s:bg1})
 call s:h('PmenuSel', {'fg': s:bg1, 'bg': s:green})
 call s:h('PmenuSbar', {'bg': s:bg3})
 call s:h('PmenuThumb', {'bg': s:fg3})
@@ -158,6 +159,7 @@ call s:h('StatusMiscArrow', {'fg': s:bg3, 'bg': s:bg0})
 call s:h('StatusMisc', {'fg': s:fg2, 'bg': s:bg3})
 call s:h('StatusFiletypeArrow', {'fg': s:bg0, 'bg': s:bg3})
 call s:h('StatusFiletype', {'fg': s:fg3, 'bg': s:bg0})
+call s:h('StatusDiagnostics', {'fg': s:red, 'bg': s:bg1})
 
 " ------------------------------------------------------------------------------
 
@@ -230,7 +232,3 @@ call s:h('HopUnmatched', {'fg': s:fg3})
 
 call s:h('CmpItemAbbrMatch', {'fg': s:fg1, 'gui': 'none'})
 call s:h('CmpItemKind', {'fg': s:orange})
-
-" telescope
-
-hi link TelescopeBorder FloatBorder
