@@ -233,8 +233,3 @@ call s:h('HopNextKey', {'fg': s:blue})
 call s:h('HopNextKey1', {'fg': s:orange})
 call s:h('HopNextKey2', {'fg': s:orange})
 call s:h('HopUnmatched', {'fg': s:fg3})
-
-" nvim-cmp
-
-call s:h('CmpItemAbbrMatch', {'fg': s:fg1, 'gui': 'none'})
-call s:h('CmpItemKind', {'fg': s:orange})
