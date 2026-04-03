@@ -116,10 +116,16 @@ call s:h('Normal', {'fg': s:fg1, 'bg': s:bg1})
 call s:h('NormalFloat', {'fg': s:fg1, 'bg': s:bg1})
 call s:h('FloatBorder', {'fg': s:fg3, 'bg': s:bg1})
 call s:h('Pmenu', {'fg': s:fg1, 'bg': s:bg1})
-call s:h('PmenuBorder', {'fg': s:fg3, 'bg':s:bg1})
 call s:h('PmenuSel', {'fg': s:bg1, 'bg': s:green})
-call s:h('PmenuSbar', {'bg': s:bg3})
-call s:h('PmenuThumb', {'bg': s:fg3})
+call s:h('PmenuKind', {'fg': s:fg3})
+call s:h('PmenuExtra', {'fg': s:fg3}) 
+call s:h('PmenuSbar', {'bg': s:bg0})
+call s:h('PmenuThumb', {'bg': s:bg3})
+call s:h('PmenuMatch', {'fg': s:fg1, 'gui': 'bold'})
+call s:h('PmenuMatchSel', {'fg': s:bg1, 'bg': s:green, 'gui': 'bold'})
+call s:h('PmenuBorder', {'fg': s:bg3, 'bg':s:bg1})
+call s:h('ComplMatchIns', {'fg': s:fg3})
+call s:h('ComplHint', {'fg': s:fg3})
 call s:h('Question', {'fg': s:orange})
 call s:h('QuickFixLine', {'bg': s:bg3, 'gui': 'bold'})
 call s:h('Search', {'fg': s:fg0, 'bg': s:highlight})
@@ -143,7 +149,7 @@ call s:h('WildMenu', {'fg': s:bg1, 'bg': s:green})
 
 " ------------------------------------------------------------------------------
 
-" custom status line highlight groups
+" Custom status line highlight groups
 
 call s:h('StatusUnmodified', {'fg': s:green, 'bg': s:bg3})
 call s:h('StatusModified', {'fg': s:bg1, 'bg': s:green})
@@ -186,17 +192,6 @@ hi link @lsp.mod.declaration.typescriptreact Normal
 hi link @lsp.mod.declaration.rust Normal
 hi link rustSigil Special
 
-" diff
-
-hi link diffAdded DiffAdd
-hi link diffRemoved DiffDelete
-hi link diffChanged DiffChange
-hi link diffFile PreProc
-hi link diffOldFile Directory
-hi link diffNewFile Directory
-
-" ------------------------------------------------------------------------------
-
 " LSP
 
 call s:h('DiagnosticError', {'fg': s:red})
@@ -214,6 +209,17 @@ call s:h('DiagnosticUnderlineHint', {'gui': 'underline', 'sp': s:fg3})
 call s:h('LspReferenceText', {'gui': 'underline'})
 hi link LspReferenceWrite LspReferenceText
 hi link LspReferenceRead LspReferenceText
+
+" Diff
+
+hi link diffAdded DiffAdd
+hi link diffRemoved DiffDelete
+hi link diffChanged DiffChange
+hi link diffFile PreProc
+hi link diffOldFile Directory
+hi link diffNewFile Directory
+
+" ------------------------------------------------------------------------------
 
 " illuminate
 

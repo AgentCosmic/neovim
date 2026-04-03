@@ -29,6 +29,8 @@ set inccommand=split " live preview of substitutions in a split
 set winborder=rounded
 set completeopt=menu,menuone,noselect,popup,fuzzy
 set pumborder=rounded
+set pumheight=20
+set pummaxwidth=80
 set smoothscroll " smooth scroll for wrapped lines
 
 " Disable backup litters
@@ -51,9 +53,9 @@ set statusline=%{%&modified?'%#StatusModified#':'%#StatusUnmodified#'%} " highli
 set statusline+=\ \ %{%&modified?'%#StatusArrowModified#':'%#StatusArrowUnmodified#'%}|
 set statusline+=%#StatusPath#
 set statusline+=\ %f " working directory followed by file path
-set statusline+=\ %r%h%w%q%m\  " flags: readonly, help, preview, list, modified
+set statusline+=\ %r%h%w%q%m " flags: readonly, help, preview, list, modified
+set statusline+=%#StatusDiagnostics#%{StatuslineDiagnostics()}\ 
 set statusline+=%#StatusArrowPath#%#StatusArrowPath2#
-set statusline+=\ %#StatusDiagnostics#%{StatuslineDiagnostics()}
 set statusline+=%= " right align from here
 set statusline+=%#StatusPositionArrow#%#StatusPositionArrow2#
 set statusline+=%#StatusPosition#
@@ -67,7 +69,7 @@ set statusline+=\ 󰅩\ %{&ft}\ |
 function! StatuslineDiagnostics()
 	let total = len(v:lua.vim.diagnostic.get(0, { 'severity': 1 }))
 	if total > 0
-		return ' ' . total
+		return '  ' . total
 	else
 		return ''
 	endif
