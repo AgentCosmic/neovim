@@ -344,6 +344,7 @@ set guicursor+=a:blinkwait250-blinkon500-blinkoff250
 " ----- ----- ----- -----
 
 packadd! cfilter
+packadd! nvim.undotree
 
 " Disable some native plugins to improve performance
 let g:loaded_getscriptPlugin = 1
