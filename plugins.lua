@@ -354,54 +354,21 @@ end, {})
 
 ----------
 
-vim.pack.add({ 'https://github.com/nvim-telescope/telescope.nvim', 'https://github.com/nvim-lua/plenary.nvim',
-	'https://github.com/neovim/nvim-lspconfig' }) -- lsp must load first to enable lsp pickers
--- use git_files if available, else find_files
--- vim.keymap.set('n', '<leader>f', function()
--- 	local opts = {} -- add additional options here
--- 	local ok = pcall(require('telescope.builtin').git_files, opts)
--- 	if not ok then require('telescope.builtin').find_files(opts) end
--- end, {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>f', ':Telescope find_files<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>of', ':Telescope oldfiles<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ls', ':Telescope lsp_document_symbols<cr>',
-	{ noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'g/', ':Telescope current_buffer_fuzzy_find<cr>',
-	{ noremap = true, silent = true })
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-	once = true,
-	callback = function()
-		require('telescope').setup({
-			defaults = {
-				file_ignore_patterns = { '.git/', 'node_modules/', '.venv/', 'venv/', '__pycache__/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
-				preview = {
-					filesize_limit = 1,
-					timeout = 250,
-				},
-			},
-			sorters = 'get_fzy_sorter',
-			pickers = {
-				find_files = {
-					hidden = true
-				},
-				lsp_references = {
-					fname_width = 60
-				}
-			}
-		})
-	end
-})
+vim.pack.add({ 'https://github.com/ibhagwan/fzf-lua', 'nvim-tree/nvim-web-devicons' })
+vim.api.nvim_set_keymap('n', '<leader>f', ':FzfLua global<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>of', ':FzfLua oldfiles<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>rf', ':FzfLua lsp_references<cr>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>ls', ':FzfLua lsp_document_symbols<cr>', { noremap = true, silent = true })
 
 ----------
 
 vim.pack.add(
 	{
 		{ src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',        version = 'v3.x' },
+		{ src = 'https://github.com/antosha417/nvim-lsp-file-operations' }, -- for lsp integration
 		{ src = 'https://github.com/nvim-lua/plenary.nvim' },
-		{ src = 'https://github.com/nvim-tree/nvim-web-devicons' }, -- not strictly required, but recommended
+		{ src = 'https://github.com/nvim-tree/nvim-web-devicons' },   -- not strictly required, but recommended
 		{ src = 'https://github.com/MunifTanjim/nui.nvim' },
-		{ src = 'https://github.com/antosha417/nvim-lsp-file-operations' }
 	}
 )
 vim.cmd('cabbrev NT Neotree reveal')
