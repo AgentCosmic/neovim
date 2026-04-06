@@ -83,9 +83,14 @@ require('illuminate').configure({
 
 vim.pack.add({ 'https://github.com/smoka7/hop.nvim' })
 vim.api.nvim_set_keymap('n', '<leader>h', ':HopChar1<cr>', { noremap = true, silent = true })
-require('hop').setup({
-	-- customized for custom keyboard layout, excluding Q & Z
-	keys = 'etahiscnodywkrgpjmbfulxv',
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+	once = true,
+	callback = function()
+		require('hop').setup({
+			-- customized for custom keyboard layout, excluding Q & Z
+			keys = 'etahiscnodywkrgpjmbfulxv',
+		})
+	end
 })
 
 ----------
@@ -217,7 +222,12 @@ vim.pack.add({ 'https://github.com/jeetsukumaran/vim-indentwise' })
 ----------
 
 vim.pack.add({ { src = 'https://github.com/altermo/ultimate-autopair.nvim', version = 'v0.6' } })
-require('ultimate-autopair').setup({})
+vim.api.nvim_create_autocmd('InsertEnter', {
+	once = true,
+	callback = function()
+		require('ultimate-autopair').setup({})
+	end
+})
 
 ----------
 
@@ -359,23 +369,28 @@ vim.api.nvim_set_keymap('n', '<leader>ls', ':Telescope lsp_document_symbols<cr>'
 vim.api.nvim_set_keymap('n', '<leader>rf', ':Telescope lsp_references<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'g/', ':Telescope current_buffer_fuzzy_find<cr>',
 	{ noremap = true, silent = true })
-require('telescope').setup({
-	defaults = {
-		file_ignore_patterns = { '.git/', 'node_modules/', '.venv/', 'venv/', '__pycache__/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
-		preview = {
-			filesize_limit = 1,
-			timeout = 250,
-		},
-	},
-	sorters = 'get_fzy_sorter',
-	pickers = {
-		find_files = {
-			hidden = true
-		},
-		lsp_references = {
-			fname_width = 60
-		}
-	}
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+	once = true,
+	callback = function()
+		require('telescope').setup({
+			defaults = {
+				file_ignore_patterns = { '.git/', 'node_modules/', '.venv/', 'venv/', '__pycache__/', '%.jpeg$', '%.jpg$', '%.png$', '%.gif$' },
+				preview = {
+					filesize_limit = 1,
+					timeout = 250,
+				},
+			},
+			sorters = 'get_fzy_sorter',
+			pickers = {
+				find_files = {
+					hidden = true
+				},
+				lsp_references = {
+					fname_width = 60
+				}
+			}
+		})
+	end
 })
 
 ----------
@@ -391,30 +406,35 @@ vim.pack.add(
 )
 vim.cmd('cabbrev NT Neotree reveal')
 vim.api.nvim_set_keymap('n', '<leader>nt', ':Neotree<cr>', { silent = true })
-require('neo-tree').setup({
-	filesystem = {
-		filtered_items = {
-			hide_dotfiles = false,
-		}
-	},
-	close_if_last_window = true,
-})
--- integrate file operations with lsp
-local lsp_file_operations = require('lsp-file-operations')
-lsp_file_operations.setup()
-local lspconfig = require('lspconfig')
--- set global defaults for all servers
-lspconfig.util.default_config = vim.tbl_extend(
-	'force',
-	lspconfig.util.default_config,
-	{
-		capabilities = vim.tbl_deep_extend(
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+	once = true,
+	callback = function()
+		require('neo-tree').setup({
+			filesystem = {
+				filtered_items = {
+					hide_dotfiles = false,
+				}
+			},
+			close_if_last_window = true,
+		})
+		-- integrate file operations with lsp
+		local lsp_file_operations = require('lsp-file-operations')
+		lsp_file_operations.setup()
+		local lspconfig = require('lspconfig')
+		-- set global defaults for all servers
+		lspconfig.util.default_config = vim.tbl_extend(
 			'force',
-			vim.lsp.protocol.make_client_capabilities(),
-			lsp_file_operations.default_capabilities()
+			lspconfig.util.default_config,
+			{
+				capabilities = vim.tbl_deep_extend(
+					'force',
+					vim.lsp.protocol.make_client_capabilities(),
+					lsp_file_operations.default_capabilities()
+				)
+			}
 		)
-	}
-)
+	end
+})
 
 ----------
 
@@ -476,7 +496,12 @@ require('gitsigns').setup({})
 ----------
 
 vim.pack.add({ 'https://github.com/folke/trouble.nvim' })
-require('trouble').setup({ auto_preview = false })
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+	once = true,
+	callback = function()
+		require('trouble').setup({ auto_preview = false })
+	end
+})
 
 
 ------------------------------------------------------------------------------
@@ -484,61 +509,66 @@ require('trouble').setup({ auto_preview = false })
 ------------------------------------------------------------------------------
 
 vim.pack.add({ 'https://github.com/robitx/gp.nvim' })
-require('gp').setup({
-	providers = {
-		googleai = {
-			endpoint =
-			'https://generativelanguage.googleapis.com/v1beta/models/{{model}}:streamGenerateContent?key={{secret}}',
-			secret = os.getenv('GEMINI_API_KEY'),
-		},
-		openrouter = {
-			endpoint = 'https://openrouter.ai/api/v1/chat/completions',
-			secret = os.getenv('OPENROUTER_API_KEY'),
-		},
-		openai = {
-			disable = true,
-		}
-	},
-	agents = {
-		{
-			name = 'CodeGemini',
-			provider = 'googleai',
-			chat = false,
-			command = true,
-			model = { model = 'gemini-2.5-flash' },
-			system_prompt = require('gp.defaults').code_system_prompt,
-		},
-		{
-			name = 'ChatGeminiPro',
-			provider = 'googleai',
-			chat = false,
-			command = true,
-			model = { model = 'gemini-2.5-pro' },
-			system_prompt = require('gp.defaults').code_system_prompt,
-		},
-		{
-			name = 'ChatGemini',
-			provider = 'googleai',
-			chat = true,
-			command = false,
-			model = { model = 'gemini-2.5-flash' },
-			system_prompt = require('gp.defaults').chat_system_prompt,
-		},
-		{
-			name = 'CodeDeepSeek',
-			provider = 'openrouter',
-			chat = false,
-			command = true,
-			model = { model = 'deepseek/deepseek-chat-v3.1:free' },
-			system_prompt = require('gp.defaults').code_system_prompt,
-		},
-		{
-			name = 'CodeQwen',
-			provider = 'openrouter',
-			chat = false,
-			command = true,
-			model = { model = 'qwen/qwen3-235b-a22b:free' },
-			system_prompt = require('gp.defaults').code_system_prompt,
-		},
-	},
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+	once = true,
+	callback = function()
+		require('gp').setup({
+			providers = {
+				googleai = {
+					endpoint =
+					'https://generativelanguage.googleapis.com/v1beta/models/{{model}}:streamGenerateContent?key={{secret}}',
+					secret = os.getenv('GEMINI_API_KEY'),
+				},
+				openrouter = {
+					endpoint = 'https://openrouter.ai/api/v1/chat/completions',
+					secret = os.getenv('OPENROUTER_API_KEY'),
+				},
+				openai = {
+					disable = true,
+				}
+			},
+			agents = {
+				{
+					name = 'CodeGemini',
+					provider = 'googleai',
+					chat = false,
+					command = true,
+					model = { model = 'gemini-2.5-flash' },
+					system_prompt = require('gp.defaults').code_system_prompt,
+				},
+				{
+					name = 'ChatGeminiPro',
+					provider = 'googleai',
+					chat = false,
+					command = true,
+					model = { model = 'gemini-2.5-pro' },
+					system_prompt = require('gp.defaults').code_system_prompt,
+				},
+				{
+					name = 'ChatGemini',
+					provider = 'googleai',
+					chat = true,
+					command = false,
+					model = { model = 'gemini-2.5-flash' },
+					system_prompt = require('gp.defaults').chat_system_prompt,
+				},
+				{
+					name = 'CodeDeepSeek',
+					provider = 'openrouter',
+					chat = false,
+					command = true,
+					model = { model = 'deepseek/deepseek-chat-v3.1:free' },
+					system_prompt = require('gp.defaults').code_system_prompt,
+				},
+				{
+					name = 'CodeQwen',
+					provider = 'openrouter',
+					chat = false,
+					command = true,
+					model = { model = 'qwen/qwen3-235b-a22b:free' },
+					system_prompt = require('gp.defaults').code_system_prompt,
+				},
+			},
+		})
+	end
 })
