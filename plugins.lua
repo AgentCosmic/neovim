@@ -122,11 +122,13 @@ vim.pack.add({
 	{ src = 'https://github.com/nvim-treesitter/nvim-treesitter',             version = 'main' },
 	{ src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects', version = 'main' }
 })
-require('nvim-treesitter').install({ 'vim', 'vimdoc', 'lua', 'javascript', 'typescript', 'html', 'css',
-	'python', 'markdown', 'tsx', 'vue', 'go' })
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.bo.indentexpr = 'v:lua.require("nvim-treesitter").indentexpr()'
+vim.api.nvim_create_autocmd('BufReadPost', {
+	once = true,
+	callback = function()
+		require('nvim-treesitter').install({ 'vim', 'vimdoc', 'lua', 'bash', 'javascript', 'typescript', 'html', 'css',
+			'python', 'markdown', 'markdown_inline', 'vue', 'go', 'sql' })
+	end
+})
 vim.api.nvim_create_autocmd('PackChanged', {
 	callback = function(ev)
 		local name, kind = ev.data.spec.name, ev.data.kind
@@ -136,6 +138,9 @@ vim.api.nvim_create_autocmd('PackChanged', {
 		end
 	end
 })
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.bo.indentexpr = 'v:lua.require("nvim-treesitter").indentexpr()'
 
 require('nvim-treesitter-textobjects').setup({
 	select = {
