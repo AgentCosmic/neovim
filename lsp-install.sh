@@ -16,9 +16,9 @@ cd "$ROOT"
 # essential
 if [ "$#" -ne 1 ]; then
 	# efm
-	EFM="efm-langserver_v0.0.54_linux_$(dpkg --print-architecture)"
+	EFM="efm-langserver_v0.0.57_linux_$(dpkg --print-architecture)"
 	if [ ! -f "efm-langserver" ]; then
-		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.54/$EFM.tar.gz"
+		curl -LO "https://github.com/mattn/efm-langserver/releases/download/v0.0.56/$EFM.tar.gz"
 		echo "$EFM.tar.gz"
 		tar -xf "$EFM.tar.gz"
 		mv "$EFM/efm-langserver" .
@@ -54,8 +54,8 @@ if [ "$1" = 'lua' ]; then
 		echo Architecture not supported
 		exit
 	fi
-	LUALS="lua-language-server-3.15.0-linux-$ARCH.tar.gz"
-	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.15.0/$LUALS"
+	LUALS="lua-language-server-3.18.1-linux-$ARCH.tar.gz"
+	curl -LO "https://github.com/LuaLS/lua-language-server/releases/download/3.18.1/$LUALS"
 	mkdir -p lua_ls
 	tar -xf "$LUALS" --directory "$PWD/lua_ls"
 	rm "$LUALS"
@@ -64,12 +64,12 @@ fi
 if [ "$1" = 'python' ]; then
 	python -m venv .venv
 	.venv/bin/pip install \
-		basedpyright~=1.31 \
-		ruff~=0.13
+		basedpyright~=1.39 \
+		ruff~=0.15.9
 fi
 
 if [ "$1" = 'go' ]; then
-	go install golang.org/x/tools/gopls@v0.17.1
+	go install golang.org/x/tools/gopls@v0.21.1
 fi
 
 if [ "$1" = 'solidity' ]; then
