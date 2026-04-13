@@ -1,14 +1,15 @@
 vim.lsp.enable({
-	'efm',
-	'yamlls',
+	'oxfmt',
+	'oxlint',
 	'ts_ls',
 	'jsonls',
 	'html',
 	'cssls',
-	'eslint',
 	'stylelint_lsp',
+	'efm',
 	'bashls',
 	'lua_ls',
+	'yamlls',
 	'basedpyright',
 	'ruff',
 	'gopls',
@@ -33,9 +34,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.api.nvim_buf_set_keymap(buf, 'n', '<leader>ih',
 			'<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>', opts)
 
-		-- set custom commands
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+
+		-- ts_ls: disable formatting, add OrganizeImports command
 		if client.name == 'ts_ls' then
+			client.server_capabilities.documentFormattingProvider = false
 			vim.api.nvim_buf_create_user_command(args.buf, 'OrganizeImports', function()
 				client:exec_cmd({
 						title = 'organize_imports',
@@ -48,7 +51,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 			end, {})
 		end
 
-		-- disable Ruff hover in favor of Pyright
+		-- ddisable Ruff hover in favor of Pyright
 		if client.name == 'ruff' then
 			client.server_capabilities.hoverProvider = false
 		end
@@ -67,77 +70,43 @@ end
 -- this is where we install all the language servers
 local lsp_bins = vim.fn.stdpath('data') .. '/lsp'
 
--- go get github.com/mattn/efm-langserver
--- npm install prettier
--- npm i bash-language-server prettier-plugin-solidity
-local prettier_path = './node_modules/.bin/prettier' -- default to local
-local prettier_config = ' --config-precedence file-override --use-tabs --single-quote --print-width 120'
--- use our own if project doesn't have
-if vim.fn.executable(prettier_path) ~= 1 then
-	prettier_path = lsp_bins .. '/node_modules/.bin/prettier'
-end
-local prettier_cmd = prettier_path .. prettier_config
-vim.lsp.config('efm', {
-	cmd = { lsp_bins .. '/efm-langserver' },
-	init_options = {
-		documentFormatting = true,
-		documentRangeFormatting = true,
-		hover = true,
-		documentSymbol = true,
-		codeAction = true,
-	},
-	filetypes = {
-		'json', 'yaml', 'markdown',
-		'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-		'sh',
-		'vue', 'solidity'
-	},
-	settings = {
-		rootMarkers = { '.git/', 'node_modules/' },
-		languages = {
-			json = {
-				{ formatCommand = prettier_cmd .. ' --parser json', formatStdin = true },
-			},
-			yaml = {
-				{ formatCommand = prettier_cmd .. ' --parser yaml', formatStdin = true },
-			},
-			markdown = {
-				{ formatCommand = prettier_cmd .. ' --parser markdown', formatStdin = true },
-			},
-			html = {
-				{ formatCommand = prettier_cmd .. ' --parser html', formatStdin = true },
-			},
-			css = {
-				{ formatCommand = prettier_cmd .. ' --parser css', formatStdin = true },
-			},
-			javascript = {
-				{ formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true },
-			},
-			typescript = {
-				{ formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true },
-			},
-			javascriptreact = {
-				{ formatCommand = prettier_cmd .. ' --parser babel', formatStdin = true },
-			},
-			typescriptreact = {
-				{ formatCommand = prettier_cmd .. ' --parser typescript', formatStdin = true },
-			},
-			sh = {
-				{ lintCommand = lsp_bins .. '/shellcheck -f gcc -x' },
-			},
-			vue = {
-				{ formatCommand = prettier_cmd .. ' --parser vue', formatStdin = true },
-			},
-			solidity = {
-				{ formatCommand = prettier_cmd .. ' --parser solidity-parse', formatStdin = true },
-			},
-		}
-	}
+---------- Languages ----------
+
+-- npm i oxfmt
+vim.lsp.config('oxfmt', {
+	cmd = function(dispatchers, config)
+		local cmd = 'oxfmt'
+		local full_path
+		if (config or {}).root_dir then
+			local local_cmd = vim.fs.joinpath(config.root_dir, 'node_modules/.bin', cmd)
+			if vim.fn.executable(local_cmd) == 1 then
+				full_path = local_cmd
+			end
+		end
+		if not full_path then
+			full_path = vim.fs.joinpath(lsp_bins, 'node_modules/.bin', cmd)
+		end
+		return vim.lsp.rpc.start({ full_path, '--lsp' }, dispatchers)
+	end,
 })
 
--- npm i yaml-language-server
-vim.lsp.config('yamlls', {
-	cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
+-- npm i oxlint
+vim.lsp.config('oxlint', {
+	cmd = function(dispatchers, config)
+		local cmd = 'oxlint'
+		local full_path
+		if (config or {}).root_dir then
+			local local_cmd = vim.fs.joinpath(config.root_dir, 'node_modules/.bin', cmd)
+			if vim.fn.executable(local_cmd) == 1 then
+				full_path = local_cmd
+			end
+		end
+		if not full_path then
+			full_path = vim.fs.joinpath(lsp_bins, 'node_modules/.bin', cmd)
+		end
+		print(full_path)
+		return vim.lsp.rpc.start({ full_path, '--lsp' }, dispatchers)
+	end,
 })
 
 -- npm i typescript-language-server
@@ -157,7 +126,7 @@ vim.lsp.config('ts_ls', {
 	},
 })
 
--- json, css, html, eslint
+-- json, css, html
 -- npm i vscode-langservers-extracted
 vim.lsp.config('jsonls', {
 	cmd = { lsp_bins .. '/node_modules/.bin/vscode-json-language-server', '--stdio' },
@@ -168,15 +137,33 @@ vim.lsp.config('html', {
 vim.lsp.config('cssls', {
 	cmd = { lsp_bins .. '/node_modules/.bin/vscode-css-language-server', '--stdio' },
 })
--- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/eslint.lua
-vim.lsp.config('eslint', {
-	cmd = { lsp_bins .. '/node_modules/.bin/vscode-eslint-language-server', '--stdio' },
-})
-
 
 -- npm i stylelint-lsp
 vim.lsp.config('stylelint_lsp', {
 	cmd = { lsp_bins .. '/node_modules/.bin/stylelint-lsp', '--stdio' },
+})
+
+
+-- go get github.com/mattn/efm-langserver
+-- https://github.com/koalaman/shellcheck
+vim.lsp.config('efm', {
+	cmd = { lsp_bins .. '/efm-langserver' },
+	init_options = {
+		documentFormatting = true,
+		documentRangeFormatting = true,
+		hover = true,
+		documentSymbol = true,
+		codeAction = true,
+	},
+	filetypes = { 'sh' },
+	settings = {
+		rootMarkers = { '.git/' },
+		languages = {
+			sh = {
+				{ lintCommand = lsp_bins .. '/shellcheck -f gcc -x' },
+			},
+		}
+	}
 })
 
 -- npm i bash-language-server
@@ -216,6 +203,13 @@ vim.lsp.config('lua_ls', {
 	end,
 })
 
+
+-- npm i yaml-language-server
+vim.lsp.config('yamlls', {
+	cmd = { lsp_bins .. '/node_modules/.bin/yaml-language-server', '--stdio' },
+})
+
+
 -- pip install basedpyright
 vim.lsp.config('basedpyright', {
 	cmd = { lsp_bins .. '/.venv/bin/basedpyright-langserver', '--stdio' },
@@ -231,6 +225,7 @@ vim.lsp.config('basedpyright', {
 vim.lsp.config('ruff', {
 	cmd = { lsp_bins .. '/.venv/bin/ruff', 'server' },
 })
+
 
 -- go install -v golang.org/x/tools/gopls
 vim.lsp.config('gopls', {
