@@ -27,11 +27,15 @@ set showcmd " display incomplete commands
 set selection=inclusive " include the last character, required by some plugins
 set inccommand=split " live preview of substitutions in a split
 set winborder=rounded
+set smoothscroll " smooth scroll for wrapped lines
+
+" Completion
+set autocomplete " show completion while typing
+set complete=.,b
 set completeopt=menu,menuone,noselect,popup,fuzzy
 set pumborder=rounded
 set pumheight=20
 set pummaxwidth=80
-set smoothscroll " smooth scroll for wrapped lines
 
 " Disable backup litters
 set nobackup
@@ -240,14 +244,14 @@ nnoremap <F3> g*Nyiw:cw<cr>:Grep <c-r>0
 " Save with ctrl-s
 noremap <silent> <c-s> :update<cr>
 vnoremap <silent> <c-s> <c-c>:update<cr>
-inoremap <silent> <c-s> <c-o>:update<cr>
+"inoremap <silent> <c-s> <c-o>:update<cr>
 " Comment
 nmap <leader>c gcc
 
-" don't jump when search
+" Don't jump when search
 nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <bar> set hls <cr>
 
-" bring back <c-i> because it was used by <tab>
+" Bring back <c-i> because it was used by <tab>
 nnoremap <c-s-i> <c-i>
 
 " Disable function keys in insert mode
@@ -260,6 +264,10 @@ inoremap <F7> <esc><F7>
 inoremap <F8> <esc><F8>
 inoremap <F9> <esc><F9>
 inoremap <F10> <esc><F10>
+
+" Completion
+inoremap <silent><expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 
 " ----- ----- ----- -----

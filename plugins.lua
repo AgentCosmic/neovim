@@ -2,78 +2,6 @@
 -- Universal Vim Functionality
 ------------------------------------------------------------------------------
 
-vim.pack.add({ { src = 'https://github.com/saghen/blink.cmp', version = 'v1' } })
-local blink = require('blink.cmp')
-blink.setup({
-	keymap = {
-		preset = 'default',
-		['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
-		['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
-		['<CR>'] = { 'accept', 'fallback' },
-		['<C-e>'] = {},
-	},
-	completion = {
-		documentation = {
-			auto_show = true,
-			auto_show_delay_ms = 500,
-		},
-		keyword = { range = 'prefix' },
-		trigger = {
-			show_on_keyword = true,
-			show_on_trigger_character = true,
-			show_in_snippet = false,
-		},
-		list = {
-			selection = {
-				preselect = false,
-				auto_insert = true,
-			}
-		},
-		menu = {
-			max_height = 20,
-		},
-	},
-	cmdline = {
-		completion = {
-			list = {
-				selection = {
-					preselect = false,
-					auto_insert = true,
-				}
-			},
-		}
-	},
-	signature = { enabled = true },
-	sources = {
-		default = { 'lsp', 'buffer', 'path', 'snippets' },
-		providers = {
-			lsp = {
-				-- remove language keywords/constants (if, else, while, etc.) provided by the language server
-				name = 'LSP',
-				module = 'blink.cmp.sources.lsp',
-				transform_items = function(_, items)
-					return vim.tbl_filter(function(item)
-						return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-					end, items)
-				end,
-			},
-			snippets = {
-				opts = {
-					search_paths = { vim.env.ROOT .. '/snippets' },
-				},
-			},
-			cmdline = {
-				enabled = true,
-			}
-		},
-	},
-})
-vim.lsp.config('*', {
-	capabilities = blink.get_lsp_capabilities({}, false),
-})
-
-----------
-
 vim.pack.add({ 'https://github.com/rrethy/vim-illuminate' })
 require('illuminate').configure({
 	under_cursor = false,
@@ -361,8 +289,6 @@ end, {})
 vim.pack.add({ 'https://github.com/ibhagwan/fzf-lua', 'nvim-tree/nvim-web-devicons' })
 vim.api.nvim_set_keymap('n', '<leader>f', ':FzfLua global<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>of', ':FzfLua oldfiles<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>rf', ':FzfLua lsp_references<cr>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<leader>ls', ':FzfLua lsp_document_symbols<cr>', { noremap = true, silent = true })
 
 ----------
 
