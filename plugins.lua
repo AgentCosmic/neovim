@@ -346,7 +346,6 @@ require('cokeline').setup({
 		}
 	},
 })
-
 vim.api.nvim_set_keymap('n', '<tab>', '<Plug>(cokeline-focus-next)', { silent = true })
 vim.api.nvim_set_keymap('n', '<s-tab>', '<Plug>(cokeline-focus-prev)', { silent = true })
 vim.api.nvim_set_keymap('n', '<leader><tab>', '<Plug>(cokeline-pick-focus)', { silent = true })
@@ -414,10 +413,10 @@ vim.pack.add({ 'https://github.com/preservim/vimux' })
 vim.g.VimuxOrientation = 'h'
 vim.g.VimuxHeight = '33%'
 -- vim.g.VimuxCloseOnExit = 1
-vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>')
-vim.keymap.set('n', '<leader>th', ':update | call VimuxSendKeys("c-c enter up enter")<cr>')
-vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>')
-vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>')
+vim.keymap.set('n', '<leader>tp', ':VimuxPromptCommand<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>th', ':update | call VimuxSendKeys("c-c enter up enter")<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>tt', ':VimuxOpenRunner<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>tq', ':VimuxCloseRunner<cr>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>tg', function()
 	vim.cmd('VimuxRunCommand("lazygit && exit")')
 	vim.cmd('VimuxZoomRunner')
